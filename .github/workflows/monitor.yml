@@ -3,10 +3,14 @@ name: Dune Metreon 70mm monitor
 on:
   workflow_dispatch: {}  # manual "Run workflow" button — see RUNBOOK.md for verification steps
   schedule:
-    # CADENCE PHASE — edit this single line at each transition, per RUNBOOK.md:
-    #   Now  -> Sep 30, 2026: hourly, business hours PT  (current)
-    #   Oct 1 -> Nov 30, 2026: every 15 min, 05:00-18:00 PT
-    #   Dec 1 -> Dec 18, 2026: every 5-10 min, all day
+    # CADENCE PHASE — edit this single line at each transition, per RUNBOOK.md's Cadence section:
+    #   Now   -> Sep 30, 2026: hourly, business hours PT              (current)
+    #   Oct 1  -> Oct 31, 2026: every 15 min, 05:00-18:00 PT (PDT)
+    #   Nov 1  -> Nov 30, 2026: every 15 min, 05:00-18:00 PT (PST, post-DST)
+    #   Dec 1  -> Dec 18, 2026: every 5 min, all day (main event window)
+    #   Dec 19 -> teardown (target: end of March 2027): back to hourly, business hours PT
+    #     -- kept running past release day on purpose, to catch a possible post-release
+    #        encore/extension wave (Oppenheimer and Sinners both got one). See RUNBOOK.md.
     # GitHub Actions cron is UTC. PT is UTC-7 during PDT (through early Nov) and UTC-8 during PST.
     # Offset from :00 on purpose -- GitHub warns top-of-hour schedules lag most under load.
     - cron: "7 14-23 * * 1-5"   # hourly, ~7am-4pm PT (14:07-23:07 UTC), weekdays, PDT

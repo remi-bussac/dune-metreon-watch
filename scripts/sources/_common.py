@@ -25,6 +25,7 @@ from __future__ import annotations
 import json
 import re
 import sys
+from datetime import date
 from pathlib import Path
 
 sys.path.insert(0, str(Path(__file__).resolve().parent.parent))
@@ -71,8 +72,12 @@ def _to_24h(hour: str, minute: str, meridiem: str) -> str:
     return f"{h:02d}:{minute}"
 
 
-def _nearest_date(text: str, pos: int, year_hint: int) -> str | None:
-    """Find the closest month/day token to `pos` within a window, return ISO date."""
+def _nearest_date(text: str, pos: int, today) -> str | None:
+    """Find the closest month/day token to `pos` within a window, return ISO
+    date. Year is inferred relative to `today` (not tied to the target's
+    release_date) so this stays correct across a monitoring window that
+    spans a year boundary — e.g. a post-release wave found in early 2027
+    for a film whose release_date says 2026."""
     window = text[max(0, pos - 200) : pos + 200]
     best = None
     best_dist = None
@@ -88,17 +93,22 @@ def _nearest_date(text: str, pos: int, year_hint: int) -> str | None:
     day = int(best.group(2))
     if not month:
         return None
-    return f"{year_hint:04d}-{month:02d}-{day:02d}"
+    year = today.year
+    if month < today.month - 1:  # e.g. today is Nov, match is "Jan" -> next year
+        year += 1
+    return f"{year:04d}-{month:02d}-{day:02d}"
 
 
 def extract_showtimes_from_text(
     text: str, target: dict, source_name: str, booking_url: str
 ) -> list[Showtime]:
     """Proximity-based extraction: for every occurrence of a film keyword,
-    look at a window of surrounding text for a "70mm" token and a time
-    token. Both must be present for a candidate to count — this is what
-    keeps the monitor scoped to 70mm only, per the hard constraint."""
-    year_hint = int(target["release_date"][:4])
+    look at a window of surrounding text for a "70mm" token, a time token,
+    and a date token. All three must be present for a candidate to count —
+    the 70mm requirement is what keeps the monitor scoped to 70mm only (the
+    hard constraint); the date requirement means an ambiguous match is
+    skipped rather than stamped with a guessed date that could be wrong."""
+    today = date.today()
     lowered = text.lower()
     found: dict[tuple, Showtime] = {}
 
@@ -113,9 +123,11 @@ def extract_showtimes_from_text(
             window = text[max(0, idx - 300) : idx + 300]
             if not FORMAT_70MM_PATTERN.search(window):
                 continue
+            date_str = _nearest_date(text, idx, today)
+            if not date_str:
+                continue  # no nearby date to anchor this candidate to — skip rather than guess
             for time_match in TIME_PATTERN.finditer(window):
                 time_str = _to_24h(*time_match.groups())
-                date_str = _nearest_date(text, idx, year_hint) or target["release_date"]
                 st = Showtime(
                     date=date_str,
                     time=time_str,
