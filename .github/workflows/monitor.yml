@@ -1,0 +1,45 @@
+name: Dune Metreon 70mm monitor
+
+on:
+  workflow_dispatch: {}  # manual "Run workflow" button — see RUNBOOK.md for verification steps
+  schedule:
+    # CADENCE PHASE — edit this single line at each transition, per RUNBOOK.md:
+    #   Now  -> Sep 30, 2026: hourly, business hours PT  (current)
+    #   Oct 1 -> Nov 30, 2026: every 15 min, 05:00-18:00 PT
+    #   Dec 1 -> Dec 18, 2026: every 5-10 min, all day
+    # GitHub Actions cron is UTC. PT is UTC-7 during PDT (through early Nov) and UTC-8 during PST.
+    # Offset from :00 on purpose -- GitHub warns top-of-hour schedules lag most under load.
+    - cron: "7 14-23 * * 1-5"   # hourly, ~7am-4pm PT (14:07-23:07 UTC), weekdays, PDT
+
+jobs:
+  check:
+    runs-on: ubuntu-latest
+    permissions:
+      contents: write   # needed to commit state/state.json back to the repo
+    steps:
+      - uses: actions/checkout@v4
+
+      - uses: actions/setup-python@v5
+        with:
+          python-version: "3.12"
+
+      - name: Install Python dependencies
+        run: pip install -r scripts/requirements.txt
+
+      - name: Install Playwright Chromium
+        run: playwright install --with-deps chromium
+
+      - name: Run monitor
+        env:
+          GMAIL_ADDRESS: ${{ secrets.GMAIL_ADDRESS }}
+          GMAIL_APP_PASSWORD: ${{ secrets.GMAIL_APP_PASSWORD }}
+          ALERT_EMAIL_TO: ${{ secrets.ALERT_EMAIL_TO }}
+        run: python scripts/monitor.py
+
+      - name: Commit state if changed
+        run: |
+          git config user.name "dune-metreon-watch-bot"
+          git config user.email "actions@users.noreply.github.com"
+          git add state/state.json
+          git diff --cached --quiet || git commit -m "Update monitor state [skip ci]"
+          git push
