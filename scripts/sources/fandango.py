@@ -44,11 +44,27 @@ from normalize import Showtime, SourceResult  # noqa: E402
 
 SOURCE_NAME = "fandango"
 
-# Proves the geolocation override actually applied. Fandango renders the
-# resolved ZIP under "THEATERS NEAR"; 941xx is San Francisco. If this is
-# missing the page is showing some other metro, and "no Metreon showtimes"
-# would be a lie rather than a fact — so it's reported as parse_error and
-# picked up by the dead-man's switch instead of read as "nothing on sale."
+# Fandango stores the visitor's chosen location in plain cookies. Seeding
+# them before the first navigation is what actually pins results to San
+# Francisco. The browser geolocation override in browser.py is NOT enough
+# on its own: it works from a residential IP but was observed failing on a
+# GitHub runner (2026-07-31), where Fandango fell back to the datacenter's
+# IP location and returned a different metro with no Metreon in it. These
+# values were captured from a real session that had resolved to SF.
+SF_LOCATION_COOKIES = [
+    {"name": "zip", "value": "94102"},
+    {"name": "akamai_set_zip", "value": "true"},
+    {"name": "searchcity", "value": "SANFRANCISCO"},
+    {"name": "searchstate", "value": "CA"},
+    {"name": "searchlocation",
+     "value": "lat%3D37.7795%26long%3D-122.4195%26name%3DSANFRANCISCO%252C%2520CA"},
+]
+
+# Proves the location actually took effect. Fandango renders the resolved
+# ZIP under "THEATERS NEAR"; 941xx is San Francisco. If this is missing the
+# page is showing some other metro, and "no Metreon showtimes" would be a
+# lie rather than a fact — so it's reported as parse_error and picked up by
+# the dead-man's switch instead of being read as "nothing on sale."
 SF_ZIP_PATTERN = re.compile(r"\b941\d\d\b")
 
 DATE_BUTTON_SELECTOR = "button.date-picker__button"
@@ -147,6 +163,9 @@ def check(target: dict) -> SourceResult:
     today = date.today()
 
     with polite_page() as page:
+        page.context.add_cookies(
+            [dict(c, domain=".fandango.com", path="/") for c in SF_LOCATION_COOKIES]
+        )
         classification, response = goto_and_classify(page, url)
         if classification == "blocked":
             status_code = response.status if response else "?"
