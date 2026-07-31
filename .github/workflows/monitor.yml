@@ -15,6 +15,13 @@ on:
     # Offset from :00 on purpose -- GitHub warns top-of-hour schedules lag most under load.
     - cron: "7 14-23 * * 1-5"   # hourly, ~7am-4pm PT (14:07-23:07 UTC), weekdays, PDT
 
+# Overlapping runs would race on the state commit and one would fail its
+# push. Queue instead of running concurrently; skipping a redundant check is
+# harmless for a monitor, a failed run is not.
+concurrency:
+  group: monitor
+  cancel-in-progress: false
+
 jobs:
   check:
     runs-on: ubuntu-latest
@@ -30,6 +37,15 @@ jobs:
       - name: Install Python dependencies
         run: pip install -r scripts/requirements.txt
 
+      # Chromium is ~140MB. Without this it is re-downloaded on every single
+      # run -- at the December 5-minute cadence that is ~288 downloads/day
+      # hammering Playwright's CDN for no reason, plus ~40s added per run.
+      - name: Cache Playwright browsers
+        uses: actions/cache@v4
+        with:
+          path: ~/.cache/ms-playwright
+          key: playwright-${{ runner.os }}-${{ hashFiles('scripts/requirements.txt') }}
+
       - name: Install Playwright Chromium
         run: playwright install --with-deps chromium
 
@@ -40,10 +56,27 @@ jobs:
           ALERT_EMAIL_TO: ${{ secrets.ALERT_EMAIL_TO }}
         run: python scripts/monitor.py
 
+      # always() so state is still committed when the monitor exits non-zero
+      # because an alert could not be delivered -- that run's findings are
+      # exactly the ones worth keeping.
       - name: Commit state if changed
+        if: always()
         run: |
           git config user.name "dune-metreon-watch-bot"
           git config user.email "actions@users.noreply.github.com"
           git add state/state.json
-          git diff --cached --quiet || git commit -m "Update monitor state [skip ci]"
-          git push
+          if git diff --cached --quiet; then
+            echo "no state change to commit"
+            exit 0
+          fi
+          git commit -m "Update monitor state [skip ci]"
+          for attempt in 1 2 3; do
+            if git pull --rebase --autostash origin main && git push; then
+              echo "state pushed on attempt $attempt"
+              exit 0
+            fi
+            echo "push attempt $attempt failed; retrying"
+            sleep 5
+          done
+          echo "could not push state after 3 attempts" >&2
+          exit 1

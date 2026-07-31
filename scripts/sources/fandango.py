@@ -1,28 +1,31 @@
-"""Fandango's AMC Metreon 16 theater page.
+"""Fandango's film-specific "IMAX 70MM Experience" page, geo-set to SF.
 
-This does NOT use the generic keyword+70mm+time proximity extraction from
-_common.py. Live testing against the real page (2026-07-30) showed why:
-the theater page only renders ONE calendar day's showtimes at a time (the
-selected day, defaulting to today) — so proximity text-matching only ever
-sees "today," which is useless for catching an advance wave that's booking
-dates months out.
+This is the monitor's highest-signal source. It replaced an earlier version
+that diffed the *theater* page's calendar (every bookable date at Metreon,
+for any film). That approach was wrong in both directions, confirmed against
+real data on 2026-07-31:
 
-What the page DOES expose without any clicking is the calendar widget's
-full list of bookable dates, several months deep — including the sparse,
-far-out dates that represent already-booked special/event showtimes (Dune:
-Part Three's confirmed Dec 17-20, 2026 dates showed up exactly this way in
-testing, dozens of weeks past the theater's regular day-to-day grid).
+  - False positives, daily: the theater calendar rolls forward as Metreon
+    publishes regular programming, so a brand-new date appeared essentially
+    every day (2026-09-08 showed up between two consecutive runs) and fired
+    a "new date!" alert that had nothing to do with Dune.
+  - False negative on the case that actually matters: Dec 17-20 2026 were
+    ALREADY in that calendar (the April wave booked them). A second wave
+    adding more Dune 70mm showtimes on those same dates changes no *date*,
+    so the old source would have stayed completely silent through exactly
+    the event this monitor exists to catch.
 
-So the signal this source watches for is simpler and more robust than
-per-showtime scraping: any NEW date appearing in that calendar list at all.
-A new date is a real, confirmed change to what's bookable at Metreon — it
-doesn't independently confirm which film or format, so it's surfaced as a
-"mention"-kind alert (heads up, go check) rather than a hard ticket alert,
-with the theater page URL included so checking takes one click.
+Fandango publishes a separate film entry per premium format, so the "IMAX
+70MM Experience" page is inherently scoped to 70mm — its calendar lists only
+dates that have 70mm showtimes (currently exactly Dec 17-20), and each date
+lists the specific theaters and times. That gives film + format + venue +
+date + time in one place, with no regular-programming noise, and it changes
+when a wave adds either a new date or a new showtime on an existing date.
 
-fandango.com/robots.txt disallows /api/, /napi/*, and any ?date=-filtered
-URL — this only ever loads the plain theater-page URL (no query params),
-never a disallowed one.
+Politeness: only the plain movie-overview URL is ever navigated to (no query
+params — Fandango's robots.txt disallows `*?*date=*`, `/api/` and `/napi/*`,
+and none of those are requested by hand). Selecting a date is a click on the
+page's own calendar control, the same thing a person browsing would do.
 """
 
 from __future__ import annotations
@@ -40,79 +43,185 @@ from _common import _dismiss_cookie_banner  # noqa: E402
 from normalize import Showtime, SourceResult  # noqa: E402
 
 SOURCE_NAME = "fandango"
-LANDMARKS = ["metreon", "fandango"]
 
-CALENDAR_ENTRY_PATTERN = re.compile(r"\b([A-Z]{3})\n([A-Z]{3})\n(\d{2})\b")
-MONTH_MAP = {
-    "JAN": 1, "FEB": 2, "MAR": 3, "APR": 4, "MAY": 5, "JUN": 6,
-    "JUL": 7, "AUG": 8, "SEP": 9, "OCT": 10, "NOV": 11, "DEC": 12,
+# Proves the geolocation override actually applied. Fandango renders the
+# resolved ZIP under "THEATERS NEAR"; 941xx is San Francisco. If this is
+# missing the page is showing some other metro, and "no Metreon showtimes"
+# would be a lie rather than a fact — so it's reported as parse_error and
+# picked up by the dead-man's switch instead of read as "nothing on sale."
+SF_ZIP_PATTERN = re.compile(r"\b941\d\d\b")
+
+DATE_BUTTON_SELECTOR = "button.date-picker__button"
+MAX_DATES = 12  # bounded so an unexpectedly huge calendar can't stall a run
+
+MONTH_NAMES = {
+    "january": 1, "february": 2, "march": 3, "april": 4, "may": 5, "june": 6,
+    "july": 7, "august": 8, "september": 9, "october": 10, "november": 11, "december": 12,
 }
+BUTTON_DATE_PATTERN = re.compile(
+    r"(JANUARY|FEBRUARY|MARCH|APRIL|MAY|JUNE|JULY|AUGUST|SEPTEMBER|OCTOBER|NOVEMBER|DECEMBER)\s+(\d{1,2})",
+    re.IGNORECASE,
+)
+TIME_PATTERN = re.compile(r"\b(1[0-2]|0?[1-9]):([0-5][0-9])\s*([AaPp])\.?[Mm]?\b")
+DISTANCE_PATTERN = re.compile(r"\d+\.\d+\s*mi")
+FORMAT_70MM_PATTERN = re.compile(r"70\s?mm", re.IGNORECASE)
 
 
-def _parse_calendar_dates(text: str, today: date) -> list[str]:
-    """Extract the calendar widget's date list, in the ISO format it's
-    listed in (chronological), inferring year rollover at Dec -> Jan."""
+def _button_date(label: str, today: date) -> str | None:
+    """"SATURDAY, DECEMBER 19 SAT DEC 19" -> "2026-12-19". Year is inferred
+    relative to today, so this stays correct across a year boundary (a wave
+    landing in early 2027 for a Dec 2026 film)."""
+    match = BUTTON_DATE_PATTERN.search(label)
+    if not match:
+        return None
+    month = MONTH_NAMES[match.group(1).lower()]
+    day = int(match.group(2))
     year = today.year
-    last_month = today.month
-    dates = []
-    for _weekday, month_abbr, day in CALENDAR_ENTRY_PATTERN.findall(text):
-        month = MONTH_MAP.get(month_abbr)
-        if not month:
-            continue
-        if month < last_month:
-            year += 1
-        last_month = month
-        dates.append(f"{year:04d}-{month:02d}-{int(day):02d}")
-    return dates
+    if month < today.month - 1:  # e.g. today is Nov, button says "JANUARY" -> next year
+        year += 1
+    return f"{year:04d}-{month:02d}-{day:02d}"
+
+
+def _venue_block(body_text: str, venue: str) -> str | None:
+    """Slice out just the target venue's section of the results list.
+
+    Fandango lists each theater as "<name> / <distance> mi / <formats> /
+    <times>", so the block ends where the *next* theater's distance marker
+    begins. Without this cut, a neighbouring theater's showtimes would be
+    misattributed to Metreon."""
+    start = body_text.lower().find(venue.lower())
+    if start == -1:
+        return None
+    rest = body_text[start:]
+    distances = list(DISTANCE_PATTERN.finditer(rest))
+    if len(distances) >= 2:
+        rest = rest[: distances[1].start()]  # first distance is this venue's own
+    return rest
+
+
+def _extract_showtimes(body_text: str, target: dict, date_str: str, url: str) -> list[Showtime]:
+    block = _venue_block(body_text, target["venue"])
+    if not block or not FORMAT_70MM_PATTERN.search(block):
+        return []
+    out = {}
+    for match in TIME_PATTERN.finditer(block):
+        hour, minute, meridiem = match.groups()
+        h = int(hour)
+        is_pm = meridiem.lower().startswith("p")
+        if is_pm and h != 12:
+            h += 12
+        if not is_pm and h == 12:
+            h = 0
+        st = Showtime(
+            date=date_str,
+            time=f"{h:02d}:{minute}",
+            format=target["format"],
+            venue=target["venue"],
+            booking_url=url,
+        )
+        out[st.key()] = st
+    return list(out.values())
+
+
+def _click_date(page, date_str: str, today: date) -> bool:
+    """Select `date_str` in the calendar carousel. Returns False if the
+    button can't be found or clicked. Buttons are looked up fresh each call
+    because clicking re-renders the carousel."""
+    try:
+        buttons = page.locator(DATE_BUTTON_SELECTOR)
+        for i in range(min(buttons.count(), MAX_DATES)):
+            button = buttons.nth(i)
+            if _button_date(button.inner_text(), today) != date_str:
+                continue
+            button.scroll_into_view_if_needed(timeout=3_000)  # carousel may have it off-screen
+            button.click(timeout=5_000)
+            page.wait_for_timeout(2_000)  # let the showtime list re-render
+            return True
+    except Exception:
+        return False
+    return False
 
 
 def check(target: dict) -> SourceResult:
-    url = target["fandango_theater_url"]
+    url = target["fandango_film_url"]
+    today = date.today()
 
     with polite_page() as page:
         classification, response = goto_and_classify(page, url)
         if classification == "blocked":
             status_code = response.status if response else "?"
-            reason = "403/429 response" if status_code in (403, 429) else "waiting-room/challenge interstitial"
             return SourceResult(
                 source=SOURCE_NAME, target_id=target["id"], status="blocked",
-                error=f"HTTP {status_code} — {reason}",
+                error=f"HTTP {status_code} — blocked or challenge interstitial",
             )
         if classification == "no_data":
             return SourceResult(
-                source=SOURCE_NAME, target_id=target["id"], status="no_data", error="navigation failed"
+                source=SOURCE_NAME, target_id=target["id"], status="no_data",
+                error="navigation failed (film page may have moved — check fandango_film_url)",
             )
 
         _dismiss_cookie_banner(page)
         try:
             page.wait_for_load_state("networkidle", timeout=15_000)
         except Exception:
-            pass  # Fandango's page never fully idles; proceed with whatever rendered
+            pass  # Fandango never fully idles; proceed with what rendered
+        page.wait_for_timeout(1_500)
 
         try:
             body_text = page.inner_text("body")
         except Exception as e:
-            return SourceResult(source=SOURCE_NAME, target_id=target["id"], status="parse_error", error=str(e))
+            return SourceResult(
+                source=SOURCE_NAME, target_id=target["id"], status="parse_error", error=str(e)
+            )
 
-    lowered = body_text.lower()
-    if not any(landmark in lowered for landmark in LANDMARKS):
-        return SourceResult(
-            source=SOURCE_NAME, target_id=target["id"], status="parse_error",
-            error="expected page landmarks not found — page structure may have changed",
-        )
+        if not SF_ZIP_PATTERN.search(body_text):
+            return SourceResult(
+                source=SOURCE_NAME, target_id=target["id"], status="parse_error",
+                error="no San Francisco ZIP on page — geolocation override may have stopped "
+                      "working, so venue results cannot be trusted",
+            )
 
-    calendar_dates = _parse_calendar_dates(body_text, date.today())
-    if not calendar_dates:
-        # Landmarks were present (it's genuinely Metreon's page) but the
-        # calendar widget itself yielded nothing — that's the structural
-        # break the dead-man's switch exists for, not a normal "no showtimes."
-        return SourceResult(
-            source=SOURCE_NAME, target_id=target["id"], status="parse_error",
-            error="page loaded but no calendar dates were extracted — widget structure may have changed",
-        )
+        try:
+            buttons = page.locator(DATE_BUTTON_SELECTOR)
+            labels = [buttons.nth(i).inner_text() for i in range(min(buttons.count(), MAX_DATES))]
+        except Exception as e:
+            return SourceResult(
+                source=SOURCE_NAME, target_id=target["id"], status="parse_error",
+                error=f"could not read calendar controls: {e}",
+            )
 
-    showtimes = [
-        Showtime(date=d, time="unknown", format=target["format"], venue=target["venue"], booking_url=url)
-        for d in calendar_dates
-    ]
-    return SourceResult(source=SOURCE_NAME, target_id=target["id"], status="ok", kind="mention", showtimes=showtimes)
+        if not labels:
+            # No 70mm dates offered at all. Real and meaningful for a film
+            # between waves — not an error.
+            return SourceResult(source=SOURCE_NAME, target_id=target["id"], status="ok", showtimes=[])
+
+        wanted_dates = [d for d in (_button_date(lbl, today) for lbl in labels) if d]
+
+        showtimes: list[Showtime] = []
+        missed: list[str] = []
+        for date_str in wanted_dates:
+            # Re-resolve the button every iteration and match on its parsed
+            # date rather than reusing an index: clicking re-renders the
+            # date carousel, which invalidates previously-held handles (this
+            # is why an index-based loop silently dropped the last date).
+            if not _click_date(page, date_str, today):
+                missed.append(date_str)
+                continue
+            try:
+                day_text = page.inner_text("body")
+            except Exception:
+                missed.append(date_str)
+                continue
+            showtimes.extend(_extract_showtimes(day_text, target, date_str, url))
+
+        error = None
+        if missed:
+            error = f"could not read {len(missed)} of {len(wanted_dates)} dates: {', '.join(missed)}"
+        if len(labels) >= MAX_DATES:
+            note = f"calendar truncated at MAX_DATES={MAX_DATES}; later dates not checked"
+            error = f"{error}; {note}" if error else note
+
+    return SourceResult(
+        source=SOURCE_NAME, target_id=target["id"], status="ok", kind="showtime",
+        showtimes=showtimes, error=error,
+    )

@@ -9,7 +9,7 @@
     "amc_theatre_url": "https://www.amctheatres.com/movie-theatres/san-francisco/amc-metreon-16",
     "amc_film_url": "https://www.amctheatres.com/movies/dune-part-three-77032",
     "imax_url": "https://www.imax.com/movie/dune-part-three",
-    "fandango_theater_url": "https://www.fandango.com/amc-metreon-16-aanem/theater-page",
+    "fandango_film_url": "https://www.fandango.com/dune-part-three-the-imax-70mm-experience-2026-245188/movie-overview",
     "active": true
   },
   {
@@ -22,7 +22,7 @@
     "amc_theatre_url": "https://www.amctheatres.com/movie-theatres/san-francisco/amc-metreon-16",
     "amc_film_url": "https://www.amctheatres.com/movies/the-odyssey-80679",
     "imax_url": "https://www.imax.com/movie/the-odyssey",
-    "fandango_theater_url": "https://www.fandango.com/amc-metreon-16-aanem/theater-page",
+    "fandango_film_url": "https://www.fandango.com/the-odyssey-the-imax-70mm-experience-2026-241386/movie-overview",
     "active": true,
     "note": "TEMPORARY live validation target used to prove the pipeline works on real data (the film's IMAX 70mm run is being actively extended/expanded as of 2026-07-30, so new Metreon showtimes are expected soon). Remove this entry once a real alert has been received and confirmed correct — see RUNBOOK.md 'Live test' section."
   }

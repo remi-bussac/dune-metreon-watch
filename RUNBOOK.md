@@ -4,16 +4,27 @@
 
 Every cron tick, `.github/workflows/monitor.yml` runs `scripts/monitor.py`, which checks 5 independent sources for each active target in `config/targets.json` (currently: Dune: Part Three, and The Odyssey as a temporary live test — see below), diffs results against `state/state.json`, emails you on anything new or broken, and commits the updated state back to the repo.
 
-**Source reliability, confirmed by live testing on 2026-07-30 (read this before you're surprised in November):**
+**Source reliability, confirmed by live testing (last verified 2026-07-31, after reviewing the first production runs):**
 
 | Source | Status observed live | What it means |
 |---|---|---|
-| `amc_showtimes` / `amc_film_page` | **Blocked** — every single request, even the AMC homepage, hits a Cloudflare "Global Safety Net" Queue-it waiting room | AMC is effectively unreachable by this monitor right now. Both AMC sources will very likely sit in "blocked" state for most/all of the run (through March 2027 — see the extended timeline below). This is expected, not a bug — see "If AMC starts blocking the runner" below (spoiler: it already is, from day one). |
-| `imax_page` | **Inconsistent** — one film's page loaded fine, another got stuck behind a cookie-consent modal that a real click couldn't dismiss and the page then rendered a bare client-side error | Expect intermittent `parse_error`. After 3 consecutive failures you'll get a distinct "monitor broken" email for this source specifically — that's the dead-man's switch working as designed, not something to panic about. |
-| `fandango` | **Reliable** — loads cleanly, no bot wall encountered | This is the workhorse. It doesn't scrape per-showtime data (Fandango's theater page only shows one calendar day at a time); instead it diffs the *list of bookable calendar dates* at Metreon. A new date appearing at all — confirmed live to already include Dune: Part Three's known Dec 17–20, 2026 dates — is the primary signal. |
-| `reddit_rss` | **Works, but rate-limit sensitive** — hitting the same feed twice within seconds got a 403 the second time | Fixed by caching each feed fetch once per process run regardless of how many targets ask for it (see `scripts/sources/reddit_rss.py`). If this degrades again in production, it'll show up as `blocked` in the heartbeat, not silently. |
+| `fandango` | **Reliable and validated** — the primary source | Reads Fandango's film-specific *"IMAX 70MM Experience"* page, geo-set to San Francisco, and extracts AMC Metreon 16's showtimes for every date the film offers in 70mm. Currently returns exactly the 8 known Dune showtimes (Dec 17–20 × 7:00p and 11:00p). Because the page is inherently 70mm-only, there is no regular-programming noise, and it detects both a **new date** and a **new showtime on an existing date**. |
+| `reddit_rss` | **Works, rate-limit sensitive** — 1 of 2 feeds usually 403s | Each feed is fetched once per run and cached across targets. Partial coverage is reported in `last_error` rather than hidden. Leading indicator only, never a ticket alert. |
+| `amc_showtimes` / `amc_film_page` | **Unreliable and unvalidated** — 403 / Queue-it waiting room from GitHub's datacenter IPs; intermittently loads from a home IP | Treat AMC output as *redundancy only, never as evidence of absence*. Its extraction path has never once successfully parsed a real showtime (AMC has been blocked every time it mattered), so an `ok (0 showtimes)` from AMC means "nothing found by unvalidated code," not "nothing on sale." Fandango is the source of truth. |
+| `imax_page` | **Persistently broken** — page loads but stalls behind a cookie-consent modal it won't dismiss, rendering ~300 chars ending in a bare client-side error | Reports `parse_error`, and has already tripped the 3-strike dead-man's switch, so **expect one "⚠️ MONITOR BROKEN: imax_page" email** — that alert is correct, not a false alarm. It then goes quiet unless IMAX starts working again. |
 
-Net effect: in practice, **Fandango and Reddit are your real signal**; AMC and IMAX are best-effort redundancy that will mostly report their own broken/blocked state honestly rather than pretend to work. If AMC's blocking changes (loosens or tightens further), that shows up in the weekly heartbeat digest.
+Net effect: **Fandango is the real signal; Reddit is a leading indicator; AMC and IMAX mostly report their own broken state honestly.** That's the intended behavior of the dead-man's switch — a source that can't work says so instead of quietly returning "nothing."
+
+### Why the Fandango source was rewritten (found during the post-deployment review)
+
+The original implementation diffed the *theater* page's calendar — every bookable date at Metreon, for any film. Checking it against two days of real production data showed it was wrong in both directions:
+
+- **False positives, roughly daily.** The theater calendar rolls forward as Metreon publishes ordinary programming. `2026-09-08` appeared between two consecutive runs, which would have fired a "new date!" alert with nothing to do with Dune. Over five months that is alert fatigue on the one channel that has to stay trustworthy.
+- **A false negative on the case that actually matters.** Dec 17–20 2026 were *already* in that calendar (the April wave booked them). A second wave adding more Dune 70mm showtimes on those same dates changes no *date*, so the monitor would have stayed completely silent through exactly the event it exists to catch.
+
+The rewrite watches the 70mm-specific film page instead, which lists only 70mm dates and the actual per-theater showtimes — so it is quiet by default and fires on either a new date or a new showtime. Verified by simulation: removing Dec 20 from state and re-running produced a correct 🎟️ TICKETS email naming exactly the two restored showtimes.
+
+**One dependency to know about:** this source relies on a browser **geolocation override** (`SF_GEOLOCATION` in `scripts/browser.py`) to make Fandango show San Francisco theaters — without it the runner's own IP picks the metro and Metreon never appears. If Fandango stops honoring it, the page would show another city and "no Metreon showtimes" would be a lie. The source guards against this by requiring a `941xx` ZIP on the page and reporting `parse_error` if it's missing, so that failure surfaces as a broken-monitor alert instead of false silence.
 
 ---
 
@@ -56,14 +67,16 @@ If the workflow fails outright (not "sources report blocked," but the *job* fail
 
 ## Live test: The Odyssey (do this before trusting the pipeline for Dune)
 
-`config/targets.json` includes The Odyssey (Metreon, IMAX 70mm) specifically as a live test target, per your request. As of 2026-07-30, its IMAX 70mm run was just extended through Sept 16, 2026 due to demand — new Metreon dates are actively being added to Fandango's calendar right now, so within days of turning the monitor on you should get a real "leading indicator" email when a new far-future date shows up.
+`config/targets.json` includes The Odyssey (Metreon, IMAX 70mm) specifically as a live test target, per your request. Its IMAX 70mm run was extended through Sept 16, 2026 due to demand, so Metreon is actively adding showtimes — you should get real alerts within days.
 
-**What to check when it arrives:**
-1. Subject line says "👀 Leading indicator" (not "🎟️ TICKETS") — Fandango's calendar-diff source is intentionally `kind="mention"`, since a new bookable date doesn't independently confirm it's for The Odyssey vs. some other booking at Metreon.
-2. The email includes the Fandango Metreon theater page URL.
-3. Manually check that URL and confirm there really is a new date, and it's plausible it's an Odyssey addition (matches the ongoing run-extension pattern).
+**Heads up: The Odyssey is deliberately chatty, and that's the point.** It's a currently-playing film, so it has ~90 tracked 70mm showtimes at Metreon and its schedule rolls forward daily. Expect a 🎟️ TICKETS email fairly often while it's in the target list — each one is the pipeline genuinely working on real data. Dune: Part Three, by contrast, is an event booking with a stable 8-showtime baseline, so it should stay completely silent until an actual wave drops. **Do not calibrate your expectations for Dune based on Odyssey's volume.**
 
-Once you've confirmed one real alert end-to-end, remove The Odyssey from the target list:
+**What to check when an Odyssey alert arrives:**
+1. Subject says "🎟️ TICKETS: The Odyssey 70mm at AMC Metreon 16".
+2. It lists specific dates and times, and includes the direct Fandango 70mm booking URL.
+3. Click through and confirm those showtimes really exist at Metreon in IMAX 70mm.
+
+That confirms the full chain — scrape → normalize → diff → email — on real data. Once you've confirmed one, remove The Odyssey from the target list to stop the noise:
 
 ```bash
 # edit config/targets.json, delete the "the-odyssey" object, then:
@@ -181,12 +194,14 @@ Archiving is reversible (unarchive from repo settings) and stops any possibility
   "amc_theatre_url": "https://www.amctheatres.com/movie-theatres/san-francisco/amc-metreon-16",
   "amc_film_url": "https://www.amctheatres.com/movies/<find-the-real-slug>",
   "imax_url": "https://www.imax.com/movie/<find-the-real-slug>",
-  "fandango_theater_url": "https://www.fandango.com/amc-metreon-16-aanem/theater-page",
+  "fandango_film_url": "https://www.fandango.com/<film>-the-imax-70mm-experience-<year>-<id>/movie-overview",
   "active": true
 }
 ```
 
-`amc_theatre_url` and `fandango_theater_url` stay the same for anything at Metreon (they're theater pages, not film pages) — only `amc_film_url` and `imax_url` need the new film's real URL, which you'll have to find manually (search `site:amctheatres.com <film name>` / `site:imax.com <film name>` the way this project's research did). A different venue would mean a different `amc_theatre_url`/`fandango_theater_url` too, and `fandango.py`'s calendar-diff approach should work at any Fandango-covered theater page, not just Metreon's — the URL is the only thing that's Metreon-specific in that source.
+**`fandango_film_url` is the one that matters** — it's the primary source. Find it by searching Fandango for the film and picking the entry explicitly titled *"<Film> - The IMAX 70MM Experience"*, not the standard entry. That separate per-format entry is what makes the source 70mm-only. If a film has no 70mm entry yet, the URL won't exist and the source will report `no_data` with a hint to check the URL — add the target once the 70mm listing appears.
+
+`amc_theatre_url` stays the same for anything at Metreon; `amc_film_url` and `imax_url` need the new film's slug (search `site:amctheatres.com <film name>` / `site:imax.com <film name>`). For a **different venue**, change `venue` to match the theater's name exactly as Fandango renders it (e.g. `"AMC Lincoln Square 13"`) — the Fandango source matches on that string — and update `scripts/browser.py`'s `SF_GEOLOCATION` plus `fandango.py`'s `SF_ZIP_PATTERN` to that city, or the page will show the wrong metro.
 
 Set `"active": false` on any target instead of deleting it if you want to pause without losing the config.
 

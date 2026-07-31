@@ -1,23 +1,23 @@
 {
-  "last_heartbeat_sent": "2026-07-31T20:28:02.665961+00:00",
+  "last_heartbeat_sent": "2026-07-31T20:59:37.731975+00:00",
   "sources": {
     "dune-part-three::amc_film_page": {
-      "blocked_alert_sent": true,
+      "blocked_alert_sent": false,
       "broken_alert_sent": false,
       "consecutive_parse_errors": 0,
       "known_showtimes": [],
-      "last_checked_at": "2026-07-31T20:37:43.515824+00:00",
-      "last_error": "HTTP 403 \u2014 403/429 response",
-      "last_status": "blocked"
+      "last_checked_at": "2026-07-31T21:04:24.627646+00:00",
+      "last_error": null,
+      "last_status": "ok"
     },
     "dune-part-three::amc_showtimes": {
-      "blocked_alert_sent": true,
+      "blocked_alert_sent": false,
       "broken_alert_sent": false,
       "consecutive_parse_errors": 0,
       "known_showtimes": [],
-      "last_checked_at": "2026-07-31T20:37:43.015125+00:00",
-      "last_error": "HTTP 403 \u2014 403/429 response",
-      "last_status": "blocked"
+      "last_checked_at": "2026-07-31T21:04:05.257199+00:00",
+      "last_error": null,
+      "last_status": "ok"
     },
     "dune-part-three::fandango": {
       "blocked_alert_sent": false,
@@ -25,655 +25,74 @@
       "consecutive_parse_errors": 0,
       "known_showtimes": [
         {
-          "booking_url": "https://www.fandango.com/amc-metreon-16-aanem/theater-page",
-          "date": "2026-08-01",
-          "format": "IMAX 70mm",
-          "time": "unknown",
-          "venue": "AMC Metreon 16"
-        },
-        {
-          "booking_url": "https://www.fandango.com/amc-metreon-16-aanem/theater-page",
-          "date": "2026-08-02",
-          "format": "IMAX 70mm",
-          "time": "unknown",
-          "venue": "AMC Metreon 16"
-        },
-        {
-          "booking_url": "https://www.fandango.com/amc-metreon-16-aanem/theater-page",
-          "date": "2026-08-03",
-          "format": "IMAX 70mm",
-          "time": "unknown",
-          "venue": "AMC Metreon 16"
-        },
-        {
-          "booking_url": "https://www.fandango.com/amc-metreon-16-aanem/theater-page",
-          "date": "2026-08-04",
-          "format": "IMAX 70mm",
-          "time": "unknown",
-          "venue": "AMC Metreon 16"
-        },
-        {
-          "booking_url": "https://www.fandango.com/amc-metreon-16-aanem/theater-page",
-          "date": "2026-08-05",
-          "format": "IMAX 70mm",
-          "time": "unknown",
-          "venue": "AMC Metreon 16"
-        },
-        {
-          "booking_url": "https://www.fandango.com/amc-metreon-16-aanem/theater-page",
-          "date": "2026-08-06",
-          "format": "IMAX 70mm",
-          "time": "unknown",
-          "venue": "AMC Metreon 16"
-        },
-        {
-          "booking_url": "https://www.fandango.com/amc-metreon-16-aanem/theater-page",
-          "date": "2026-08-07",
-          "format": "IMAX 70mm",
-          "time": "unknown",
-          "venue": "AMC Metreon 16"
-        },
-        {
-          "booking_url": "https://www.fandango.com/amc-metreon-16-aanem/theater-page",
-          "date": "2026-08-08",
-          "format": "IMAX 70mm",
-          "time": "unknown",
-          "venue": "AMC Metreon 16"
-        },
-        {
-          "booking_url": "https://www.fandango.com/amc-metreon-16-aanem/theater-page",
-          "date": "2026-08-09",
-          "format": "IMAX 70mm",
-          "time": "unknown",
-          "venue": "AMC Metreon 16"
-        },
-        {
-          "booking_url": "https://www.fandango.com/amc-metreon-16-aanem/theater-page",
-          "date": "2026-08-10",
-          "format": "IMAX 70mm",
-          "time": "unknown",
-          "venue": "AMC Metreon 16"
-        },
-        {
-          "booking_url": "https://www.fandango.com/amc-metreon-16-aanem/theater-page",
-          "date": "2026-08-11",
-          "format": "IMAX 70mm",
-          "time": "unknown",
-          "venue": "AMC Metreon 16"
-        },
-        {
-          "booking_url": "https://www.fandango.com/amc-metreon-16-aanem/theater-page",
-          "date": "2026-08-12",
-          "format": "IMAX 70mm",
-          "time": "unknown",
-          "venue": "AMC Metreon 16"
-        },
-        {
-          "booking_url": "https://www.fandango.com/amc-metreon-16-aanem/theater-page",
-          "date": "2026-08-13",
-          "format": "IMAX 70mm",
-          "time": "unknown",
-          "venue": "AMC Metreon 16"
-        },
-        {
-          "booking_url": "https://www.fandango.com/amc-metreon-16-aanem/theater-page",
-          "date": "2026-08-14",
-          "format": "IMAX 70mm",
-          "time": "unknown",
-          "venue": "AMC Metreon 16"
-        },
-        {
-          "booking_url": "https://www.fandango.com/amc-metreon-16-aanem/theater-page",
-          "date": "2026-08-15",
-          "format": "IMAX 70mm",
-          "time": "unknown",
-          "venue": "AMC Metreon 16"
-        },
-        {
-          "booking_url": "https://www.fandango.com/amc-metreon-16-aanem/theater-page",
-          "date": "2026-08-16",
-          "format": "IMAX 70mm",
-          "time": "unknown",
-          "venue": "AMC Metreon 16"
-        },
-        {
-          "booking_url": "https://www.fandango.com/amc-metreon-16-aanem/theater-page",
-          "date": "2026-08-17",
-          "format": "IMAX 70mm",
-          "time": "unknown",
-          "venue": "AMC Metreon 16"
-        },
-        {
-          "booking_url": "https://www.fandango.com/amc-metreon-16-aanem/theater-page",
-          "date": "2026-08-18",
-          "format": "IMAX 70mm",
-          "time": "unknown",
-          "venue": "AMC Metreon 16"
-        },
-        {
-          "booking_url": "https://www.fandango.com/amc-metreon-16-aanem/theater-page",
-          "date": "2026-08-19",
-          "format": "IMAX 70mm",
-          "time": "unknown",
-          "venue": "AMC Metreon 16"
-        },
-        {
-          "booking_url": "https://www.fandango.com/amc-metreon-16-aanem/theater-page",
-          "date": "2026-08-20",
-          "format": "IMAX 70mm",
-          "time": "unknown",
-          "venue": "AMC Metreon 16"
-        },
-        {
-          "booking_url": "https://www.fandango.com/amc-metreon-16-aanem/theater-page",
-          "date": "2026-08-21",
-          "format": "IMAX 70mm",
-          "time": "unknown",
-          "venue": "AMC Metreon 16"
-        },
-        {
-          "booking_url": "https://www.fandango.com/amc-metreon-16-aanem/theater-page",
-          "date": "2026-08-22",
-          "format": "IMAX 70mm",
-          "time": "unknown",
-          "venue": "AMC Metreon 16"
-        },
-        {
-          "booking_url": "https://www.fandango.com/amc-metreon-16-aanem/theater-page",
-          "date": "2026-08-23",
-          "format": "IMAX 70mm",
-          "time": "unknown",
-          "venue": "AMC Metreon 16"
-        },
-        {
-          "booking_url": "https://www.fandango.com/amc-metreon-16-aanem/theater-page",
-          "date": "2026-08-24",
-          "format": "IMAX 70mm",
-          "time": "unknown",
-          "venue": "AMC Metreon 16"
-        },
-        {
-          "booking_url": "https://www.fandango.com/amc-metreon-16-aanem/theater-page",
-          "date": "2026-08-25",
-          "format": "IMAX 70mm",
-          "time": "unknown",
-          "venue": "AMC Metreon 16"
-        },
-        {
-          "booking_url": "https://www.fandango.com/amc-metreon-16-aanem/theater-page",
-          "date": "2026-08-26",
-          "format": "IMAX 70mm",
-          "time": "unknown",
-          "venue": "AMC Metreon 16"
-        },
-        {
-          "booking_url": "https://www.fandango.com/amc-metreon-16-aanem/theater-page",
-          "date": "2026-08-27",
-          "format": "IMAX 70mm",
-          "time": "unknown",
-          "venue": "AMC Metreon 16"
-        },
-        {
-          "booking_url": "https://www.fandango.com/amc-metreon-16-aanem/theater-page",
-          "date": "2026-08-28",
-          "format": "IMAX 70mm",
-          "time": "unknown",
-          "venue": "AMC Metreon 16"
-        },
-        {
-          "booking_url": "https://www.fandango.com/amc-metreon-16-aanem/theater-page",
-          "date": "2026-08-29",
-          "format": "IMAX 70mm",
-          "time": "unknown",
-          "venue": "AMC Metreon 16"
-        },
-        {
-          "booking_url": "https://www.fandango.com/amc-metreon-16-aanem/theater-page",
-          "date": "2026-08-30",
-          "format": "IMAX 70mm",
-          "time": "unknown",
-          "venue": "AMC Metreon 16"
-        },
-        {
-          "booking_url": "https://www.fandango.com/amc-metreon-16-aanem/theater-page",
-          "date": "2026-08-31",
-          "format": "IMAX 70mm",
-          "time": "unknown",
-          "venue": "AMC Metreon 16"
-        },
-        {
-          "booking_url": "https://www.fandango.com/amc-metreon-16-aanem/theater-page",
-          "date": "2026-09-01",
-          "format": "IMAX 70mm",
-          "time": "unknown",
-          "venue": "AMC Metreon 16"
-        },
-        {
-          "booking_url": "https://www.fandango.com/amc-metreon-16-aanem/theater-page",
-          "date": "2026-09-02",
-          "format": "IMAX 70mm",
-          "time": "unknown",
-          "venue": "AMC Metreon 16"
-        },
-        {
-          "booking_url": "https://www.fandango.com/amc-metreon-16-aanem/theater-page",
-          "date": "2026-09-03",
-          "format": "IMAX 70mm",
-          "time": "unknown",
-          "venue": "AMC Metreon 16"
-        },
-        {
-          "booking_url": "https://www.fandango.com/amc-metreon-16-aanem/theater-page",
-          "date": "2026-09-04",
-          "format": "IMAX 70mm",
-          "time": "unknown",
-          "venue": "AMC Metreon 16"
-        },
-        {
-          "booking_url": "https://www.fandango.com/amc-metreon-16-aanem/theater-page",
-          "date": "2026-09-05",
-          "format": "IMAX 70mm",
-          "time": "unknown",
-          "venue": "AMC Metreon 16"
-        },
-        {
-          "booking_url": "https://www.fandango.com/amc-metreon-16-aanem/theater-page",
-          "date": "2026-09-06",
-          "format": "IMAX 70mm",
-          "time": "unknown",
-          "venue": "AMC Metreon 16"
-        },
-        {
-          "booking_url": "https://www.fandango.com/amc-metreon-16-aanem/theater-page",
-          "date": "2026-09-07",
-          "format": "IMAX 70mm",
-          "time": "unknown",
-          "venue": "AMC Metreon 16"
-        },
-        {
-          "booking_url": "https://www.fandango.com/amc-metreon-16-aanem/theater-page",
-          "date": "2026-09-08",
-          "format": "IMAX 70mm",
-          "time": "unknown",
-          "venue": "AMC Metreon 16"
-        },
-        {
-          "booking_url": "https://www.fandango.com/amc-metreon-16-aanem/theater-page",
-          "date": "2026-09-09",
-          "format": "IMAX 70mm",
-          "time": "unknown",
-          "venue": "AMC Metreon 16"
-        },
-        {
-          "booking_url": "https://www.fandango.com/amc-metreon-16-aanem/theater-page",
-          "date": "2026-09-10",
-          "format": "IMAX 70mm",
-          "time": "unknown",
-          "venue": "AMC Metreon 16"
-        },
-        {
-          "booking_url": "https://www.fandango.com/amc-metreon-16-aanem/theater-page",
-          "date": "2026-09-11",
-          "format": "IMAX 70mm",
-          "time": "unknown",
-          "venue": "AMC Metreon 16"
-        },
-        {
-          "booking_url": "https://www.fandango.com/amc-metreon-16-aanem/theater-page",
-          "date": "2026-09-19",
-          "format": "IMAX 70mm",
-          "time": "unknown",
-          "venue": "AMC Metreon 16"
-        },
-        {
-          "booking_url": "https://www.fandango.com/amc-metreon-16-aanem/theater-page",
-          "date": "2026-09-20",
-          "format": "IMAX 70mm",
-          "time": "unknown",
-          "venue": "AMC Metreon 16"
-        },
-        {
-          "booking_url": "https://www.fandango.com/amc-metreon-16-aanem/theater-page",
-          "date": "2026-09-21",
-          "format": "IMAX 70mm",
-          "time": "unknown",
-          "venue": "AMC Metreon 16"
-        },
-        {
-          "booking_url": "https://www.fandango.com/amc-metreon-16-aanem/theater-page",
-          "date": "2026-09-23",
-          "format": "IMAX 70mm",
-          "time": "unknown",
-          "venue": "AMC Metreon 16"
-        },
-        {
-          "booking_url": "https://www.fandango.com/amc-metreon-16-aanem/theater-page",
-          "date": "2026-09-26",
-          "format": "IMAX 70mm",
-          "time": "unknown",
-          "venue": "AMC Metreon 16"
-        },
-        {
-          "booking_url": "https://www.fandango.com/amc-metreon-16-aanem/theater-page",
-          "date": "2026-09-27",
-          "format": "IMAX 70mm",
-          "time": "unknown",
-          "venue": "AMC Metreon 16"
-        },
-        {
-          "booking_url": "https://www.fandango.com/amc-metreon-16-aanem/theater-page",
-          "date": "2026-09-28",
-          "format": "IMAX 70mm",
-          "time": "unknown",
-          "venue": "AMC Metreon 16"
-        },
-        {
-          "booking_url": "https://www.fandango.com/amc-metreon-16-aanem/theater-page",
-          "date": "2026-09-29",
-          "format": "IMAX 70mm",
-          "time": "unknown",
-          "venue": "AMC Metreon 16"
-        },
-        {
-          "booking_url": "https://www.fandango.com/amc-metreon-16-aanem/theater-page",
-          "date": "2026-09-30",
-          "format": "IMAX 70mm",
-          "time": "unknown",
-          "venue": "AMC Metreon 16"
-        },
-        {
-          "booking_url": "https://www.fandango.com/amc-metreon-16-aanem/theater-page",
-          "date": "2026-10-03",
-          "format": "IMAX 70mm",
-          "time": "unknown",
-          "venue": "AMC Metreon 16"
-        },
-        {
-          "booking_url": "https://www.fandango.com/amc-metreon-16-aanem/theater-page",
-          "date": "2026-10-11",
-          "format": "IMAX 70mm",
-          "time": "unknown",
-          "venue": "AMC Metreon 16"
-        },
-        {
-          "booking_url": "https://www.fandango.com/amc-metreon-16-aanem/theater-page",
-          "date": "2026-10-12",
-          "format": "IMAX 70mm",
-          "time": "unknown",
-          "venue": "AMC Metreon 16"
-        },
-        {
-          "booking_url": "https://www.fandango.com/amc-metreon-16-aanem/theater-page",
-          "date": "2026-10-13",
-          "format": "IMAX 70mm",
-          "time": "unknown",
-          "venue": "AMC Metreon 16"
-        },
-        {
-          "booking_url": "https://www.fandango.com/amc-metreon-16-aanem/theater-page",
-          "date": "2026-10-14",
-          "format": "IMAX 70mm",
-          "time": "unknown",
-          "venue": "AMC Metreon 16"
-        },
-        {
-          "booking_url": "https://www.fandango.com/amc-metreon-16-aanem/theater-page",
-          "date": "2026-10-17",
-          "format": "IMAX 70mm",
-          "time": "unknown",
-          "venue": "AMC Metreon 16"
-        },
-        {
-          "booking_url": "https://www.fandango.com/amc-metreon-16-aanem/theater-page",
-          "date": "2026-10-18",
-          "format": "IMAX 70mm",
-          "time": "unknown",
-          "venue": "AMC Metreon 16"
-        },
-        {
-          "booking_url": "https://www.fandango.com/amc-metreon-16-aanem/theater-page",
-          "date": "2026-10-19",
-          "format": "IMAX 70mm",
-          "time": "unknown",
-          "venue": "AMC Metreon 16"
-        },
-        {
-          "booking_url": "https://www.fandango.com/amc-metreon-16-aanem/theater-page",
-          "date": "2026-10-20",
-          "format": "IMAX 70mm",
-          "time": "unknown",
-          "venue": "AMC Metreon 16"
-        },
-        {
-          "booking_url": "https://www.fandango.com/amc-metreon-16-aanem/theater-page",
-          "date": "2026-10-21",
-          "format": "IMAX 70mm",
-          "time": "unknown",
-          "venue": "AMC Metreon 16"
-        },
-        {
-          "booking_url": "https://www.fandango.com/amc-metreon-16-aanem/theater-page",
-          "date": "2026-10-22",
-          "format": "IMAX 70mm",
-          "time": "unknown",
-          "venue": "AMC Metreon 16"
-        },
-        {
-          "booking_url": "https://www.fandango.com/amc-metreon-16-aanem/theater-page",
-          "date": "2026-10-25",
-          "format": "IMAX 70mm",
-          "time": "unknown",
-          "venue": "AMC Metreon 16"
-        },
-        {
-          "booking_url": "https://www.fandango.com/amc-metreon-16-aanem/theater-page",
-          "date": "2026-11-14",
-          "format": "IMAX 70mm",
-          "time": "unknown",
-          "venue": "AMC Metreon 16"
-        },
-        {
-          "booking_url": "https://www.fandango.com/amc-metreon-16-aanem/theater-page",
-          "date": "2026-11-22",
-          "format": "IMAX 70mm",
-          "time": "unknown",
-          "venue": "AMC Metreon 16"
-        },
-        {
-          "booking_url": "https://www.fandango.com/amc-metreon-16-aanem/theater-page",
-          "date": "2026-11-23",
-          "format": "IMAX 70mm",
-          "time": "unknown",
-          "venue": "AMC Metreon 16"
-        },
-        {
-          "booking_url": "https://www.fandango.com/amc-metreon-16-aanem/theater-page",
-          "date": "2026-12-05",
-          "format": "IMAX 70mm",
-          "time": "unknown",
-          "venue": "AMC Metreon 16"
-        },
-        {
-          "booking_url": "https://www.fandango.com/amc-metreon-16-aanem/theater-page",
-          "date": "2026-12-06",
-          "format": "IMAX 70mm",
-          "time": "unknown",
-          "venue": "AMC Metreon 16"
-        },
-        {
-          "booking_url": "https://www.fandango.com/amc-metreon-16-aanem/theater-page",
-          "date": "2026-12-09",
-          "format": "IMAX 70mm",
-          "time": "unknown",
-          "venue": "AMC Metreon 16"
-        },
-        {
-          "booking_url": "https://www.fandango.com/amc-metreon-16-aanem/theater-page",
-          "date": "2026-12-12",
-          "format": "IMAX 70mm",
-          "time": "unknown",
-          "venue": "AMC Metreon 16"
-        },
-        {
-          "booking_url": "https://www.fandango.com/amc-metreon-16-aanem/theater-page",
+          "booking_url": "https://www.fandango.com/dune-part-three-the-imax-70mm-experience-2026-245188/movie-overview",
           "date": "2026-12-17",
           "format": "IMAX 70mm",
-          "time": "unknown",
+          "time": "19:00",
           "venue": "AMC Metreon 16"
         },
         {
-          "booking_url": "https://www.fandango.com/amc-metreon-16-aanem/theater-page",
+          "booking_url": "https://www.fandango.com/dune-part-three-the-imax-70mm-experience-2026-245188/movie-overview",
+          "date": "2026-12-17",
+          "format": "IMAX 70mm",
+          "time": "23:00",
+          "venue": "AMC Metreon 16"
+        },
+        {
+          "booking_url": "https://www.fandango.com/dune-part-three-the-imax-70mm-experience-2026-245188/movie-overview",
           "date": "2026-12-18",
           "format": "IMAX 70mm",
-          "time": "unknown",
+          "time": "19:00",
           "venue": "AMC Metreon 16"
         },
         {
-          "booking_url": "https://www.fandango.com/amc-metreon-16-aanem/theater-page",
+          "booking_url": "https://www.fandango.com/dune-part-three-the-imax-70mm-experience-2026-245188/movie-overview",
+          "date": "2026-12-18",
+          "format": "IMAX 70mm",
+          "time": "23:00",
+          "venue": "AMC Metreon 16"
+        },
+        {
+          "booking_url": "https://www.fandango.com/dune-part-three-the-imax-70mm-experience-2026-245188/movie-overview",
           "date": "2026-12-19",
           "format": "IMAX 70mm",
-          "time": "unknown",
+          "time": "19:00",
           "venue": "AMC Metreon 16"
         },
         {
-          "booking_url": "https://www.fandango.com/amc-metreon-16-aanem/theater-page",
+          "booking_url": "https://www.fandango.com/dune-part-three-the-imax-70mm-experience-2026-245188/movie-overview",
+          "date": "2026-12-19",
+          "format": "IMAX 70mm",
+          "time": "23:00",
+          "venue": "AMC Metreon 16"
+        },
+        {
+          "booking_url": "https://www.fandango.com/dune-part-three-the-imax-70mm-experience-2026-245188/movie-overview",
           "date": "2026-12-20",
           "format": "IMAX 70mm",
-          "time": "unknown",
+          "time": "19:00",
           "venue": "AMC Metreon 16"
         },
         {
-          "booking_url": "https://www.fandango.com/amc-metreon-16-aanem/theater-page",
-          "date": "2026-12-21",
+          "booking_url": "https://www.fandango.com/dune-part-three-the-imax-70mm-experience-2026-245188/movie-overview",
+          "date": "2026-12-20",
           "format": "IMAX 70mm",
-          "time": "unknown",
-          "venue": "AMC Metreon 16"
-        },
-        {
-          "booking_url": "https://www.fandango.com/amc-metreon-16-aanem/theater-page",
-          "date": "2026-12-22",
-          "format": "IMAX 70mm",
-          "time": "unknown",
-          "venue": "AMC Metreon 16"
-        },
-        {
-          "booking_url": "https://www.fandango.com/amc-metreon-16-aanem/theater-page",
-          "date": "2026-12-23",
-          "format": "IMAX 70mm",
-          "time": "unknown",
-          "venue": "AMC Metreon 16"
-        },
-        {
-          "booking_url": "https://www.fandango.com/amc-metreon-16-aanem/theater-page",
-          "date": "2026-12-24",
-          "format": "IMAX 70mm",
-          "time": "unknown",
-          "venue": "AMC Metreon 16"
-        },
-        {
-          "booking_url": "https://www.fandango.com/amc-metreon-16-aanem/theater-page",
-          "date": "2026-12-25",
-          "format": "IMAX 70mm",
-          "time": "unknown",
-          "venue": "AMC Metreon 16"
-        },
-        {
-          "booking_url": "https://www.fandango.com/amc-metreon-16-aanem/theater-page",
-          "date": "2026-12-26",
-          "format": "IMAX 70mm",
-          "time": "unknown",
-          "venue": "AMC Metreon 16"
-        },
-        {
-          "booking_url": "https://www.fandango.com/amc-metreon-16-aanem/theater-page",
-          "date": "2026-12-27",
-          "format": "IMAX 70mm",
-          "time": "unknown",
-          "venue": "AMC Metreon 16"
-        },
-        {
-          "booking_url": "https://www.fandango.com/amc-metreon-16-aanem/theater-page",
-          "date": "2026-12-28",
-          "format": "IMAX 70mm",
-          "time": "unknown",
-          "venue": "AMC Metreon 16"
-        },
-        {
-          "booking_url": "https://www.fandango.com/amc-metreon-16-aanem/theater-page",
-          "date": "2026-12-29",
-          "format": "IMAX 70mm",
-          "time": "unknown",
-          "venue": "AMC Metreon 16"
-        },
-        {
-          "booking_url": "https://www.fandango.com/amc-metreon-16-aanem/theater-page",
-          "date": "2026-12-30",
-          "format": "IMAX 70mm",
-          "time": "unknown",
-          "venue": "AMC Metreon 16"
-        },
-        {
-          "booking_url": "https://www.fandango.com/amc-metreon-16-aanem/theater-page",
-          "date": "2026-12-31",
-          "format": "IMAX 70mm",
-          "time": "unknown",
-          "venue": "AMC Metreon 16"
-        },
-        {
-          "booking_url": "https://www.fandango.com/amc-metreon-16-aanem/theater-page",
-          "date": "2027-01-23",
-          "format": "IMAX 70mm",
-          "time": "unknown",
-          "venue": "AMC Metreon 16"
-        },
-        {
-          "booking_url": "https://www.fandango.com/amc-metreon-16-aanem/theater-page",
-          "date": "2027-03-20",
-          "format": "IMAX 70mm",
-          "time": "unknown",
-          "venue": "AMC Metreon 16"
-        },
-        {
-          "booking_url": "https://www.fandango.com/amc-metreon-16-aanem/theater-page",
-          "date": "2027-04-03",
-          "format": "IMAX 70mm",
-          "time": "unknown",
-          "venue": "AMC Metreon 16"
-        },
-        {
-          "booking_url": "https://www.fandango.com/amc-metreon-16-aanem/theater-page",
-          "date": "2027-04-24",
-          "format": "IMAX 70mm",
-          "time": "unknown",
-          "venue": "AMC Metreon 16"
-        },
-        {
-          "booking_url": "https://www.fandango.com/amc-metreon-16-aanem/theater-page",
-          "date": "2027-05-08",
-          "format": "IMAX 70mm",
-          "time": "unknown",
-          "venue": "AMC Metreon 16"
-        },
-        {
-          "booking_url": "https://www.fandango.com/amc-metreon-16-aanem/theater-page",
-          "date": "2027-06-05",
-          "format": "IMAX 70mm",
-          "time": "unknown",
+          "time": "23:00",
           "venue": "AMC Metreon 16"
         }
       ],
-      "last_checked_at": "2026-07-31T20:38:01.092905+00:00",
+      "last_checked_at": "2026-07-31T21:05:11.358285+00:00",
       "last_error": null,
       "last_status": "ok"
     },
     "dune-part-three::imax_page": {
-      "blocked_alert_sent": true,
-      "broken_alert_sent": false,
-      "consecutive_parse_errors": 0,
+      "blocked_alert_sent": false,
+      "broken_alert_sent": true,
+      "consecutive_parse_errors": 3,
       "known_showtimes": [],
-      "last_checked_at": "2026-07-31T20:37:44.067550+00:00",
-      "last_error": "HTTP 403 \u2014 403/429 response",
-      "last_status": "blocked"
+      "last_checked_at": "2026-07-31T21:04:41.902540+00:00",
+      "last_error": "page rendered only 299 chars \u2014 likely stuck behind a modal/error, not real content",
+      "last_status": "parse_error"
     },
     "dune-part-three::reddit_rss": {
       "blocked_alert_sent": false,
@@ -688,27 +107,27 @@
           "venue": "r/imax"
         }
       ],
-      "last_checked_at": "2026-07-31T20:38:01.722361+00:00",
+      "last_checked_at": "2026-07-31T21:05:12.202161+00:00",
       "last_error": "1 of 2 feeds blocked (403/429) \u2014 partial coverage only",
       "last_status": "ok"
     },
     "the-odyssey::amc_film_page": {
-      "blocked_alert_sent": true,
+      "blocked_alert_sent": false,
       "broken_alert_sent": false,
       "consecutive_parse_errors": 0,
       "known_showtimes": [],
-      "last_checked_at": "2026-07-31T20:38:02.690399+00:00",
-      "last_error": "HTTP 403 \u2014 403/429 response",
-      "last_status": "blocked"
+      "last_checked_at": "2026-07-31T21:05:53.878468+00:00",
+      "last_error": null,
+      "last_status": "ok"
     },
     "the-odyssey::amc_showtimes": {
-      "blocked_alert_sent": true,
+      "blocked_alert_sent": false,
       "broken_alert_sent": false,
       "consecutive_parse_errors": 0,
       "known_showtimes": [],
-      "last_checked_at": "2026-07-31T20:38:02.190698+00:00",
-      "last_error": "HTTP 403 \u2014 403/429 response",
-      "last_status": "blocked"
+      "last_checked_at": "2026-07-31T21:05:31.649032+00:00",
+      "last_error": null,
+      "last_status": "ok"
     },
     "the-odyssey::fandango": {
       "blocked_alert_sent": false,
@@ -716,655 +135,648 @@
       "consecutive_parse_errors": 0,
       "known_showtimes": [
         {
-          "booking_url": "https://www.fandango.com/amc-metreon-16-aanem/theater-page",
+          "booking_url": "https://www.fandango.com/the-odyssey-the-imax-70mm-experience-2026-241386/movie-overview",
+          "date": "2026-07-31",
+          "format": "IMAX 70mm",
+          "time": "10:00",
+          "venue": "AMC Metreon 16"
+        },
+        {
+          "booking_url": "https://www.fandango.com/the-odyssey-the-imax-70mm-experience-2026-241386/movie-overview",
+          "date": "2026-07-31",
+          "format": "IMAX 70mm",
+          "time": "14:00",
+          "venue": "AMC Metreon 16"
+        },
+        {
+          "booking_url": "https://www.fandango.com/the-odyssey-the-imax-70mm-experience-2026-241386/movie-overview",
+          "date": "2026-07-31",
+          "format": "IMAX 70mm",
+          "time": "18:00",
+          "venue": "AMC Metreon 16"
+        },
+        {
+          "booking_url": "https://www.fandango.com/the-odyssey-the-imax-70mm-experience-2026-241386/movie-overview",
+          "date": "2026-07-31",
+          "format": "IMAX 70mm",
+          "time": "22:00",
+          "venue": "AMC Metreon 16"
+        },
+        {
+          "booking_url": "https://www.fandango.com/the-odyssey-the-imax-70mm-experience-2026-241386/movie-overview",
+          "date": "2026-07-31",
+          "format": "IMAX 70mm",
+          "time": "09:00",
+          "venue": "AMC Metreon 16"
+        },
+        {
+          "booking_url": "https://www.fandango.com/the-odyssey-the-imax-70mm-experience-2026-241386/movie-overview",
+          "date": "2026-07-31",
+          "format": "IMAX 70mm",
+          "time": "11:10",
+          "venue": "AMC Metreon 16"
+        },
+        {
+          "booking_url": "https://www.fandango.com/the-odyssey-the-imax-70mm-experience-2026-241386/movie-overview",
+          "date": "2026-07-31",
+          "format": "IMAX 70mm",
+          "time": "13:00",
+          "venue": "AMC Metreon 16"
+        },
+        {
+          "booking_url": "https://www.fandango.com/the-odyssey-the-imax-70mm-experience-2026-241386/movie-overview",
+          "date": "2026-07-31",
+          "format": "IMAX 70mm",
+          "time": "15:10",
+          "venue": "AMC Metreon 16"
+        },
+        {
+          "booking_url": "https://www.fandango.com/the-odyssey-the-imax-70mm-experience-2026-241386/movie-overview",
+          "date": "2026-07-31",
+          "format": "IMAX 70mm",
+          "time": "17:00",
+          "venue": "AMC Metreon 16"
+        },
+        {
+          "booking_url": "https://www.fandango.com/the-odyssey-the-imax-70mm-experience-2026-241386/movie-overview",
+          "date": "2026-07-31",
+          "format": "IMAX 70mm",
+          "time": "19:15",
+          "venue": "AMC Metreon 16"
+        },
+        {
+          "booking_url": "https://www.fandango.com/the-odyssey-the-imax-70mm-experience-2026-241386/movie-overview",
+          "date": "2026-07-31",
+          "format": "IMAX 70mm",
+          "time": "21:00",
+          "venue": "AMC Metreon 16"
+        },
+        {
+          "booking_url": "https://www.fandango.com/the-odyssey-the-imax-70mm-experience-2026-241386/movie-overview",
           "date": "2026-08-01",
           "format": "IMAX 70mm",
-          "time": "unknown",
+          "time": "10:00",
           "venue": "AMC Metreon 16"
         },
         {
-          "booking_url": "https://www.fandango.com/amc-metreon-16-aanem/theater-page",
+          "booking_url": "https://www.fandango.com/the-odyssey-the-imax-70mm-experience-2026-241386/movie-overview",
+          "date": "2026-08-01",
+          "format": "IMAX 70mm",
+          "time": "14:00",
+          "venue": "AMC Metreon 16"
+        },
+        {
+          "booking_url": "https://www.fandango.com/the-odyssey-the-imax-70mm-experience-2026-241386/movie-overview",
+          "date": "2026-08-01",
+          "format": "IMAX 70mm",
+          "time": "18:00",
+          "venue": "AMC Metreon 16"
+        },
+        {
+          "booking_url": "https://www.fandango.com/the-odyssey-the-imax-70mm-experience-2026-241386/movie-overview",
+          "date": "2026-08-01",
+          "format": "IMAX 70mm",
+          "time": "22:00",
+          "venue": "AMC Metreon 16"
+        },
+        {
+          "booking_url": "https://www.fandango.com/the-odyssey-the-imax-70mm-experience-2026-241386/movie-overview",
+          "date": "2026-08-01",
+          "format": "IMAX 70mm",
+          "time": "08:30",
+          "venue": "AMC Metreon 16"
+        },
+        {
+          "booking_url": "https://www.fandango.com/the-odyssey-the-imax-70mm-experience-2026-241386/movie-overview",
+          "date": "2026-08-01",
+          "format": "IMAX 70mm",
+          "time": "11:00",
+          "venue": "AMC Metreon 16"
+        },
+        {
+          "booking_url": "https://www.fandango.com/the-odyssey-the-imax-70mm-experience-2026-241386/movie-overview",
+          "date": "2026-08-01",
+          "format": "IMAX 70mm",
+          "time": "12:15",
+          "venue": "AMC Metreon 16"
+        },
+        {
+          "booking_url": "https://www.fandango.com/the-odyssey-the-imax-70mm-experience-2026-241386/movie-overview",
+          "date": "2026-08-01",
+          "format": "IMAX 70mm",
+          "time": "15:00",
+          "venue": "AMC Metreon 16"
+        },
+        {
+          "booking_url": "https://www.fandango.com/the-odyssey-the-imax-70mm-experience-2026-241386/movie-overview",
+          "date": "2026-08-01",
+          "format": "IMAX 70mm",
+          "time": "16:15",
+          "venue": "AMC Metreon 16"
+        },
+        {
+          "booking_url": "https://www.fandango.com/the-odyssey-the-imax-70mm-experience-2026-241386/movie-overview",
+          "date": "2026-08-01",
+          "format": "IMAX 70mm",
+          "time": "19:00",
+          "venue": "AMC Metreon 16"
+        },
+        {
+          "booking_url": "https://www.fandango.com/the-odyssey-the-imax-70mm-experience-2026-241386/movie-overview",
+          "date": "2026-08-01",
+          "format": "IMAX 70mm",
+          "time": "20:15",
+          "venue": "AMC Metreon 16"
+        },
+        {
+          "booking_url": "https://www.fandango.com/the-odyssey-the-imax-70mm-experience-2026-241386/movie-overview",
+          "date": "2026-08-01",
+          "format": "IMAX 70mm",
+          "time": "22:30",
+          "venue": "AMC Metreon 16"
+        },
+        {
+          "booking_url": "https://www.fandango.com/the-odyssey-the-imax-70mm-experience-2026-241386/movie-overview",
           "date": "2026-08-02",
           "format": "IMAX 70mm",
-          "time": "unknown",
+          "time": "10:00",
           "venue": "AMC Metreon 16"
         },
         {
-          "booking_url": "https://www.fandango.com/amc-metreon-16-aanem/theater-page",
+          "booking_url": "https://www.fandango.com/the-odyssey-the-imax-70mm-experience-2026-241386/movie-overview",
+          "date": "2026-08-02",
+          "format": "IMAX 70mm",
+          "time": "14:00",
+          "venue": "AMC Metreon 16"
+        },
+        {
+          "booking_url": "https://www.fandango.com/the-odyssey-the-imax-70mm-experience-2026-241386/movie-overview",
+          "date": "2026-08-02",
+          "format": "IMAX 70mm",
+          "time": "18:00",
+          "venue": "AMC Metreon 16"
+        },
+        {
+          "booking_url": "https://www.fandango.com/the-odyssey-the-imax-70mm-experience-2026-241386/movie-overview",
+          "date": "2026-08-02",
+          "format": "IMAX 70mm",
+          "time": "22:00",
+          "venue": "AMC Metreon 16"
+        },
+        {
+          "booking_url": "https://www.fandango.com/the-odyssey-the-imax-70mm-experience-2026-241386/movie-overview",
+          "date": "2026-08-02",
+          "format": "IMAX 70mm",
+          "time": "09:00",
+          "venue": "AMC Metreon 16"
+        },
+        {
+          "booking_url": "https://www.fandango.com/the-odyssey-the-imax-70mm-experience-2026-241386/movie-overview",
+          "date": "2026-08-02",
+          "format": "IMAX 70mm",
+          "time": "12:15",
+          "venue": "AMC Metreon 16"
+        },
+        {
+          "booking_url": "https://www.fandango.com/the-odyssey-the-imax-70mm-experience-2026-241386/movie-overview",
+          "date": "2026-08-02",
+          "format": "IMAX 70mm",
+          "time": "15:30",
+          "venue": "AMC Metreon 16"
+        },
+        {
+          "booking_url": "https://www.fandango.com/the-odyssey-the-imax-70mm-experience-2026-241386/movie-overview",
+          "date": "2026-08-02",
+          "format": "IMAX 70mm",
+          "time": "16:15",
+          "venue": "AMC Metreon 16"
+        },
+        {
+          "booking_url": "https://www.fandango.com/the-odyssey-the-imax-70mm-experience-2026-241386/movie-overview",
+          "date": "2026-08-02",
+          "format": "IMAX 70mm",
+          "time": "19:30",
+          "venue": "AMC Metreon 16"
+        },
+        {
+          "booking_url": "https://www.fandango.com/the-odyssey-the-imax-70mm-experience-2026-241386/movie-overview",
+          "date": "2026-08-02",
+          "format": "IMAX 70mm",
+          "time": "20:15",
+          "venue": "AMC Metreon 16"
+        },
+        {
+          "booking_url": "https://www.fandango.com/the-odyssey-the-imax-70mm-experience-2026-241386/movie-overview",
+          "date": "2026-08-02",
+          "format": "IMAX 70mm",
+          "time": "21:30",
+          "venue": "AMC Metreon 16"
+        },
+        {
+          "booking_url": "https://www.fandango.com/the-odyssey-the-imax-70mm-experience-2026-241386/movie-overview",
           "date": "2026-08-03",
           "format": "IMAX 70mm",
-          "time": "unknown",
+          "time": "10:00",
           "venue": "AMC Metreon 16"
         },
         {
-          "booking_url": "https://www.fandango.com/amc-metreon-16-aanem/theater-page",
+          "booking_url": "https://www.fandango.com/the-odyssey-the-imax-70mm-experience-2026-241386/movie-overview",
+          "date": "2026-08-03",
+          "format": "IMAX 70mm",
+          "time": "14:00",
+          "venue": "AMC Metreon 16"
+        },
+        {
+          "booking_url": "https://www.fandango.com/the-odyssey-the-imax-70mm-experience-2026-241386/movie-overview",
+          "date": "2026-08-03",
+          "format": "IMAX 70mm",
+          "time": "18:00",
+          "venue": "AMC Metreon 16"
+        },
+        {
+          "booking_url": "https://www.fandango.com/the-odyssey-the-imax-70mm-experience-2026-241386/movie-overview",
+          "date": "2026-08-03",
+          "format": "IMAX 70mm",
+          "time": "22:00",
+          "venue": "AMC Metreon 16"
+        },
+        {
+          "booking_url": "https://www.fandango.com/the-odyssey-the-imax-70mm-experience-2026-241386/movie-overview",
+          "date": "2026-08-03",
+          "format": "IMAX 70mm",
+          "time": "11:00",
+          "venue": "AMC Metreon 16"
+        },
+        {
+          "booking_url": "https://www.fandango.com/the-odyssey-the-imax-70mm-experience-2026-241386/movie-overview",
+          "date": "2026-08-03",
+          "format": "IMAX 70mm",
+          "time": "12:15",
+          "venue": "AMC Metreon 16"
+        },
+        {
+          "booking_url": "https://www.fandango.com/the-odyssey-the-imax-70mm-experience-2026-241386/movie-overview",
+          "date": "2026-08-03",
+          "format": "IMAX 70mm",
+          "time": "15:00",
+          "venue": "AMC Metreon 16"
+        },
+        {
+          "booking_url": "https://www.fandango.com/the-odyssey-the-imax-70mm-experience-2026-241386/movie-overview",
+          "date": "2026-08-03",
+          "format": "IMAX 70mm",
+          "time": "16:15",
+          "venue": "AMC Metreon 16"
+        },
+        {
+          "booking_url": "https://www.fandango.com/the-odyssey-the-imax-70mm-experience-2026-241386/movie-overview",
+          "date": "2026-08-03",
+          "format": "IMAX 70mm",
+          "time": "19:00",
+          "venue": "AMC Metreon 16"
+        },
+        {
+          "booking_url": "https://www.fandango.com/the-odyssey-the-imax-70mm-experience-2026-241386/movie-overview",
+          "date": "2026-08-03",
+          "format": "IMAX 70mm",
+          "time": "20:15",
+          "venue": "AMC Metreon 16"
+        },
+        {
+          "booking_url": "https://www.fandango.com/the-odyssey-the-imax-70mm-experience-2026-241386/movie-overview",
+          "date": "2026-08-03",
+          "format": "IMAX 70mm",
+          "time": "21:30",
+          "venue": "AMC Metreon 16"
+        },
+        {
+          "booking_url": "https://www.fandango.com/the-odyssey-the-imax-70mm-experience-2026-241386/movie-overview",
           "date": "2026-08-04",
           "format": "IMAX 70mm",
-          "time": "unknown",
+          "time": "10:00",
           "venue": "AMC Metreon 16"
         },
         {
-          "booking_url": "https://www.fandango.com/amc-metreon-16-aanem/theater-page",
+          "booking_url": "https://www.fandango.com/the-odyssey-the-imax-70mm-experience-2026-241386/movie-overview",
+          "date": "2026-08-04",
+          "format": "IMAX 70mm",
+          "time": "14:00",
+          "venue": "AMC Metreon 16"
+        },
+        {
+          "booking_url": "https://www.fandango.com/the-odyssey-the-imax-70mm-experience-2026-241386/movie-overview",
+          "date": "2026-08-04",
+          "format": "IMAX 70mm",
+          "time": "18:00",
+          "venue": "AMC Metreon 16"
+        },
+        {
+          "booking_url": "https://www.fandango.com/the-odyssey-the-imax-70mm-experience-2026-241386/movie-overview",
+          "date": "2026-08-04",
+          "format": "IMAX 70mm",
+          "time": "22:00",
+          "venue": "AMC Metreon 16"
+        },
+        {
+          "booking_url": "https://www.fandango.com/the-odyssey-the-imax-70mm-experience-2026-241386/movie-overview",
+          "date": "2026-08-04",
+          "format": "IMAX 70mm",
+          "time": "11:15",
+          "venue": "AMC Metreon 16"
+        },
+        {
+          "booking_url": "https://www.fandango.com/the-odyssey-the-imax-70mm-experience-2026-241386/movie-overview",
+          "date": "2026-08-04",
+          "format": "IMAX 70mm",
+          "time": "12:15",
+          "venue": "AMC Metreon 16"
+        },
+        {
+          "booking_url": "https://www.fandango.com/the-odyssey-the-imax-70mm-experience-2026-241386/movie-overview",
+          "date": "2026-08-04",
+          "format": "IMAX 70mm",
+          "time": "15:15",
+          "venue": "AMC Metreon 16"
+        },
+        {
+          "booking_url": "https://www.fandango.com/the-odyssey-the-imax-70mm-experience-2026-241386/movie-overview",
+          "date": "2026-08-04",
+          "format": "IMAX 70mm",
+          "time": "16:15",
+          "venue": "AMC Metreon 16"
+        },
+        {
+          "booking_url": "https://www.fandango.com/the-odyssey-the-imax-70mm-experience-2026-241386/movie-overview",
+          "date": "2026-08-04",
+          "format": "IMAX 70mm",
+          "time": "19:15",
+          "venue": "AMC Metreon 16"
+        },
+        {
+          "booking_url": "https://www.fandango.com/the-odyssey-the-imax-70mm-experience-2026-241386/movie-overview",
+          "date": "2026-08-04",
+          "format": "IMAX 70mm",
+          "time": "20:15",
+          "venue": "AMC Metreon 16"
+        },
+        {
+          "booking_url": "https://www.fandango.com/the-odyssey-the-imax-70mm-experience-2026-241386/movie-overview",
+          "date": "2026-08-04",
+          "format": "IMAX 70mm",
+          "time": "21:45",
+          "venue": "AMC Metreon 16"
+        },
+        {
+          "booking_url": "https://www.fandango.com/the-odyssey-the-imax-70mm-experience-2026-241386/movie-overview",
           "date": "2026-08-05",
           "format": "IMAX 70mm",
-          "time": "unknown",
+          "time": "10:00",
           "venue": "AMC Metreon 16"
         },
         {
-          "booking_url": "https://www.fandango.com/amc-metreon-16-aanem/theater-page",
+          "booking_url": "https://www.fandango.com/the-odyssey-the-imax-70mm-experience-2026-241386/movie-overview",
+          "date": "2026-08-05",
+          "format": "IMAX 70mm",
+          "time": "14:00",
+          "venue": "AMC Metreon 16"
+        },
+        {
+          "booking_url": "https://www.fandango.com/the-odyssey-the-imax-70mm-experience-2026-241386/movie-overview",
+          "date": "2026-08-05",
+          "format": "IMAX 70mm",
+          "time": "18:00",
+          "venue": "AMC Metreon 16"
+        },
+        {
+          "booking_url": "https://www.fandango.com/the-odyssey-the-imax-70mm-experience-2026-241386/movie-overview",
+          "date": "2026-08-05",
+          "format": "IMAX 70mm",
+          "time": "22:00",
+          "venue": "AMC Metreon 16"
+        },
+        {
+          "booking_url": "https://www.fandango.com/the-odyssey-the-imax-70mm-experience-2026-241386/movie-overview",
+          "date": "2026-08-05",
+          "format": "IMAX 70mm",
+          "time": "11:15",
+          "venue": "AMC Metreon 16"
+        },
+        {
+          "booking_url": "https://www.fandango.com/the-odyssey-the-imax-70mm-experience-2026-241386/movie-overview",
+          "date": "2026-08-05",
+          "format": "IMAX 70mm",
+          "time": "15:15",
+          "venue": "AMC Metreon 16"
+        },
+        {
+          "booking_url": "https://www.fandango.com/the-odyssey-the-imax-70mm-experience-2026-241386/movie-overview",
+          "date": "2026-08-05",
+          "format": "IMAX 70mm",
+          "time": "16:30",
+          "venue": "AMC Metreon 16"
+        },
+        {
+          "booking_url": "https://www.fandango.com/the-odyssey-the-imax-70mm-experience-2026-241386/movie-overview",
+          "date": "2026-08-05",
+          "format": "IMAX 70mm",
+          "time": "19:15",
+          "venue": "AMC Metreon 16"
+        },
+        {
+          "booking_url": "https://www.fandango.com/the-odyssey-the-imax-70mm-experience-2026-241386/movie-overview",
+          "date": "2026-08-05",
+          "format": "IMAX 70mm",
+          "time": "20:30",
+          "venue": "AMC Metreon 16"
+        },
+        {
+          "booking_url": "https://www.fandango.com/the-odyssey-the-imax-70mm-experience-2026-241386/movie-overview",
+          "date": "2026-08-05",
+          "format": "IMAX 70mm",
+          "time": "21:30",
+          "venue": "AMC Metreon 16"
+        },
+        {
+          "booking_url": "https://www.fandango.com/the-odyssey-the-imax-70mm-experience-2026-241386/movie-overview",
           "date": "2026-08-06",
           "format": "IMAX 70mm",
-          "time": "unknown",
+          "time": "10:00",
           "venue": "AMC Metreon 16"
         },
         {
-          "booking_url": "https://www.fandango.com/amc-metreon-16-aanem/theater-page",
+          "booking_url": "https://www.fandango.com/the-odyssey-the-imax-70mm-experience-2026-241386/movie-overview",
+          "date": "2026-08-06",
+          "format": "IMAX 70mm",
+          "time": "14:00",
+          "venue": "AMC Metreon 16"
+        },
+        {
+          "booking_url": "https://www.fandango.com/the-odyssey-the-imax-70mm-experience-2026-241386/movie-overview",
+          "date": "2026-08-06",
+          "format": "IMAX 70mm",
+          "time": "18:00",
+          "venue": "AMC Metreon 16"
+        },
+        {
+          "booking_url": "https://www.fandango.com/the-odyssey-the-imax-70mm-experience-2026-241386/movie-overview",
+          "date": "2026-08-06",
+          "format": "IMAX 70mm",
+          "time": "22:00",
+          "venue": "AMC Metreon 16"
+        },
+        {
+          "booking_url": "https://www.fandango.com/the-odyssey-the-imax-70mm-experience-2026-241386/movie-overview",
           "date": "2026-08-07",
           "format": "IMAX 70mm",
-          "time": "unknown",
+          "time": "10:00",
           "venue": "AMC Metreon 16"
         },
         {
-          "booking_url": "https://www.fandango.com/amc-metreon-16-aanem/theater-page",
+          "booking_url": "https://www.fandango.com/the-odyssey-the-imax-70mm-experience-2026-241386/movie-overview",
+          "date": "2026-08-07",
+          "format": "IMAX 70mm",
+          "time": "14:00",
+          "venue": "AMC Metreon 16"
+        },
+        {
+          "booking_url": "https://www.fandango.com/the-odyssey-the-imax-70mm-experience-2026-241386/movie-overview",
+          "date": "2026-08-07",
+          "format": "IMAX 70mm",
+          "time": "18:00",
+          "venue": "AMC Metreon 16"
+        },
+        {
+          "booking_url": "https://www.fandango.com/the-odyssey-the-imax-70mm-experience-2026-241386/movie-overview",
+          "date": "2026-08-07",
+          "format": "IMAX 70mm",
+          "time": "22:00",
+          "venue": "AMC Metreon 16"
+        },
+        {
+          "booking_url": "https://www.fandango.com/the-odyssey-the-imax-70mm-experience-2026-241386/movie-overview",
           "date": "2026-08-08",
           "format": "IMAX 70mm",
-          "time": "unknown",
+          "time": "10:00",
           "venue": "AMC Metreon 16"
         },
         {
-          "booking_url": "https://www.fandango.com/amc-metreon-16-aanem/theater-page",
+          "booking_url": "https://www.fandango.com/the-odyssey-the-imax-70mm-experience-2026-241386/movie-overview",
+          "date": "2026-08-08",
+          "format": "IMAX 70mm",
+          "time": "14:00",
+          "venue": "AMC Metreon 16"
+        },
+        {
+          "booking_url": "https://www.fandango.com/the-odyssey-the-imax-70mm-experience-2026-241386/movie-overview",
+          "date": "2026-08-08",
+          "format": "IMAX 70mm",
+          "time": "18:00",
+          "venue": "AMC Metreon 16"
+        },
+        {
+          "booking_url": "https://www.fandango.com/the-odyssey-the-imax-70mm-experience-2026-241386/movie-overview",
+          "date": "2026-08-08",
+          "format": "IMAX 70mm",
+          "time": "22:00",
+          "venue": "AMC Metreon 16"
+        },
+        {
+          "booking_url": "https://www.fandango.com/the-odyssey-the-imax-70mm-experience-2026-241386/movie-overview",
           "date": "2026-08-09",
           "format": "IMAX 70mm",
-          "time": "unknown",
+          "time": "10:00",
           "venue": "AMC Metreon 16"
         },
         {
-          "booking_url": "https://www.fandango.com/amc-metreon-16-aanem/theater-page",
+          "booking_url": "https://www.fandango.com/the-odyssey-the-imax-70mm-experience-2026-241386/movie-overview",
+          "date": "2026-08-09",
+          "format": "IMAX 70mm",
+          "time": "14:00",
+          "venue": "AMC Metreon 16"
+        },
+        {
+          "booking_url": "https://www.fandango.com/the-odyssey-the-imax-70mm-experience-2026-241386/movie-overview",
+          "date": "2026-08-09",
+          "format": "IMAX 70mm",
+          "time": "18:00",
+          "venue": "AMC Metreon 16"
+        },
+        {
+          "booking_url": "https://www.fandango.com/the-odyssey-the-imax-70mm-experience-2026-241386/movie-overview",
+          "date": "2026-08-09",
+          "format": "IMAX 70mm",
+          "time": "22:00",
+          "venue": "AMC Metreon 16"
+        },
+        {
+          "booking_url": "https://www.fandango.com/the-odyssey-the-imax-70mm-experience-2026-241386/movie-overview",
           "date": "2026-08-10",
           "format": "IMAX 70mm",
-          "time": "unknown",
+          "time": "10:00",
           "venue": "AMC Metreon 16"
         },
         {
-          "booking_url": "https://www.fandango.com/amc-metreon-16-aanem/theater-page",
+          "booking_url": "https://www.fandango.com/the-odyssey-the-imax-70mm-experience-2026-241386/movie-overview",
+          "date": "2026-08-10",
+          "format": "IMAX 70mm",
+          "time": "14:00",
+          "venue": "AMC Metreon 16"
+        },
+        {
+          "booking_url": "https://www.fandango.com/the-odyssey-the-imax-70mm-experience-2026-241386/movie-overview",
+          "date": "2026-08-10",
+          "format": "IMAX 70mm",
+          "time": "18:00",
+          "venue": "AMC Metreon 16"
+        },
+        {
+          "booking_url": "https://www.fandango.com/the-odyssey-the-imax-70mm-experience-2026-241386/movie-overview",
+          "date": "2026-08-10",
+          "format": "IMAX 70mm",
+          "time": "22:00",
+          "venue": "AMC Metreon 16"
+        },
+        {
+          "booking_url": "https://www.fandango.com/the-odyssey-the-imax-70mm-experience-2026-241386/movie-overview",
           "date": "2026-08-11",
           "format": "IMAX 70mm",
-          "time": "unknown",
+          "time": "10:00",
           "venue": "AMC Metreon 16"
         },
         {
-          "booking_url": "https://www.fandango.com/amc-metreon-16-aanem/theater-page",
-          "date": "2026-08-12",
+          "booking_url": "https://www.fandango.com/the-odyssey-the-imax-70mm-experience-2026-241386/movie-overview",
+          "date": "2026-08-11",
           "format": "IMAX 70mm",
-          "time": "unknown",
+          "time": "14:00",
           "venue": "AMC Metreon 16"
         },
         {
-          "booking_url": "https://www.fandango.com/amc-metreon-16-aanem/theater-page",
-          "date": "2026-08-13",
+          "booking_url": "https://www.fandango.com/the-odyssey-the-imax-70mm-experience-2026-241386/movie-overview",
+          "date": "2026-08-11",
           "format": "IMAX 70mm",
-          "time": "unknown",
+          "time": "18:00",
           "venue": "AMC Metreon 16"
         },
         {
-          "booking_url": "https://www.fandango.com/amc-metreon-16-aanem/theater-page",
-          "date": "2026-08-14",
+          "booking_url": "https://www.fandango.com/the-odyssey-the-imax-70mm-experience-2026-241386/movie-overview",
+          "date": "2026-08-11",
           "format": "IMAX 70mm",
-          "time": "unknown",
-          "venue": "AMC Metreon 16"
-        },
-        {
-          "booking_url": "https://www.fandango.com/amc-metreon-16-aanem/theater-page",
-          "date": "2026-08-15",
-          "format": "IMAX 70mm",
-          "time": "unknown",
-          "venue": "AMC Metreon 16"
-        },
-        {
-          "booking_url": "https://www.fandango.com/amc-metreon-16-aanem/theater-page",
-          "date": "2026-08-16",
-          "format": "IMAX 70mm",
-          "time": "unknown",
-          "venue": "AMC Metreon 16"
-        },
-        {
-          "booking_url": "https://www.fandango.com/amc-metreon-16-aanem/theater-page",
-          "date": "2026-08-17",
-          "format": "IMAX 70mm",
-          "time": "unknown",
-          "venue": "AMC Metreon 16"
-        },
-        {
-          "booking_url": "https://www.fandango.com/amc-metreon-16-aanem/theater-page",
-          "date": "2026-08-18",
-          "format": "IMAX 70mm",
-          "time": "unknown",
-          "venue": "AMC Metreon 16"
-        },
-        {
-          "booking_url": "https://www.fandango.com/amc-metreon-16-aanem/theater-page",
-          "date": "2026-08-19",
-          "format": "IMAX 70mm",
-          "time": "unknown",
-          "venue": "AMC Metreon 16"
-        },
-        {
-          "booking_url": "https://www.fandango.com/amc-metreon-16-aanem/theater-page",
-          "date": "2026-08-20",
-          "format": "IMAX 70mm",
-          "time": "unknown",
-          "venue": "AMC Metreon 16"
-        },
-        {
-          "booking_url": "https://www.fandango.com/amc-metreon-16-aanem/theater-page",
-          "date": "2026-08-21",
-          "format": "IMAX 70mm",
-          "time": "unknown",
-          "venue": "AMC Metreon 16"
-        },
-        {
-          "booking_url": "https://www.fandango.com/amc-metreon-16-aanem/theater-page",
-          "date": "2026-08-22",
-          "format": "IMAX 70mm",
-          "time": "unknown",
-          "venue": "AMC Metreon 16"
-        },
-        {
-          "booking_url": "https://www.fandango.com/amc-metreon-16-aanem/theater-page",
-          "date": "2026-08-23",
-          "format": "IMAX 70mm",
-          "time": "unknown",
-          "venue": "AMC Metreon 16"
-        },
-        {
-          "booking_url": "https://www.fandango.com/amc-metreon-16-aanem/theater-page",
-          "date": "2026-08-24",
-          "format": "IMAX 70mm",
-          "time": "unknown",
-          "venue": "AMC Metreon 16"
-        },
-        {
-          "booking_url": "https://www.fandango.com/amc-metreon-16-aanem/theater-page",
-          "date": "2026-08-25",
-          "format": "IMAX 70mm",
-          "time": "unknown",
-          "venue": "AMC Metreon 16"
-        },
-        {
-          "booking_url": "https://www.fandango.com/amc-metreon-16-aanem/theater-page",
-          "date": "2026-08-26",
-          "format": "IMAX 70mm",
-          "time": "unknown",
-          "venue": "AMC Metreon 16"
-        },
-        {
-          "booking_url": "https://www.fandango.com/amc-metreon-16-aanem/theater-page",
-          "date": "2026-08-27",
-          "format": "IMAX 70mm",
-          "time": "unknown",
-          "venue": "AMC Metreon 16"
-        },
-        {
-          "booking_url": "https://www.fandango.com/amc-metreon-16-aanem/theater-page",
-          "date": "2026-08-28",
-          "format": "IMAX 70mm",
-          "time": "unknown",
-          "venue": "AMC Metreon 16"
-        },
-        {
-          "booking_url": "https://www.fandango.com/amc-metreon-16-aanem/theater-page",
-          "date": "2026-08-29",
-          "format": "IMAX 70mm",
-          "time": "unknown",
-          "venue": "AMC Metreon 16"
-        },
-        {
-          "booking_url": "https://www.fandango.com/amc-metreon-16-aanem/theater-page",
-          "date": "2026-08-30",
-          "format": "IMAX 70mm",
-          "time": "unknown",
-          "venue": "AMC Metreon 16"
-        },
-        {
-          "booking_url": "https://www.fandango.com/amc-metreon-16-aanem/theater-page",
-          "date": "2026-08-31",
-          "format": "IMAX 70mm",
-          "time": "unknown",
-          "venue": "AMC Metreon 16"
-        },
-        {
-          "booking_url": "https://www.fandango.com/amc-metreon-16-aanem/theater-page",
-          "date": "2026-09-01",
-          "format": "IMAX 70mm",
-          "time": "unknown",
-          "venue": "AMC Metreon 16"
-        },
-        {
-          "booking_url": "https://www.fandango.com/amc-metreon-16-aanem/theater-page",
-          "date": "2026-09-02",
-          "format": "IMAX 70mm",
-          "time": "unknown",
-          "venue": "AMC Metreon 16"
-        },
-        {
-          "booking_url": "https://www.fandango.com/amc-metreon-16-aanem/theater-page",
-          "date": "2026-09-03",
-          "format": "IMAX 70mm",
-          "time": "unknown",
-          "venue": "AMC Metreon 16"
-        },
-        {
-          "booking_url": "https://www.fandango.com/amc-metreon-16-aanem/theater-page",
-          "date": "2026-09-04",
-          "format": "IMAX 70mm",
-          "time": "unknown",
-          "venue": "AMC Metreon 16"
-        },
-        {
-          "booking_url": "https://www.fandango.com/amc-metreon-16-aanem/theater-page",
-          "date": "2026-09-05",
-          "format": "IMAX 70mm",
-          "time": "unknown",
-          "venue": "AMC Metreon 16"
-        },
-        {
-          "booking_url": "https://www.fandango.com/amc-metreon-16-aanem/theater-page",
-          "date": "2026-09-06",
-          "format": "IMAX 70mm",
-          "time": "unknown",
-          "venue": "AMC Metreon 16"
-        },
-        {
-          "booking_url": "https://www.fandango.com/amc-metreon-16-aanem/theater-page",
-          "date": "2026-09-07",
-          "format": "IMAX 70mm",
-          "time": "unknown",
-          "venue": "AMC Metreon 16"
-        },
-        {
-          "booking_url": "https://www.fandango.com/amc-metreon-16-aanem/theater-page",
-          "date": "2026-09-08",
-          "format": "IMAX 70mm",
-          "time": "unknown",
-          "venue": "AMC Metreon 16"
-        },
-        {
-          "booking_url": "https://www.fandango.com/amc-metreon-16-aanem/theater-page",
-          "date": "2026-09-09",
-          "format": "IMAX 70mm",
-          "time": "unknown",
-          "venue": "AMC Metreon 16"
-        },
-        {
-          "booking_url": "https://www.fandango.com/amc-metreon-16-aanem/theater-page",
-          "date": "2026-09-10",
-          "format": "IMAX 70mm",
-          "time": "unknown",
-          "venue": "AMC Metreon 16"
-        },
-        {
-          "booking_url": "https://www.fandango.com/amc-metreon-16-aanem/theater-page",
-          "date": "2026-09-11",
-          "format": "IMAX 70mm",
-          "time": "unknown",
-          "venue": "AMC Metreon 16"
-        },
-        {
-          "booking_url": "https://www.fandango.com/amc-metreon-16-aanem/theater-page",
-          "date": "2026-09-19",
-          "format": "IMAX 70mm",
-          "time": "unknown",
-          "venue": "AMC Metreon 16"
-        },
-        {
-          "booking_url": "https://www.fandango.com/amc-metreon-16-aanem/theater-page",
-          "date": "2026-09-20",
-          "format": "IMAX 70mm",
-          "time": "unknown",
-          "venue": "AMC Metreon 16"
-        },
-        {
-          "booking_url": "https://www.fandango.com/amc-metreon-16-aanem/theater-page",
-          "date": "2026-09-21",
-          "format": "IMAX 70mm",
-          "time": "unknown",
-          "venue": "AMC Metreon 16"
-        },
-        {
-          "booking_url": "https://www.fandango.com/amc-metreon-16-aanem/theater-page",
-          "date": "2026-09-23",
-          "format": "IMAX 70mm",
-          "time": "unknown",
-          "venue": "AMC Metreon 16"
-        },
-        {
-          "booking_url": "https://www.fandango.com/amc-metreon-16-aanem/theater-page",
-          "date": "2026-09-26",
-          "format": "IMAX 70mm",
-          "time": "unknown",
-          "venue": "AMC Metreon 16"
-        },
-        {
-          "booking_url": "https://www.fandango.com/amc-metreon-16-aanem/theater-page",
-          "date": "2026-09-27",
-          "format": "IMAX 70mm",
-          "time": "unknown",
-          "venue": "AMC Metreon 16"
-        },
-        {
-          "booking_url": "https://www.fandango.com/amc-metreon-16-aanem/theater-page",
-          "date": "2026-09-28",
-          "format": "IMAX 70mm",
-          "time": "unknown",
-          "venue": "AMC Metreon 16"
-        },
-        {
-          "booking_url": "https://www.fandango.com/amc-metreon-16-aanem/theater-page",
-          "date": "2026-09-29",
-          "format": "IMAX 70mm",
-          "time": "unknown",
-          "venue": "AMC Metreon 16"
-        },
-        {
-          "booking_url": "https://www.fandango.com/amc-metreon-16-aanem/theater-page",
-          "date": "2026-09-30",
-          "format": "IMAX 70mm",
-          "time": "unknown",
-          "venue": "AMC Metreon 16"
-        },
-        {
-          "booking_url": "https://www.fandango.com/amc-metreon-16-aanem/theater-page",
-          "date": "2026-10-03",
-          "format": "IMAX 70mm",
-          "time": "unknown",
-          "venue": "AMC Metreon 16"
-        },
-        {
-          "booking_url": "https://www.fandango.com/amc-metreon-16-aanem/theater-page",
-          "date": "2026-10-11",
-          "format": "IMAX 70mm",
-          "time": "unknown",
-          "venue": "AMC Metreon 16"
-        },
-        {
-          "booking_url": "https://www.fandango.com/amc-metreon-16-aanem/theater-page",
-          "date": "2026-10-12",
-          "format": "IMAX 70mm",
-          "time": "unknown",
-          "venue": "AMC Metreon 16"
-        },
-        {
-          "booking_url": "https://www.fandango.com/amc-metreon-16-aanem/theater-page",
-          "date": "2026-10-13",
-          "format": "IMAX 70mm",
-          "time": "unknown",
-          "venue": "AMC Metreon 16"
-        },
-        {
-          "booking_url": "https://www.fandango.com/amc-metreon-16-aanem/theater-page",
-          "date": "2026-10-14",
-          "format": "IMAX 70mm",
-          "time": "unknown",
-          "venue": "AMC Metreon 16"
-        },
-        {
-          "booking_url": "https://www.fandango.com/amc-metreon-16-aanem/theater-page",
-          "date": "2026-10-17",
-          "format": "IMAX 70mm",
-          "time": "unknown",
-          "venue": "AMC Metreon 16"
-        },
-        {
-          "booking_url": "https://www.fandango.com/amc-metreon-16-aanem/theater-page",
-          "date": "2026-10-18",
-          "format": "IMAX 70mm",
-          "time": "unknown",
-          "venue": "AMC Metreon 16"
-        },
-        {
-          "booking_url": "https://www.fandango.com/amc-metreon-16-aanem/theater-page",
-          "date": "2026-10-19",
-          "format": "IMAX 70mm",
-          "time": "unknown",
-          "venue": "AMC Metreon 16"
-        },
-        {
-          "booking_url": "https://www.fandango.com/amc-metreon-16-aanem/theater-page",
-          "date": "2026-10-20",
-          "format": "IMAX 70mm",
-          "time": "unknown",
-          "venue": "AMC Metreon 16"
-        },
-        {
-          "booking_url": "https://www.fandango.com/amc-metreon-16-aanem/theater-page",
-          "date": "2026-10-21",
-          "format": "IMAX 70mm",
-          "time": "unknown",
-          "venue": "AMC Metreon 16"
-        },
-        {
-          "booking_url": "https://www.fandango.com/amc-metreon-16-aanem/theater-page",
-          "date": "2026-10-22",
-          "format": "IMAX 70mm",
-          "time": "unknown",
-          "venue": "AMC Metreon 16"
-        },
-        {
-          "booking_url": "https://www.fandango.com/amc-metreon-16-aanem/theater-page",
-          "date": "2026-10-25",
-          "format": "IMAX 70mm",
-          "time": "unknown",
-          "venue": "AMC Metreon 16"
-        },
-        {
-          "booking_url": "https://www.fandango.com/amc-metreon-16-aanem/theater-page",
-          "date": "2026-11-14",
-          "format": "IMAX 70mm",
-          "time": "unknown",
-          "venue": "AMC Metreon 16"
-        },
-        {
-          "booking_url": "https://www.fandango.com/amc-metreon-16-aanem/theater-page",
-          "date": "2026-11-22",
-          "format": "IMAX 70mm",
-          "time": "unknown",
-          "venue": "AMC Metreon 16"
-        },
-        {
-          "booking_url": "https://www.fandango.com/amc-metreon-16-aanem/theater-page",
-          "date": "2026-11-23",
-          "format": "IMAX 70mm",
-          "time": "unknown",
-          "venue": "AMC Metreon 16"
-        },
-        {
-          "booking_url": "https://www.fandango.com/amc-metreon-16-aanem/theater-page",
-          "date": "2026-12-05",
-          "format": "IMAX 70mm",
-          "time": "unknown",
-          "venue": "AMC Metreon 16"
-        },
-        {
-          "booking_url": "https://www.fandango.com/amc-metreon-16-aanem/theater-page",
-          "date": "2026-12-06",
-          "format": "IMAX 70mm",
-          "time": "unknown",
-          "venue": "AMC Metreon 16"
-        },
-        {
-          "booking_url": "https://www.fandango.com/amc-metreon-16-aanem/theater-page",
-          "date": "2026-12-09",
-          "format": "IMAX 70mm",
-          "time": "unknown",
-          "venue": "AMC Metreon 16"
-        },
-        {
-          "booking_url": "https://www.fandango.com/amc-metreon-16-aanem/theater-page",
-          "date": "2026-12-12",
-          "format": "IMAX 70mm",
-          "time": "unknown",
-          "venue": "AMC Metreon 16"
-        },
-        {
-          "booking_url": "https://www.fandango.com/amc-metreon-16-aanem/theater-page",
-          "date": "2026-12-17",
-          "format": "IMAX 70mm",
-          "time": "unknown",
-          "venue": "AMC Metreon 16"
-        },
-        {
-          "booking_url": "https://www.fandango.com/amc-metreon-16-aanem/theater-page",
-          "date": "2026-12-18",
-          "format": "IMAX 70mm",
-          "time": "unknown",
-          "venue": "AMC Metreon 16"
-        },
-        {
-          "booking_url": "https://www.fandango.com/amc-metreon-16-aanem/theater-page",
-          "date": "2026-12-19",
-          "format": "IMAX 70mm",
-          "time": "unknown",
-          "venue": "AMC Metreon 16"
-        },
-        {
-          "booking_url": "https://www.fandango.com/amc-metreon-16-aanem/theater-page",
-          "date": "2026-12-20",
-          "format": "IMAX 70mm",
-          "time": "unknown",
-          "venue": "AMC Metreon 16"
-        },
-        {
-          "booking_url": "https://www.fandango.com/amc-metreon-16-aanem/theater-page",
-          "date": "2026-12-21",
-          "format": "IMAX 70mm",
-          "time": "unknown",
-          "venue": "AMC Metreon 16"
-        },
-        {
-          "booking_url": "https://www.fandango.com/amc-metreon-16-aanem/theater-page",
-          "date": "2026-12-22",
-          "format": "IMAX 70mm",
-          "time": "unknown",
-          "venue": "AMC Metreon 16"
-        },
-        {
-          "booking_url": "https://www.fandango.com/amc-metreon-16-aanem/theater-page",
-          "date": "2026-12-23",
-          "format": "IMAX 70mm",
-          "time": "unknown",
-          "venue": "AMC Metreon 16"
-        },
-        {
-          "booking_url": "https://www.fandango.com/amc-metreon-16-aanem/theater-page",
-          "date": "2026-12-24",
-          "format": "IMAX 70mm",
-          "time": "unknown",
-          "venue": "AMC Metreon 16"
-        },
-        {
-          "booking_url": "https://www.fandango.com/amc-metreon-16-aanem/theater-page",
-          "date": "2026-12-25",
-          "format": "IMAX 70mm",
-          "time": "unknown",
-          "venue": "AMC Metreon 16"
-        },
-        {
-          "booking_url": "https://www.fandango.com/amc-metreon-16-aanem/theater-page",
-          "date": "2026-12-26",
-          "format": "IMAX 70mm",
-          "time": "unknown",
-          "venue": "AMC Metreon 16"
-        },
-        {
-          "booking_url": "https://www.fandango.com/amc-metreon-16-aanem/theater-page",
-          "date": "2026-12-27",
-          "format": "IMAX 70mm",
-          "time": "unknown",
-          "venue": "AMC Metreon 16"
-        },
-        {
-          "booking_url": "https://www.fandango.com/amc-metreon-16-aanem/theater-page",
-          "date": "2026-12-28",
-          "format": "IMAX 70mm",
-          "time": "unknown",
-          "venue": "AMC Metreon 16"
-        },
-        {
-          "booking_url": "https://www.fandango.com/amc-metreon-16-aanem/theater-page",
-          "date": "2026-12-29",
-          "format": "IMAX 70mm",
-          "time": "unknown",
-          "venue": "AMC Metreon 16"
-        },
-        {
-          "booking_url": "https://www.fandango.com/amc-metreon-16-aanem/theater-page",
-          "date": "2026-12-30",
-          "format": "IMAX 70mm",
-          "time": "unknown",
-          "venue": "AMC Metreon 16"
-        },
-        {
-          "booking_url": "https://www.fandango.com/amc-metreon-16-aanem/theater-page",
-          "date": "2026-12-31",
-          "format": "IMAX 70mm",
-          "time": "unknown",
-          "venue": "AMC Metreon 16"
-        },
-        {
-          "booking_url": "https://www.fandango.com/amc-metreon-16-aanem/theater-page",
-          "date": "2027-01-23",
-          "format": "IMAX 70mm",
-          "time": "unknown",
-          "venue": "AMC Metreon 16"
-        },
-        {
-          "booking_url": "https://www.fandango.com/amc-metreon-16-aanem/theater-page",
-          "date": "2027-03-20",
-          "format": "IMAX 70mm",
-          "time": "unknown",
-          "venue": "AMC Metreon 16"
-        },
-        {
-          "booking_url": "https://www.fandango.com/amc-metreon-16-aanem/theater-page",
-          "date": "2027-04-03",
-          "format": "IMAX 70mm",
-          "time": "unknown",
-          "venue": "AMC Metreon 16"
-        },
-        {
-          "booking_url": "https://www.fandango.com/amc-metreon-16-aanem/theater-page",
-          "date": "2027-04-24",
-          "format": "IMAX 70mm",
-          "time": "unknown",
-          "venue": "AMC Metreon 16"
-        },
-        {
-          "booking_url": "https://www.fandango.com/amc-metreon-16-aanem/theater-page",
-          "date": "2027-05-08",
-          "format": "IMAX 70mm",
-          "time": "unknown",
-          "venue": "AMC Metreon 16"
-        },
-        {
-          "booking_url": "https://www.fandango.com/amc-metreon-16-aanem/theater-page",
-          "date": "2027-06-05",
-          "format": "IMAX 70mm",
-          "time": "unknown",
+          "time": "22:00",
           "venue": "AMC Metreon 16"
         }
       ],
-      "last_checked_at": "2026-07-31T20:38:20.770541+00:00",
-      "last_error": null,
+      "last_checked_at": "2026-07-31T21:06:55.466203+00:00",
+      "last_error": "calendar truncated at MAX_DATES=12; later dates not checked",
       "last_status": "ok"
     },
     "the-odyssey::imax_page": {
-      "blocked_alert_sent": true,
-      "broken_alert_sent": false,
-      "consecutive_parse_errors": 0,
+      "blocked_alert_sent": false,
+      "broken_alert_sent": true,
+      "consecutive_parse_errors": 3,
       "known_showtimes": [],
-      "last_checked_at": "2026-07-31T20:38:03.214330+00:00",
-      "last_error": "HTTP 403 \u2014 403/429 response",
-      "last_status": "blocked"
+      "last_checked_at": "2026-07-31T21:06:11.073430+00:00",
+      "last_error": "page rendered only 299 chars \u2014 likely stuck behind a modal/error, not real content",
+      "last_status": "parse_error"
     },
     "the-odyssey::reddit_rss": {
       "blocked_alert_sent": false,
@@ -1442,7 +854,7 @@
           "venue": "r/imax"
         }
       ],
-      "last_checked_at": "2026-07-31T20:38:20.771133+00:00",
+      "last_checked_at": "2026-07-31T21:06:55.466786+00:00",
       "last_error": "1 of 2 feeds blocked (403/429) \u2014 partial coverage only",
       "last_status": "ok"
     }

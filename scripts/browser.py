@@ -40,11 +40,22 @@ REALISTIC_UA = (
 )
 
 
+# Downtown San Francisco. Fandango resolves the browser's geolocation to a
+# nearby ZIP and shows "theaters near" that ZIP — without this the runner's
+# own IP decides, which puts you in the wrong metro entirely (a local test
+# from a Bay Area ISP still resolved to 95050 / Santa Clara, with no Metreon
+# in the results). Setting it explicitly is what makes the Fandango film-page
+# source return AMC Metreon 16 at all. Verified 2026-07-31: overriding these
+# coords flipped the page from 95050 to 94102 and surfaced Metreon.
+SF_GEOLOCATION = {"latitude": 37.7853, "longitude": -122.4056}
+
+
 @contextmanager
 def polite_page():
     """Yields a single Playwright page configured to look like a real
-    Chrome browser rather than bare automation. One page per call, closed
-    on exit — no shared/reused browser state across sources."""
+    Chrome browser in San Francisco rather than bare automation. One page
+    per call, closed on exit — no shared/reused browser state across
+    sources."""
     with sync_playwright() as p:
         browser = p.chromium.launch(
             headless=True, args=["--disable-blink-features=AutomationControlled"]
@@ -54,6 +65,8 @@ def polite_page():
             locale="en-US",
             timezone_id="America/Los_Angeles",
             user_agent=REALISTIC_UA,
+            geolocation=SF_GEOLOCATION,
+            permissions=["geolocation"],
         )
         page = context.new_page()
         page.add_init_script("Object.defineProperty(navigator, 'webdriver', {get: () => undefined})")

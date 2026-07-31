@@ -60,13 +60,26 @@ def default_source_entry() -> dict:
     }
 
 
-def process_result(target: dict, result: SourceResult, state: dict) -> None:
+def process_result(target: dict, result: SourceResult, state: dict) -> bool:
+    """Update state for one source result, sending alerts as needed.
+
+    Returns False if an alert could not be delivered. A send failure is
+    never allowed to abort the run: a transient SMTP error used to raise
+    all the way out of main(), so save_state() never ran and the entire
+    run's progress was lost (this actually happened — two runs died on
+    SMTPAuthenticationError before the secrets were fixed). Instead the
+    failure is recorded, the newly-found showtimes are deliberately NOT
+    marked as known so the next run retries them, and main() exits
+    non-zero at the very end so GitHub's own workflow-failure notification
+    surfaces it — the one alerting channel that still works when email
+    is the thing that's broken."""
     key = state_key(target["id"], result.source)
     entry = state["sources"].setdefault(key, default_source_entry())
 
     entry["last_status"] = result.status
     entry["last_checked_at"] = result.checked_at
     entry["last_error"] = result.error
+    delivered = True
 
     if result.status == "ok":
         known = [Showtime.from_dict(d) for d in entry["known_showtimes"]]
@@ -80,10 +93,19 @@ def process_result(target: dict, result: SourceResult, state: dict) -> None:
                 showtimes=new,
                 checked_at=result.checked_at,
             )
-            if result.kind == "showtime":
-                alert.send_ticket_alert(target, alert_result)
-            else:
-                alert.send_mention_alert(target, alert_result)
+            try:
+                if result.kind == "showtime":
+                    alert.send_ticket_alert(target, alert_result)
+                else:
+                    alert.send_mention_alert(target, alert_result)
+            except Exception as e:
+                print(f"  !! alert delivery FAILED for {key}: {e}")
+                entry["last_error"] = f"alert delivery failed: {e}"
+                # Leave known_showtimes untouched so the next run re-detects
+                # these and tries again. Better a duplicate email later than
+                # a drop that was found and then silently forgotten.
+                return False
+
         entry["known_showtimes"] = [s.to_dict() for s in result.showtimes]
         entry["consecutive_parse_errors"] = 0
         entry["broken_alert_sent"] = False
@@ -92,16 +114,28 @@ def process_result(target: dict, result: SourceResult, state: dict) -> None:
     elif result.status == "parse_error":
         entry["consecutive_parse_errors"] += 1
         if entry["consecutive_parse_errors"] >= PARSE_ERROR_THRESHOLD and not entry["broken_alert_sent"]:
-            alert.send_broken_alert(result.source, target["id"], entry["consecutive_parse_errors"], result.error)
-            entry["broken_alert_sent"] = True
+            try:
+                alert.send_broken_alert(
+                    result.source, target["id"], entry["consecutive_parse_errors"], result.error
+                )
+                entry["broken_alert_sent"] = True
+            except Exception as e:
+                print(f"  !! broken-alert delivery FAILED for {key}: {e}")
+                delivered = False
 
     elif result.status == "blocked":
         if not entry["blocked_alert_sent"]:
-            alert.send_blocked_alert(result.source, target["id"], result.error)
-            entry["blocked_alert_sent"] = True
+            try:
+                alert.send_blocked_alert(result.source, target["id"], result.error)
+                entry["blocked_alert_sent"] = True
+            except Exception as e:
+                print(f"  !! blocked-alert delivery FAILED for {key}: {e}")
+                delivered = False
 
     elif result.status == "no_data":
         pass  # transient network hiccup; visible in state/heartbeat, not alert-worthy on its own
+
+    return delivered
 
 
 def build_heartbeat_summary(state: dict) -> str:
@@ -112,20 +146,47 @@ def build_heartbeat_summary(state: dict) -> str:
     return "\n".join(lines) if lines else "  (no sources checked yet)"
 
 
-def maybe_send_heartbeat(state: dict) -> None:
+def maybe_send_heartbeat(state: dict) -> bool:
+    """Send the weekly proof-of-life digest if due. Returns False only if a
+    due heartbeat failed to send."""
     last = state.get("last_heartbeat_sent")
     now = datetime.now(timezone.utc)
     if last is not None:
         last_dt = datetime.fromisoformat(last)
         if now - last_dt < HEARTBEAT_INTERVAL:
-            return
-    alert.send_heartbeat(build_heartbeat_summary(state))
+            return True
+    try:
+        alert.send_heartbeat(build_heartbeat_summary(state))
+    except Exception as e:
+        print(f"  !! heartbeat delivery FAILED: {e}")
+        return False
     state["last_heartbeat_sent"] = now.isoformat()
+    return True
+
+
+def meaningful_fingerprint(state: dict) -> str:
+    """Everything in state EXCEPT the per-run timestamps.
+
+    last_checked_at changes on literally every run, so committing whenever
+    state.json differs meant a commit every single run — ~288/day at the
+    December cadence, which buries the handful of commits that actually
+    represent something happening. Persisting only on a meaningful change
+    keeps the git history usable as the audit trail it was meant to be."""
+    trimmed = {
+        key: {k: v for k, v in entry.items() if k != "last_checked_at"}
+        for key, entry in state["sources"].items()
+    }
+    return json.dumps(
+        {"sources": trimmed, "last_heartbeat_sent": state.get("last_heartbeat_sent")},
+        sort_keys=True,
+    )
 
 
 def main() -> None:
     targets = load_targets()
     state = load_state()
+    before = meaningful_fingerprint(state)
+    all_delivered = True
 
     for target in targets:
         for module in SOURCE_MODULES:
@@ -139,10 +200,25 @@ def main() -> None:
                     error=f"unhandled exception: {e}",
                 )
             print(f"[{target['id']}] {result.source}: {result.status} ({len(result.showtimes)} showtimes)")
-            process_result(target, result, state)
+            if not process_result(target, result, state):
+                all_delivered = False
 
-    maybe_send_heartbeat(state)
-    save_state(state)
+    if not maybe_send_heartbeat(state):
+        all_delivered = False
+
+    if meaningful_fingerprint(state) != before:
+        save_state(state)
+        print("state changed — written to disk for commit")
+    else:
+        print("no meaningful state change — leaving state.json untouched")
+
+    if not all_delivered:
+        # State is already saved at this point, so nothing is lost. Exit
+        # non-zero purely so the run shows up as failed and GitHub emails
+        # about it -- when email delivery is what's broken, the workflow's
+        # own failure notification is the only channel left.
+        print("one or more alerts could not be delivered — failing the run to surface it")
+        sys.exit(1)
 
 
 if __name__ == "__main__":
