@@ -24,7 +24,12 @@ The original implementation diffed the *theater* page's calendar — every booka
 
 The rewrite watches the 70mm-specific film page instead, which lists only 70mm dates and the actual per-theater showtimes — so it is quiet by default and fires on either a new date or a new showtime. Verified by simulation: removing Dec 20 from state and re-running produced a correct 🎟️ TICKETS email naming exactly the two restored showtimes.
 
-**One dependency to know about:** this source relies on a browser **geolocation override** (`SF_GEOLOCATION` in `scripts/browser.py`) to make Fandango show San Francisco theaters — without it the runner's own IP picks the metro and Metreon never appears. If Fandango stops honoring it, the page would show another city and "no Metreon showtimes" would be a lie. The source guards against this by requiring a `941xx` ZIP on the page and reporting `parse_error` if it's missing, so that failure surfaces as a broken-monitor alert instead of false silence.
+**One dependency to know about — how the monitor gets San Francisco results.** Fandango decides which metro to show you, and by default a GitHub runner gets whatever metro its datacenter IP resolves to, which does not contain Metreon. Two mechanisms pin it to SF:
+
+1. **Location cookies** (`SF_LOCATION_COOKIES` in `scripts/sources/fandango.py`) — `zip`, `searchcity`, `searchstate`, `searchlocation`, seeded before the first navigation. This is the one that actually works in CI.
+2. **Browser geolocation override** (`SF_GEOLOCATION` in `scripts/browser.py`) — belt-and-braces; sufficient on a home IP, but *not* on a GitHub runner.
+
+This was found the hard way: geolocation alone worked locally, then returned `parse_error` on the first real CI run because Fandango fell back to IP-based location. That's the ZIP guard doing its job — the source requires a `941xx` ZIP on the page and reports `parse_error` if it's missing, so a location failure surfaces as a broken-monitor alert instead of a silent, false "no showtimes." If you ever see that error again, the cookies have stopped working and the fix is to re-capture them from a real browser session (see the probe approach in this repo's git history).
 
 ---
 
@@ -52,12 +57,22 @@ gh secret set GMAIL_APP_PASSWORD --body "xxxxxxxxxxxxxxxx"          # that accou
 gh secret set ALERT_EMAIL_TO --body "your-real-address@gmail.com"   # your actual inbox — no credentials needed here
 ```
 
-### 4. First manual run
+### 4. First manual run — done, and this is the current steady state
 
-GitHub → your repo → Actions → "Dune Metreon 70mm monitor" → Run workflow (uses the `workflow_dispatch` trigger). Watch the log. Expect to see:
-- `amc_showtimes` / `amc_film_page`: `blocked` — expected, see table above. You'll get one blocked-alert email per AMC source on this first run (that's `blocked_alert_sent` flipping from false to true; it won't re-alert every run after that, only when the state changes).
-- `imax_page`: probably `ok` or `parse_error` depending on which target and the day's luck with IMAX's consent modal.
-- `fandango`: `ok` with ~90 dates found on first run — this will trigger a "leading indicator" email for both targets, since every one of those dates is "new" relative to empty starting state. That's expected and correct for a first run; it will not repeat next run.
+GitHub → your repo → Actions → "Dune Metreon 70mm monitor" → Run workflow (uses the `workflow_dispatch` trigger). As of the last verified run (2026-07-31, 1m34s, green), a healthy run looks like:
+
+```
+[dune-part-three] amc_showtimes: blocked (0 showtimes)
+[dune-part-three] amc_film_page: blocked (0 showtimes)
+[dune-part-three] imax_page:     blocked (0 showtimes)
+[dune-part-three] fandango:      ok (8 showtimes)      <-- the one that matters
+[dune-part-three] reddit_rss:    ok (1 showtimes)
+[the-odyssey]     fandango:      ok (90 showtimes)
+```
+
+- **`fandango: ok (8 showtimes)` for Dune is the health check.** That's Dec 17–20 × 7:00p and 11:00p — the existing April wave. If that number changes, something real happened. If it ever reads `parse_error`, the location cookies or page structure broke (see below) — it does *not* mean tickets vanished.
+- `blocked` on the AMC and IMAX sources is expected and permanent-ish, not a failure.
+- You'll get one blocked/broken email per affected source the first time each enters that state, then silence until it changes.
 - `reddit_rss`: `ok` or `blocked` depending on current Reddit rate limits.
 - A state commit (`Update monitor state [skip ci]`) should land in the repo after the run.
 
