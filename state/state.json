@@ -2,27 +2,27 @@
   "last_heartbeat_sent": "2026-07-31T20:59:37.731975+00:00",
   "sources": {
     "dune-part-three::amc_film_page": {
-      "blocked_alert_sent": false,
+      "blocked_alert_sent": true,
       "broken_alert_sent": false,
       "consecutive_parse_errors": 0,
       "known_showtimes": [],
-      "last_checked_at": "2026-07-31T21:04:24.627646+00:00",
-      "last_error": null,
-      "last_status": "ok"
+      "last_checked_at": "2026-07-31T21:10:20.055974+00:00",
+      "last_error": "HTTP 403 \u2014 403/429 response",
+      "last_status": "blocked"
     },
     "dune-part-three::amc_showtimes": {
-      "blocked_alert_sent": false,
+      "blocked_alert_sent": true,
       "broken_alert_sent": false,
       "consecutive_parse_errors": 0,
       "known_showtimes": [],
-      "last_checked_at": "2026-07-31T21:04:05.257199+00:00",
-      "last_error": null,
-      "last_status": "ok"
+      "last_checked_at": "2026-07-31T21:10:17.842780+00:00",
+      "last_error": "HTTP 403 \u2014 403/429 response",
+      "last_status": "blocked"
     },
     "dune-part-three::fandango": {
       "blocked_alert_sent": false,
       "broken_alert_sent": false,
-      "consecutive_parse_errors": 0,
+      "consecutive_parse_errors": 1,
       "known_showtimes": [
         {
           "booking_url": "https://www.fandango.com/dune-part-three-the-imax-70mm-experience-2026-245188/movie-overview",
@@ -81,18 +81,18 @@
           "venue": "AMC Metreon 16"
         }
       ],
-      "last_checked_at": "2026-07-31T21:05:11.358285+00:00",
-      "last_error": null,
-      "last_status": "ok"
+      "last_checked_at": "2026-07-31T21:10:43.060607+00:00",
+      "last_error": "no San Francisco ZIP on page \u2014 geolocation override may have stopped working, so venue results cannot be trusted",
+      "last_status": "parse_error"
     },
     "dune-part-three::imax_page": {
-      "blocked_alert_sent": false,
+      "blocked_alert_sent": true,
       "broken_alert_sent": true,
       "consecutive_parse_errors": 3,
       "known_showtimes": [],
-      "last_checked_at": "2026-07-31T21:04:41.902540+00:00",
-      "last_error": "page rendered only 299 chars \u2014 likely stuck behind a modal/error, not real content",
-      "last_status": "parse_error"
+      "last_checked_at": "2026-07-31T21:10:21.885919+00:00",
+      "last_error": "HTTP 403 \u2014 403/429 response",
+      "last_status": "blocked"
     },
     "dune-part-three::reddit_rss": {
       "blocked_alert_sent": false,
@@ -107,32 +107,32 @@
           "venue": "r/imax"
         }
       ],
-      "last_checked_at": "2026-07-31T21:05:12.202161+00:00",
+      "last_checked_at": "2026-07-31T21:10:43.749644+00:00",
       "last_error": "1 of 2 feeds blocked (403/429) \u2014 partial coverage only",
       "last_status": "ok"
     },
     "the-odyssey::amc_film_page": {
-      "blocked_alert_sent": false,
+      "blocked_alert_sent": true,
       "broken_alert_sent": false,
       "consecutive_parse_errors": 0,
       "known_showtimes": [],
-      "last_checked_at": "2026-07-31T21:05:53.878468+00:00",
-      "last_error": null,
-      "last_status": "ok"
+      "last_checked_at": "2026-07-31T21:10:46.675600+00:00",
+      "last_error": "HTTP 403 \u2014 403/429 response",
+      "last_status": "blocked"
     },
     "the-odyssey::amc_showtimes": {
-      "blocked_alert_sent": false,
+      "blocked_alert_sent": true,
       "broken_alert_sent": false,
       "consecutive_parse_errors": 0,
       "known_showtimes": [],
-      "last_checked_at": "2026-07-31T21:05:31.649032+00:00",
-      "last_error": null,
-      "last_status": "ok"
+      "last_checked_at": "2026-07-31T21:10:44.177857+00:00",
+      "last_error": "HTTP 403 \u2014 403/429 response",
+      "last_status": "blocked"
     },
     "the-odyssey::fandango": {
       "blocked_alert_sent": false,
       "broken_alert_sent": false,
-      "consecutive_parse_errors": 0,
+      "consecutive_parse_errors": 1,
       "known_showtimes": [
         {
           "booking_url": "https://www.fandango.com/the-odyssey-the-imax-70mm-experience-2026-241386/movie-overview",
@@ -765,18 +765,18 @@
           "venue": "AMC Metreon 16"
         }
       ],
-      "last_checked_at": "2026-07-31T21:06:55.466203+00:00",
-      "last_error": "calendar truncated at MAX_DATES=12; later dates not checked",
-      "last_status": "ok"
+      "last_checked_at": "2026-07-31T21:11:10.001044+00:00",
+      "last_error": "no San Francisco ZIP on page \u2014 geolocation override may have stopped working, so venue results cannot be trusted",
+      "last_status": "parse_error"
     },
     "the-odyssey::imax_page": {
-      "blocked_alert_sent": false,
+      "blocked_alert_sent": true,
       "broken_alert_sent": true,
       "consecutive_parse_errors": 3,
       "known_showtimes": [],
-      "last_checked_at": "2026-07-31T21:06:11.073430+00:00",
-      "last_error": "page rendered only 299 chars \u2014 likely stuck behind a modal/error, not real content",
-      "last_status": "parse_error"
+      "last_checked_at": "2026-07-31T21:10:49.018360+00:00",
+      "last_error": "HTTP 403 \u2014 403/429 response",
+      "last_status": "blocked"
     },
     "the-odyssey::reddit_rss": {
       "blocked_alert_sent": false,
@@ -854,7 +854,7 @@
           "venue": "r/imax"
         }
       ],
-      "last_checked_at": "2026-07-31T21:06:55.466786+00:00",
+      "last_checked_at": "2026-07-31T21:11:10.071923+00:00",
       "last_error": "1 of 2 feeds blocked (403/429) \u2014 partial coverage only",
       "last_status": "ok"
     }
