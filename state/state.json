@@ -6,7 +6,7 @@
       "broken_alert_sent": false,
       "consecutive_parse_errors": 0,
       "known_showtimes": [],
-      "last_checked_at": "2026-07-31T21:10:20.055974+00:00",
+      "last_checked_at": "2026-07-31T21:14:45.934549+00:00",
       "last_error": "HTTP 403 \u2014 403/429 response",
       "last_status": "blocked"
     },
@@ -15,14 +15,14 @@
       "broken_alert_sent": false,
       "consecutive_parse_errors": 0,
       "known_showtimes": [],
-      "last_checked_at": "2026-07-31T21:10:17.842780+00:00",
+      "last_checked_at": "2026-07-31T21:14:45.416371+00:00",
       "last_error": "HTTP 403 \u2014 403/429 response",
       "last_status": "blocked"
     },
     "dune-part-three::fandango": {
       "blocked_alert_sent": false,
       "broken_alert_sent": false,
-      "consecutive_parse_errors": 1,
+      "consecutive_parse_errors": 0,
       "known_showtimes": [
         {
           "booking_url": "https://www.fandango.com/dune-part-three-the-imax-70mm-experience-2026-245188/movie-overview",
@@ -81,16 +81,16 @@
           "venue": "AMC Metreon 16"
         }
       ],
-      "last_checked_at": "2026-07-31T21:10:43.060607+00:00",
-      "last_error": "no San Francisco ZIP on page \u2014 geolocation override may have stopped working, so venue results cannot be trusted",
-      "last_status": "parse_error"
+      "last_checked_at": "2026-07-31T21:15:15.562378+00:00",
+      "last_error": null,
+      "last_status": "ok"
     },
     "dune-part-three::imax_page": {
       "blocked_alert_sent": true,
       "broken_alert_sent": true,
       "consecutive_parse_errors": 3,
       "known_showtimes": [],
-      "last_checked_at": "2026-07-31T21:10:21.885919+00:00",
+      "last_checked_at": "2026-07-31T21:14:46.511008+00:00",
       "last_error": "HTTP 403 \u2014 403/429 response",
       "last_status": "blocked"
     },
@@ -107,7 +107,7 @@
           "venue": "r/imax"
         }
       ],
-      "last_checked_at": "2026-07-31T21:10:43.749644+00:00",
+      "last_checked_at": "2026-07-31T21:15:16.222590+00:00",
       "last_error": "1 of 2 feeds blocked (403/429) \u2014 partial coverage only",
       "last_status": "ok"
     },
@@ -116,7 +116,7 @@
       "broken_alert_sent": false,
       "consecutive_parse_errors": 0,
       "known_showtimes": [],
-      "last_checked_at": "2026-07-31T21:10:46.675600+00:00",
+      "last_checked_at": "2026-07-31T21:15:17.199803+00:00",
       "last_error": "HTTP 403 \u2014 403/429 response",
       "last_status": "blocked"
     },
@@ -125,14 +125,14 @@
       "broken_alert_sent": false,
       "consecutive_parse_errors": 0,
       "known_showtimes": [],
-      "last_checked_at": "2026-07-31T21:10:44.177857+00:00",
+      "last_checked_at": "2026-07-31T21:15:16.691239+00:00",
       "last_error": "HTTP 403 \u2014 403/429 response",
       "last_status": "blocked"
     },
     "the-odyssey::fandango": {
       "blocked_alert_sent": false,
       "broken_alert_sent": false,
-      "consecutive_parse_errors": 1,
+      "consecutive_parse_errors": 0,
       "known_showtimes": [
         {
           "booking_url": "https://www.fandango.com/the-odyssey-the-imax-70mm-experience-2026-241386/movie-overview",
@@ -765,16 +765,16 @@
           "venue": "AMC Metreon 16"
         }
       ],
-      "last_checked_at": "2026-07-31T21:11:10.001044+00:00",
-      "last_error": "no San Francisco ZIP on page \u2014 geolocation override may have stopped working, so venue results cannot be trusted",
-      "last_status": "parse_error"
+      "last_checked_at": "2026-07-31T21:15:51.442127+00:00",
+      "last_error": "calendar truncated at MAX_DATES=12; later dates not checked",
+      "last_status": "ok"
     },
     "the-odyssey::imax_page": {
       "blocked_alert_sent": true,
       "broken_alert_sent": true,
       "consecutive_parse_errors": 3,
       "known_showtimes": [],
-      "last_checked_at": "2026-07-31T21:10:49.018360+00:00",
+      "last_checked_at": "2026-07-31T21:15:17.726066+00:00",
       "last_error": "HTTP 403 \u2014 403/429 response",
       "last_status": "blocked"
     },
@@ -854,7 +854,7 @@
           "venue": "r/imax"
         }
       ],
-      "last_checked_at": "2026-07-31T21:11:10.071923+00:00",
+      "last_checked_at": "2026-07-31T21:15:51.442722+00:00",
       "last_error": "1 of 2 feeds blocked (403/429) \u2014 partial coverage only",
       "last_status": "ok"
     }
