@@ -135,11 +135,14 @@ Single cron line in `.github/workflows/monitor.yml`. Edit it by hand at these po
 
 | Phase | Dates | Cadence | Cron |
 |---|---|---|---|
-| 1 | Now → Sep 30, 2026 | Hourly, ~7am–4pm PT weekdays (PDT, UTC-7) | `7 14-23 * * 1-5` *(already in the file)* |
-| 2a | Oct 1 → Oct 31, 2026 | Every 15 min, 05:00–18:00 PT (PDT, UTC-7; 18:00 PT wraps past midnight UTC) | `*/15 0-1,12-23 * * *` |
-| 2b | Nov 1 → Nov 30, 2026 | Every 15 min, 05:00–18:00 PT (PST, UTC-8, after the Nov 1 DST change) | `*/15 0-2,13-23 * * *` |
-| 3 | Dec 1 → Dec 18, 2026 | Every 5 min, all day (PST, UTC-8) — timezone-agnostic since it's 24/7 | `*/5 * * * *` |
-| 4 | Dec 19, 2026 → teardown (March 2027) | Back to hourly, ~7am–4pm PT weekdays (PST, UTC-8) | `7 15-23,0 * * 1-5` |
+| 1 | Now → Sep 30, 2026 | Hourly, 24/7 | `7 * * * *` *(current)* |
+| 2 | Oct 1 → Nov 30, 2026 | Every 15 min, 24/7 | `*/15 * * * *` |
+| 3 | Dec 1 → Dec 18, 2026 | Every 5 min, 24/7 | `*/5 * * * *` |
+| 4 | Dec 19, 2026 → teardown (March 2027) | Back to hourly, 24/7 | `7 * * * *` |
+
+**Why 24/7 rather than business hours on weekdays.** The original schedule ran 07:00–16:00 PT Mon–Fri, which left a 15-hour blind spot every night and a **63-hour blind spot every weekend** (Fri 16:07 PT → Mon 07:07 PT). Checking the dataset, *no* on-sale in `RESEARCH.md` has ever landed on a weekend — all nine were Mon–Fri, mostly Thursday — so the weekend risk is not that a wave *starts* on a Saturday. It's that a Friday-evening drop, or new showtimes added over a weekend (which happens routinely, especially for a film mid-run like The Odyssey), would sit undetected for two and a half days. Dune 3's own April wave was announced 30 minutes ahead and sold out in minutes; a 63-hour gap is not survivable against that. Since Actions minutes are free on a public repo and each run is now only two sources, closing the gap costs nothing.
+
+Note the 24/7 schedules are also DST-proof, which the old hour-bounded ones were not.
 
 **Phase 4 exists because release-day isn't necessarily the last wave.** Precedent from `RESEARCH.md`: Oppenheimer got an encore 70mm re-release ~15 weeks *after* its original release; Sinners got re-release waves for 8 months after release. Dune: Part Three plausibly does the same — an extended/encore 70mm run, or a second batch of dates at Metreon, sometime in early 2027. Phase 4 is deliberately lower-intensity than the pre-release ramp: there's no research-backed forecast window for a hypothetical post-release wave the way there is for the pre-release one, so hourly is a reasonable, sustainable baseline rather than guessing at another tight window. If you spot news suggesting a specific date, tighten the cron manually for that stretch the same way phase 2/3 do.
 

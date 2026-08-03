@@ -13,7 +13,15 @@ on:
     #        encore/extension wave (Oppenheimer and Sinners both got one). See RUNBOOK.md.
     # GitHub Actions cron is UTC. PT is UTC-7 during PDT (through early Nov) and UTC-8 during PST.
     # Offset from :00 on purpose -- GitHub warns top-of-hour schedules lag most under load.
-    - cron: "7 14-23 * * 1-5"   # hourly, ~7am-4pm PT (14:07-23:07 UTC), weekdays, PDT
+    #
+    # Runs every hour, every day. The previous "14-23 * * 1-5" (business
+    # hours, weekdays) left a 15-hour blind spot nightly and a 63-HOUR blind
+    # spot from Friday 16:07 PT to Monday 07:07 PT. No on-sale in RESEARCH.md
+    # ever landed on a weekend, but a wave that drops Friday evening would
+    # have gone unnoticed until Monday -- and Dune 3's own April wave was
+    # announced 30 minutes ahead and sold out in minutes. Covering the gap
+    # costs nothing on a public repo, so there is no reason to carry it.
+    - cron: "7 * * * *"   # hourly, 24/7
 
 # Overlapping runs would race on the state commit and one would fail its
 # push. Queue instead of running concurrently; skipping a redundant check is
