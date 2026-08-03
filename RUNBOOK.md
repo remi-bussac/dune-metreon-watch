@@ -152,6 +152,24 @@ Each edit is a one-line change to the `- cron:` value under `on.schedule` in `.g
 
 ---
 
+## Running by hand (while the Actions schedule is off)
+
+One-time: put the app password into `~/.dune-metreon-watch.env` (already created, mode 0600, deliberately **outside** the repo so it can never be committed). Replace the `PUT_YOUR_...` placeholder.
+
+Then a check is one command:
+
+```bash
+bash scripts/run_local.sh
+```
+
+It loads the credentials, runs the monitor, appends to `local-run.log` (gitignored), and alerts exactly as CI would. If the password isn't filled in it prints a `SKIP:` line and exits cleanly rather than erroring.
+
+State accumulates in `state/state.json` across manual runs and is *not* auto-committed — commit it once, by hand, whenever you like.
+
+**A macOS LaunchAgent was evaluated and rejected.** It can't work from this location: macOS TCC lets a LaunchAgent execute a binary inside `~/Documents` but blocks it from *reading* files there, so `monitor.py` can never be loaded. The only fixes are moving the repo out of `~/Documents`, or granting Full Disk Access to `/bin/bash` — which would give every script bash ever runs full disk access, a bad trade for a temporary job. Manual runs it is.
+
+---
+
 ## Cost table
 
 | Component | Cost |
