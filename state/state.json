@@ -1,24 +1,6 @@
 {
   "last_heartbeat_sent": "2026-07-31T20:59:37.731975+00:00",
   "sources": {
-    "dune-part-three::amc_film_page": {
-      "blocked_alert_sent": true,
-      "broken_alert_sent": false,
-      "consecutive_parse_errors": 0,
-      "known_showtimes": [],
-      "last_checked_at": "2026-07-31T21:14:45.934549+00:00",
-      "last_error": "HTTP 403 \u2014 403/429 response",
-      "last_status": "blocked"
-    },
-    "dune-part-three::amc_showtimes": {
-      "blocked_alert_sent": true,
-      "broken_alert_sent": false,
-      "consecutive_parse_errors": 0,
-      "known_showtimes": [],
-      "last_checked_at": "2026-07-31T21:14:45.416371+00:00",
-      "last_error": "HTTP 403 \u2014 403/429 response",
-      "last_status": "blocked"
-    },
     "dune-part-three::fandango": {
       "blocked_alert_sent": false,
       "broken_alert_sent": false,
@@ -81,53 +63,18 @@
           "venue": "AMC Metreon 16"
         }
       ],
-      "last_checked_at": "2026-07-31T21:15:15.562378+00:00",
+      "last_checked_at": "2026-08-03T03:50:05.895319+00:00",
       "last_error": null,
       "last_status": "ok"
-    },
-    "dune-part-three::imax_page": {
-      "blocked_alert_sent": true,
-      "broken_alert_sent": true,
-      "consecutive_parse_errors": 3,
-      "known_showtimes": [],
-      "last_checked_at": "2026-07-31T21:14:46.511008+00:00",
-      "last_error": "HTTP 403 \u2014 403/429 response",
-      "last_status": "blocked"
     },
     "dune-part-three::reddit_rss": {
       "blocked_alert_sent": false,
       "broken_alert_sent": false,
       "consecutive_parse_errors": 0,
-      "known_showtimes": [
-        {
-          "booking_url": "https://www.reddit.com/r/imax/comments/1v8xjve/you_can_clearly_see_a_difference_in_quality_with/",
-          "date": "2026-07-28",
-          "format": "reddit-mention:You can clearly see a difference in quality with 70mm IMAX..",
-          "time": "12:49",
-          "venue": "r/imax"
-        }
-      ],
-      "last_checked_at": "2026-07-31T21:15:16.222590+00:00",
+      "known_showtimes": [],
+      "last_checked_at": "2026-08-03T03:50:06.786174+00:00",
       "last_error": "1 of 2 feeds blocked (403/429) \u2014 partial coverage only",
       "last_status": "ok"
-    },
-    "the-odyssey::amc_film_page": {
-      "blocked_alert_sent": true,
-      "broken_alert_sent": false,
-      "consecutive_parse_errors": 0,
-      "known_showtimes": [],
-      "last_checked_at": "2026-07-31T21:15:17.199803+00:00",
-      "last_error": "HTTP 403 \u2014 403/429 response",
-      "last_status": "blocked"
-    },
-    "the-odyssey::amc_showtimes": {
-      "blocked_alert_sent": true,
-      "broken_alert_sent": false,
-      "consecutive_parse_errors": 0,
-      "known_showtimes": [],
-      "last_checked_at": "2026-07-31T21:15:16.691239+00:00",
-      "last_error": "HTTP 403 \u2014 403/429 response",
-      "last_status": "blocked"
     },
     "the-odyssey::fandango": {
       "blocked_alert_sent": false,
@@ -136,191 +83,9 @@
       "known_showtimes": [
         {
           "booking_url": "https://www.fandango.com/the-odyssey-the-imax-70mm-experience-2026-241386/movie-overview",
-          "date": "2026-07-31",
-          "format": "IMAX 70mm",
-          "time": "10:00",
-          "venue": "AMC Metreon 16"
-        },
-        {
-          "booking_url": "https://www.fandango.com/the-odyssey-the-imax-70mm-experience-2026-241386/movie-overview",
-          "date": "2026-07-31",
-          "format": "IMAX 70mm",
-          "time": "14:00",
-          "venue": "AMC Metreon 16"
-        },
-        {
-          "booking_url": "https://www.fandango.com/the-odyssey-the-imax-70mm-experience-2026-241386/movie-overview",
-          "date": "2026-07-31",
-          "format": "IMAX 70mm",
-          "time": "18:00",
-          "venue": "AMC Metreon 16"
-        },
-        {
-          "booking_url": "https://www.fandango.com/the-odyssey-the-imax-70mm-experience-2026-241386/movie-overview",
-          "date": "2026-07-31",
-          "format": "IMAX 70mm",
-          "time": "22:00",
-          "venue": "AMC Metreon 16"
-        },
-        {
-          "booking_url": "https://www.fandango.com/the-odyssey-the-imax-70mm-experience-2026-241386/movie-overview",
-          "date": "2026-07-31",
-          "format": "IMAX 70mm",
-          "time": "09:00",
-          "venue": "AMC Metreon 16"
-        },
-        {
-          "booking_url": "https://www.fandango.com/the-odyssey-the-imax-70mm-experience-2026-241386/movie-overview",
-          "date": "2026-07-31",
-          "format": "IMAX 70mm",
-          "time": "11:10",
-          "venue": "AMC Metreon 16"
-        },
-        {
-          "booking_url": "https://www.fandango.com/the-odyssey-the-imax-70mm-experience-2026-241386/movie-overview",
-          "date": "2026-07-31",
-          "format": "IMAX 70mm",
-          "time": "13:00",
-          "venue": "AMC Metreon 16"
-        },
-        {
-          "booking_url": "https://www.fandango.com/the-odyssey-the-imax-70mm-experience-2026-241386/movie-overview",
-          "date": "2026-07-31",
-          "format": "IMAX 70mm",
-          "time": "15:10",
-          "venue": "AMC Metreon 16"
-        },
-        {
-          "booking_url": "https://www.fandango.com/the-odyssey-the-imax-70mm-experience-2026-241386/movie-overview",
-          "date": "2026-07-31",
-          "format": "IMAX 70mm",
-          "time": "17:00",
-          "venue": "AMC Metreon 16"
-        },
-        {
-          "booking_url": "https://www.fandango.com/the-odyssey-the-imax-70mm-experience-2026-241386/movie-overview",
-          "date": "2026-07-31",
-          "format": "IMAX 70mm",
-          "time": "19:15",
-          "venue": "AMC Metreon 16"
-        },
-        {
-          "booking_url": "https://www.fandango.com/the-odyssey-the-imax-70mm-experience-2026-241386/movie-overview",
-          "date": "2026-07-31",
-          "format": "IMAX 70mm",
-          "time": "21:00",
-          "venue": "AMC Metreon 16"
-        },
-        {
-          "booking_url": "https://www.fandango.com/the-odyssey-the-imax-70mm-experience-2026-241386/movie-overview",
-          "date": "2026-08-01",
-          "format": "IMAX 70mm",
-          "time": "10:00",
-          "venue": "AMC Metreon 16"
-        },
-        {
-          "booking_url": "https://www.fandango.com/the-odyssey-the-imax-70mm-experience-2026-241386/movie-overview",
-          "date": "2026-08-01",
-          "format": "IMAX 70mm",
-          "time": "14:00",
-          "venue": "AMC Metreon 16"
-        },
-        {
-          "booking_url": "https://www.fandango.com/the-odyssey-the-imax-70mm-experience-2026-241386/movie-overview",
-          "date": "2026-08-01",
-          "format": "IMAX 70mm",
-          "time": "18:00",
-          "venue": "AMC Metreon 16"
-        },
-        {
-          "booking_url": "https://www.fandango.com/the-odyssey-the-imax-70mm-experience-2026-241386/movie-overview",
-          "date": "2026-08-01",
-          "format": "IMAX 70mm",
-          "time": "22:00",
-          "venue": "AMC Metreon 16"
-        },
-        {
-          "booking_url": "https://www.fandango.com/the-odyssey-the-imax-70mm-experience-2026-241386/movie-overview",
-          "date": "2026-08-01",
-          "format": "IMAX 70mm",
-          "time": "08:30",
-          "venue": "AMC Metreon 16"
-        },
-        {
-          "booking_url": "https://www.fandango.com/the-odyssey-the-imax-70mm-experience-2026-241386/movie-overview",
-          "date": "2026-08-01",
-          "format": "IMAX 70mm",
-          "time": "11:00",
-          "venue": "AMC Metreon 16"
-        },
-        {
-          "booking_url": "https://www.fandango.com/the-odyssey-the-imax-70mm-experience-2026-241386/movie-overview",
-          "date": "2026-08-01",
-          "format": "IMAX 70mm",
-          "time": "12:15",
-          "venue": "AMC Metreon 16"
-        },
-        {
-          "booking_url": "https://www.fandango.com/the-odyssey-the-imax-70mm-experience-2026-241386/movie-overview",
-          "date": "2026-08-01",
-          "format": "IMAX 70mm",
-          "time": "15:00",
-          "venue": "AMC Metreon 16"
-        },
-        {
-          "booking_url": "https://www.fandango.com/the-odyssey-the-imax-70mm-experience-2026-241386/movie-overview",
-          "date": "2026-08-01",
-          "format": "IMAX 70mm",
-          "time": "16:15",
-          "venue": "AMC Metreon 16"
-        },
-        {
-          "booking_url": "https://www.fandango.com/the-odyssey-the-imax-70mm-experience-2026-241386/movie-overview",
-          "date": "2026-08-01",
-          "format": "IMAX 70mm",
-          "time": "19:00",
-          "venue": "AMC Metreon 16"
-        },
-        {
-          "booking_url": "https://www.fandango.com/the-odyssey-the-imax-70mm-experience-2026-241386/movie-overview",
-          "date": "2026-08-01",
-          "format": "IMAX 70mm",
-          "time": "20:15",
-          "venue": "AMC Metreon 16"
-        },
-        {
-          "booking_url": "https://www.fandango.com/the-odyssey-the-imax-70mm-experience-2026-241386/movie-overview",
-          "date": "2026-08-01",
-          "format": "IMAX 70mm",
-          "time": "22:30",
-          "venue": "AMC Metreon 16"
-        },
-        {
-          "booking_url": "https://www.fandango.com/the-odyssey-the-imax-70mm-experience-2026-241386/movie-overview",
-          "date": "2026-08-02",
-          "format": "IMAX 70mm",
-          "time": "10:00",
-          "venue": "AMC Metreon 16"
-        },
-        {
-          "booking_url": "https://www.fandango.com/the-odyssey-the-imax-70mm-experience-2026-241386/movie-overview",
           "date": "2026-08-02",
           "format": "IMAX 70mm",
           "time": "14:00",
-          "venue": "AMC Metreon 16"
-        },
-        {
-          "booking_url": "https://www.fandango.com/the-odyssey-the-imax-70mm-experience-2026-241386/movie-overview",
-          "date": "2026-08-02",
-          "format": "IMAX 70mm",
-          "time": "18:00",
-          "venue": "AMC Metreon 16"
-        },
-        {
-          "booking_url": "https://www.fandango.com/the-odyssey-the-imax-70mm-experience-2026-241386/movie-overview",
-          "date": "2026-08-02",
-          "format": "IMAX 70mm",
-          "time": "22:00",
           "venue": "AMC Metreon 16"
         },
         {
@@ -763,26 +528,80 @@
           "format": "IMAX 70mm",
           "time": "22:00",
           "venue": "AMC Metreon 16"
+        },
+        {
+          "booking_url": "https://www.fandango.com/the-odyssey-the-imax-70mm-experience-2026-241386/movie-overview",
+          "date": "2026-08-12",
+          "format": "IMAX 70mm",
+          "time": "10:00",
+          "venue": "AMC Metreon 16"
+        },
+        {
+          "booking_url": "https://www.fandango.com/the-odyssey-the-imax-70mm-experience-2026-241386/movie-overview",
+          "date": "2026-08-12",
+          "format": "IMAX 70mm",
+          "time": "14:00",
+          "venue": "AMC Metreon 16"
+        },
+        {
+          "booking_url": "https://www.fandango.com/the-odyssey-the-imax-70mm-experience-2026-241386/movie-overview",
+          "date": "2026-08-12",
+          "format": "IMAX 70mm",
+          "time": "18:00",
+          "venue": "AMC Metreon 16"
+        },
+        {
+          "booking_url": "https://www.fandango.com/the-odyssey-the-imax-70mm-experience-2026-241386/movie-overview",
+          "date": "2026-08-12",
+          "format": "IMAX 70mm",
+          "time": "22:00",
+          "venue": "AMC Metreon 16"
+        },
+        {
+          "booking_url": "https://www.fandango.com/the-odyssey-the-imax-70mm-experience-2026-241386/movie-overview",
+          "date": "2026-08-13",
+          "format": "IMAX 70mm",
+          "time": "10:00",
+          "venue": "AMC Metreon 16"
+        },
+        {
+          "booking_url": "https://www.fandango.com/the-odyssey-the-imax-70mm-experience-2026-241386/movie-overview",
+          "date": "2026-08-13",
+          "format": "IMAX 70mm",
+          "time": "14:00",
+          "venue": "AMC Metreon 16"
+        },
+        {
+          "booking_url": "https://www.fandango.com/the-odyssey-the-imax-70mm-experience-2026-241386/movie-overview",
+          "date": "2026-08-13",
+          "format": "IMAX 70mm",
+          "time": "23:00",
+          "venue": "AMC Metreon 16"
         }
       ],
-      "last_checked_at": "2026-07-31T21:15:51.442127+00:00",
+      "last_checked_at": "2026-08-03T03:50:42.284541+00:00",
       "last_error": "calendar truncated at MAX_DATES=12; later dates not checked",
       "last_status": "ok"
-    },
-    "the-odyssey::imax_page": {
-      "blocked_alert_sent": true,
-      "broken_alert_sent": true,
-      "consecutive_parse_errors": 3,
-      "known_showtimes": [],
-      "last_checked_at": "2026-07-31T21:15:17.726066+00:00",
-      "last_error": "HTTP 403 \u2014 403/429 response",
-      "last_status": "blocked"
     },
     "the-odyssey::reddit_rss": {
       "blocked_alert_sent": false,
       "broken_alert_sent": false,
       "consecutive_parse_errors": 0,
       "known_showtimes": [
+        {
+          "booking_url": "https://www.reddit.com/r/imax/comments/1vczjlz/imax_theatres_global_president_says_the_canadian/",
+          "date": "2026-08-01",
+          "format": "reddit-mention:IMAX Theatres\u2019 global president says the Canadian film company wants to redesign",
+          "time": "21:38",
+          "venue": "r/imax"
+        },
+        {
+          "booking_url": "https://www.reddit.com/r/imax/comments/1vcljw8/what_about_showing_two_different_films/",
+          "date": "2026-08-01",
+          "format": "reddit-mention:What about showing two different films?",
+          "time": "12:01",
+          "venue": "r/imax"
+        },
         {
           "booking_url": "https://www.reddit.com/r/imax/comments/1vb60af/how_the_odyssey_70mm_imax_print_was_made_the/",
           "date": "2026-07-30",
@@ -824,37 +643,9 @@
           "format": "reddit-mention:Las Vegas IMAX at Brenden Theatres / Palms a good venue?",
           "time": "15:34",
           "venue": "r/imax"
-        },
-        {
-          "booking_url": "https://www.reddit.com/r/imax/comments/1v8zd2n/some_questions_regarding_digital_and_analogue/",
-          "date": "2026-07-28",
-          "format": "reddit-mention:Some questions regarding digital and analogue experience",
-          "time": "14:00",
-          "venue": "r/imax"
-        },
-        {
-          "booking_url": "https://www.reddit.com/r/imax/comments/1v8xjve/you_can_clearly_see_a_difference_in_quality_with/",
-          "date": "2026-07-28",
-          "format": "reddit-mention:You can clearly see a difference in quality with 70mm IMAX..",
-          "time": "12:49",
-          "venue": "r/imax"
-        },
-        {
-          "booking_url": "https://www.reddit.com/r/imax/comments/1v8rqrl/pragues_rare_70_mm_imax_draws_thousands_of/",
-          "date": "2026-07-28",
-          "format": "reddit-mention:Prague\u2019s rare 70 mm IMAX draws thousands of Europeans for Nolan\u2019s 'The Odyssey'",
-          "time": "08:04",
-          "venue": "r/imax"
-        },
-        {
-          "booking_url": "https://www.reddit.com/r/imax/comments/1v8nqi2/the_power_of_the_sunin_the_palm_of_my_hand/",
-          "date": "2026-07-28",
-          "format": "reddit-mention:The power of the sun\u2026in the palm of my hand.",
-          "time": "04:29",
-          "venue": "r/imax"
         }
       ],
-      "last_checked_at": "2026-07-31T21:15:51.442722+00:00",
+      "last_checked_at": "2026-08-03T03:50:42.285036+00:00",
       "last_error": "1 of 2 feeds blocked (403/429) \u2014 partial coverage only",
       "last_status": "ok"
     }

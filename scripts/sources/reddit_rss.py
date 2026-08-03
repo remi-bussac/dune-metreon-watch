@@ -36,9 +36,12 @@ FEEDS = [
     ("r/dune", "https://www.reddit.com/r/dune/new.rss"),
 ]
 
+# Identifies the tool and points at the repo rather than embedding a personal
+# email address -- this repo is public, and a bare address in source is both
+# scraped by spammers and personal data that does not belong here.
 HEADERS = {
     "User-Agent": "DuneMetreonWatch/1.0 (personal ticket-availability monitor; "
-    "contact: remi.bussac@gmail.com)"
+    "+https://github.com/remi-bussac/dune-metreon-watch)"
 }
 
 EXTRA_KEYWORDS = ("70mm", "70 mm", "ticket", "on sale", "onsale", "imax")

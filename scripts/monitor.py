@@ -30,7 +30,19 @@ STATE_PATH = REPO_ROOT / "state" / "state.json"
 PARSE_ERROR_THRESHOLD = 3  # consecutive runs before the "monitor broken" alert fires
 HEARTBEAT_INTERVAL = timedelta(days=7)
 
-SOURCE_MODULES = [amc_showtimes, amc_film_page, imax_page, fandango, reddit_rss]
+SOURCE_MODULES = [fandango, reddit_rss]
+
+# Retained in the tree but NOT polled. amc_showtimes, amc_film_page and
+# imax_page have never once succeeded from a GitHub runner -- every single
+# CI attempt returned a Cloudflare 403 or a Queue-it waiting room. Polling
+# them bought no redundancy, only refused requests: 6 per run, which at the
+# planned December cadence would have been ~1,700 rejected requests a day
+# against sites that had already said no. Continuing to knock is both rude
+# and, from the outside, indistinguishable from abusive scraping.
+#
+# To re-enable one (e.g. if AMC ever stops blocking datacenter IPs), move it
+# back into SOURCE_MODULES above. Nothing else needs to change.
+DISABLED_SOURCES = [amc_showtimes, amc_film_page, imax_page]
 
 
 def load_targets() -> list[dict]:
