@@ -166,7 +166,27 @@ It loads the credentials, runs the monitor, appends to `local-run.log` (gitignor
 
 State accumulates in `state/state.json` across manual runs and is *not* auto-committed — commit it once, by hand, whenever you like.
 
-**A macOS LaunchAgent was evaluated and rejected.** It can't work from this location: macOS TCC lets a LaunchAgent execute a binary inside `~/Documents` but blocks it from *reading* files there, so `monitor.py` can never be loaded. The only fixes are moving the repo out of `~/Documents`, or granting Full Disk Access to `/bin/bash` — which would give every script bash ever runs full disk access, a bad trade for a temporary job. Manual runs it is.
+### Continuous loop in tmux (the actual stopgap)
+
+Rather than remembering to run it, keep a loop alive in tmux. It inherits your interactive shell's permissions, so it sidesteps the TCC problem below entirely, and it survives closing the terminal window.
+
+```bash
+tmux new-session -d -s dune "bash /Users/remibussac/Documents/PERSO/Watcher-AMC/scripts/run_loop.sh"
+```
+
+| Task | Command |
+|---|---|
+| Watch it live | `tmux attach -t dune` (detach again with `Ctrl-B` then `D`) |
+| Tail without attaching | `tail -f local-run.log` |
+| Stop it | `tmux kill-session -t dune` |
+| Is it running? | `tmux ls` |
+| Faster interval | `DUNE_WATCH_INTERVAL=300 tmux new-session -d -s dune "bash .../run_loop.sh"` |
+
+Default interval is **600s (10 minutes)**. Each pass is roughly 15–20 requests (one Fandango page per target, then a click per date in that film's carousel), so 10 minutes is about 2,500 requests/day with the laptop open all day. Five minutes doubles that. Ten is a deliberate middle ground against this project's own "honest request rate" rule. Dropping to 60s for a few hours on a known drop day is fine — a short burst and sustained load are different things.
+
+**It does not survive a reboot or logout.** Re-run the `tmux new-session` command after restarting. Laptop sleep just pauses it; it picks up on wake.
+
+**A macOS LaunchAgent was evaluated and rejected.** It can't work from this location: macOS TCC lets a LaunchAgent execute a binary inside `~/Documents` but blocks it from *reading* files there, so `monitor.py` can never be loaded. The only fixes were moving the repo out of `~/Documents`, or granting Full Disk Access to `/bin/bash` — which would give every script bash ever runs full disk access, a bad trade for a temporary job. tmux avoids the whole problem.
 
 ---
 
