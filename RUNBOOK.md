@@ -43,7 +43,7 @@ Live at https://github.com/remi-bussac/dune-metreon-watch (public, per your conf
 
 **Use a separate Gmail account for `GMAIL_ADDRESS`, not your primary one.** `GMAIL_ADDRESS` is the *sender* — its app password sits in a GitHub repo secret for the life of this project (through March 2027 per the extended timeline below), so it's worth isolating: if that secret were ever exposed, the blast radius is a throwaway account that does nothing but send you alert emails, not your real inbox, contacts, or anything else tied to your primary Google account. `ALERT_EMAIL_TO` (where alerts land) stays your real, normal inbox — it's just a plain address, no credentials attached to it at all.
 
-1. Create a new Google account (you do this — I don't create accounts): https://accounts.google.com/signup — something like `dunemetreonwatch@gmail.com` is fine, it never needs to be checked.
+1. Create a new Google account (you do this — I don't create accounts): https://accounts.google.com/signup. It never needs to be checked. **Write down the exact address you end up with** — the one you want is often taken, and a mismatch here produces a confusing SMTP error later (see Troubleshooting).
 2. On that new account, turn on 2-Step Verification: https://myaccount.google.com/security
 3. Go to https://myaccount.google.com/apppasswords, create an app password (name it "dune-metreon-watch"), copy the 16-character value.
 
@@ -52,7 +52,7 @@ Live at https://github.com/remi-bussac/dune-metreon-watch (public, per your conf
 Do this from your own terminal (not by pasting the password into chat with me):
 
 ```bash
-gh secret set GMAIL_ADDRESS --body "dunemetreonwatch@gmail.com"    # the dedicated sender account from step 2
+gh secret set GMAIL_ADDRESS --body "YOUR-SENDER-ACCOUNT@gmail.com"  # the dedicated sender account from step 2
 gh secret set GMAIL_APP_PASSWORD --body "xxxxxxxxxxxxxxxx"          # that account's app password
 gh secret set ALERT_EMAIL_TO --body "your-real-address@gmail.com"   # your actual inbox — no credentials needed here
 ```
@@ -167,6 +167,32 @@ It loads the credentials, runs the monitor, appends to `local-run.log` (gitignor
 State accumulates in `state/state.json` across manual runs and is *not* auto-committed — commit it once, by hand, whenever you like.
 
 **A macOS LaunchAgent was evaluated and rejected.** It can't work from this location: macOS TCC lets a LaunchAgent execute a binary inside `~/Documents` but blocks it from *reading* files there, so `monitor.py` can never be loaded. The only fixes are moving the repo out of `~/Documents`, or granting Full Disk Access to `/bin/bash` — which would give every script bash ever runs full disk access, a bad trade for a temporary job. Manual runs it is.
+
+---
+
+## Troubleshooting
+
+### `535 5.7.8 Username and Password not accepted`
+
+SMTP is rejecting the credential **pair**, not the monitor. The message reads like a bad password, but in practice it is almost always one of these, in order of likelihood:
+
+1. **`GMAIL_ADDRESS` is not the account the app password belongs to.** This is the common one, and it bit this project once already: a placeholder address was left in the config while the real sender account had a different name. Easiest way to find the true address: open any alert email the monitor has already sent successfully and read its `From:` header.
+2. **The app password was generated while signed into a different Google account** (e.g. your personal one). App passwords are per-account. Regenerate while signed into the sender account specifically.
+3. **2-Step Verification is off** on the sender account. App passwords do not exist without it.
+4. ~~Password pasted with spaces~~ — handled in code now; `alert.py` strips whitespace, so either form works.
+
+Isolate it in one step, which tests auth only and sends nothing:
+
+```bash
+source ~/.dune-metreon-watch.env && .venv/bin/python -c "
+import os, smtplib
+a=os.environ['GMAIL_ADDRESS'].strip(); p=''.join(os.environ['GMAIL_APP_PASSWORD'].split())
+s=smtplib.SMTP_SSL('smtp.gmail.com',465,timeout=20); s.login(a,p); print('LOGIN OK for',a); s.quit()"
+```
+
+If that prints `LOGIN OK`, the credentials are fine and any remaining failure is elsewhere.
+
+**A failed send is not a lost drop.** `monitor.py` deliberately leaves newly-found showtimes out of `known_showtimes` when delivery fails, so the next run re-detects and re-sends them. You get a duplicate email later rather than a silently forgotten drop.
 
 ---
 
