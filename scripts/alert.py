@@ -17,9 +17,14 @@ from normalize import SourceResult
 
 
 def _send(subject: str, body: str) -> None:
-    gmail_address = os.environ["GMAIL_ADDRESS"]
-    app_password = os.environ["GMAIL_APP_PASSWORD"]
-    to_addr = os.environ["ALERT_EMAIL_TO"]
+    gmail_address = os.environ["GMAIL_ADDRESS"].strip()
+    # Google displays app passwords as four space-separated groups ("abcd efgh
+    # ijkl mnop"). Pasting that verbatim is the obvious thing to do and gets a
+    # completely unhelpful "535 Username and Password not accepted" from SMTP,
+    # which reads like a wrong password rather than a formatting problem.
+    # Strip all whitespace so either form works.
+    app_password = "".join(os.environ["GMAIL_APP_PASSWORD"].split())
+    to_addr = os.environ["ALERT_EMAIL_TO"].strip()
 
     msg = MIMEText(body)
     msg["Subject"] = subject

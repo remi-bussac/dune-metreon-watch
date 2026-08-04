@@ -63,7 +63,7 @@
           "venue": "AMC Metreon 16"
         }
       ],
-      "last_checked_at": "2026-08-03T03:50:05.895319+00:00",
+      "last_checked_at": "2026-08-04T22:42:48.729922+00:00",
       "last_error": null,
       "last_status": "ok"
     },
@@ -72,8 +72,8 @@
       "broken_alert_sent": false,
       "consecutive_parse_errors": 0,
       "known_showtimes": [],
-      "last_checked_at": "2026-08-03T03:50:06.786174+00:00",
-      "last_error": "1 of 2 feeds blocked (403/429) \u2014 partial coverage only",
+      "last_checked_at": "2026-08-04T22:42:49.466730+00:00",
+      "last_error": "alert delivery failed: (535, b'5.7.8 Username and Password not accepted. For more information, go to\\n5.7.8  https://support.google.com/mail/?p=BadCredentials a92af1059eb24-13fca8df88csm6386497c88.11 - gsmtp')",
       "last_status": "ok"
     },
     "the-odyssey::fandango": {
@@ -579,8 +579,8 @@
           "venue": "AMC Metreon 16"
         }
       ],
-      "last_checked_at": "2026-08-03T03:50:42.284541+00:00",
-      "last_error": "calendar truncated at MAX_DATES=12; later dates not checked",
+      "last_checked_at": "2026-08-04T22:43:26.552037+00:00",
+      "last_error": "alert delivery failed: (535, b'5.7.8 Username and Password not accepted. For more information, go to\\n5.7.8  https://support.google.com/mail/?p=BadCredentials a92af1059eb24-13fca660e66sm6899611c88.8 - gsmtp')",
       "last_status": "ok"
     },
     "the-odyssey::reddit_rss": {
@@ -645,8 +645,8 @@
           "venue": "r/imax"
         }
       ],
-      "last_checked_at": "2026-08-03T03:50:42.285036+00:00",
-      "last_error": "1 of 2 feeds blocked (403/429) \u2014 partial coverage only",
+      "last_checked_at": "2026-08-04T22:43:27.034441+00:00",
+      "last_error": "alert delivery failed: (535, b'5.7.8 Username and Password not accepted. For more information, go to\\n5.7.8  https://support.google.com/mail/?p=BadCredentials 5a478bee46e88-3158673a9e4sm9993269eec.18 - gsmtp')",
       "last_status": "ok"
     }
   }
