@@ -20,6 +20,8 @@ and is naturally empty again on the next cron tick.
 from __future__ import annotations
 
 import sys
+import time
+from datetime import datetime, timezone
 from pathlib import Path
 
 sys.path.insert(0, str(Path(__file__).resolve().parent.parent))
@@ -55,30 +57,55 @@ HEADERS = {
 # in the ~30 minutes before Fandango lists it, which is what happened with
 # Dune 3's April wave. Discussion posts cannot do that job, so they are no
 # longer treated as signal at all.
-ONSALE_KEYWORDS = (
-    "on sale",
-    "onsale",
-    "on-sale",
-    "presale",
-    "pre-sale",
-    "tickets are live",
-    "tickets go live",
-    "tickets are now",
-    "tickets available",
-    "tickets just went",
-    "tickets just dropped",
-    "ticket drop",
-    "tickets drop",
-    "booking now open",
-    "now booking",
+#
+# Evaluated against the real titles this project has actually observed. A
+# first, stricter version of this list looked clean but missed a genuine
+# event already in the corpus -- "IMAX 70mm showings for 'THE ODYSSEY' are
+# being extended through to September 16" -- because a run extension never
+# uses the words "on sale". A run extension means new dates, which is the
+# single most likely shape for a Dune second wave, so the list covers
+# availability EXPANDING as well as availability OPENING.
+AVAILABILITY_KEYWORDS = (
+    # tickets becoming buyable
+    "on sale", "onsale", "on-sale", "presale", "pre-sale",
+    "tickets are live", "tickets go live", "tickets are now", "tickets available",
+    "tickets just went", "tickets just dropped", "ticket drop", "tickets drop",
+    "booking now open", "now booking",
+    # more of them becoming buyable (runs extended, showtimes added, new waves)
+    "extended", "extension", "added", "adding",
+    "more showtimes", "more screenings", "more dates",
+    "additional showtime", "additional screening",
+    "new showtimes", "new dates",
+    "second wave", "next wave", "another wave",
+    # after the fact, but tells you a wave happened and you need to look now
+    "sold out",
 )
 
+# Reddit rate-limits unauthenticated RSS hard enough that two feeds fetched
+# back-to-back reliably produce a 429 on the SECOND one. Because the feed
+# order was fixed, r/dune was always the loser: every stored run showed
+# "1 of 2 feeds blocked", meaning the Dune subreddit was effectively never
+# being read at all. Two mitigations, both cheap:
+#   - pause between feeds
+#   - rotate which feed goes first, so neither is permanently starved
+# Rotation is derived from the clock rather than stored state, so it needs
+# no plumbing and still alternates across runs at any sane cadence.
+FEED_GAP_SECONDS = 8
+
 _FEED_CACHE: dict[str, tuple[str, object]] = {}  # url -> ("ok"|"blocked"|"error", feedparser result or None)
+
+
+def _ordered_feeds() -> list[tuple[str, str]]:
+    offset = (datetime.now(timezone.utc).minute // 10) % len(FEEDS)
+    return FEEDS[offset:] + FEEDS[:offset]
 
 
 def _fetch(subreddit: str, url: str) -> tuple[str, object]:
     if url in _FEED_CACHE:
         return _FEED_CACHE[url]
+
+    if _FEED_CACHE:  # not the first feed this run — give Reddit a breather
+        time.sleep(FEED_GAP_SECONDS)
 
     try:
         resp = requests.get(url, headers=HEADERS, timeout=15)
@@ -99,7 +126,7 @@ def _fetch(subreddit: str, url: str) -> tuple[str, object]:
 def _matches(title: str, summary: str, target: dict) -> bool:
     text = f"{title} {summary}".lower()
     has_film = any(kw in text for kw in target["film_keywords"])
-    is_onsale_news = any(kw in text for kw in ONSALE_KEYWORDS)
+    is_onsale_news = any(kw in text for kw in AVAILABILITY_KEYWORDS)
     return has_film and is_onsale_news
 
 
@@ -110,7 +137,7 @@ def check(target: dict, known_dates: set[str] | None = None) -> SourceResult:
     blocked_count = 0
     entries: list[Showtime] = []
 
-    for subreddit, url in FEEDS:
+    for subreddit, url in _ordered_feeds():
         status, parsed = _fetch(subreddit, url)
 
         if status == "blocked":

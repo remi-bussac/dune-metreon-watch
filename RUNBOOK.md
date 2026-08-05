@@ -208,7 +208,16 @@ Past showtimes are pruned (they can't be bought); Reddit mentions are kept 30 da
 
 **Clicks are rationed, coverage is not.** Reading a date button's label is free, so all dates up to `LABEL_CAP=60` are listed every run. Clicking is a request, so only *unseen* dates plus the nearest `NEAR_TERM_RESCAN=6` known ones get scanned. A brand-new date is always scanned the run it appears. This is both cheaper and more complete than the old fixed `MAX_DATES=12`, which silently capped The Odyssey at Aug 5–16 while its run reached mid-September.
 
-**Reddit alerts require on-sale wording**, not just a film mention. `ONSALE_KEYWORDS` demands phrasing like "on sale", "presale", "tickets are live". The earlier rule accepted "imax" or "70mm" as context, which inside r/imax matches nearly every post — it emailed a photo of film strips, a Colorado show report, and a London screening announcement, none of them Metreon on-sale signals. This source exists solely to catch an announcement in the ~30 minutes before Fandango lists it; discussion posts can't do that job.
+### What the Reddit source can and cannot see
+
+Worth being blunt, because it is easy to over-trust:
+
+- **It reads posts, not comments.** `new.rss` lists top-level submissions only. If on-sale news breaks as a *comment* inside an existing megathread — a very common pattern for big releases — this source will never see it. There is no cheap fix; treat it as a known blind spot and rely on Fandango as the primary signal.
+- **Reddit rate-limits it.** Two feeds fetched back to back reliably 429 the second one. Because the order used to be fixed, r/dune was *always* the loser, and every stored run read `1 of 2 feeds blocked` — meaning the Dune subreddit was effectively never monitored. The order now rotates and there is a pause between feeds, so each subreddit gets read roughly every other run instead of one being permanently dark. This is a mitigation, not a cure: expect to still see `1 of 2 feeds blocked` regularly.
+- **It only sees the ~25 most recent posts.** Fine at r/imax's ~9 posts/day, but a burst could push a post out of the window between checks.
+- **It is a bonus, not a safety net.** Its whole value is the ~30 minutes between an announcement and Fandango listing the showtimes. Fandango is what actually guarantees you find out.
+
+**Reddit alerts require availability wording**, not just a film mention. `ONSALE_KEYWORDS` demands phrasing like "on sale", "presale", "tickets are live". The earlier rule accepted "imax" or "70mm" as context, which inside r/imax matches nearly every post — it emailed a photo of film strips, a Colorado show report, and a London screening announcement, none of them Metreon on-sale signals. This source exists solely to catch an announcement in the ~30 minutes before Fandango lists it; discussion posts can't do that job.
 
 ---
 

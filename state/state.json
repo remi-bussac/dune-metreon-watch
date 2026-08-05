@@ -63,12 +63,12 @@
           "venue": "AMC Metreon 16"
         }
       ],
-      "last_checked_at": "2026-08-05T16:21:35.540129+00:00",
+      "last_checked_at": "2026-08-05T16:47:42.205457+00:00",
       "last_error": null,
       "last_status": "ok"
     },
     "dune-part-three::reddit_rss": {
-      "blocked_alert_sent": false,
+      "blocked_alert_sent": true,
       "broken_alert_sent": false,
       "consecutive_parse_errors": 0,
       "known_showtimes": [
@@ -94,9 +94,9 @@
           "venue": "r/imax"
         }
       ],
-      "last_checked_at": "2026-08-05T16:21:36.335664+00:00",
-      "last_error": "1 of 2 feeds blocked (403/429) \u2014 partial coverage only",
-      "last_status": "ok"
+      "last_checked_at": "2026-08-05T16:47:42.439296+00:00",
+      "last_error": "2 feed(s) returned 403/429; rest unreachable",
+      "last_status": "blocked"
     },
     "the-odyssey::fandango": {
       "blocked_alert_sent": false,
@@ -1553,12 +1553,12 @@
           "venue": "AMC Metreon 16"
         }
       ],
-      "last_checked_at": "2026-08-05T16:23:06.052589+00:00",
+      "last_checked_at": "2026-08-05T16:48:17.068071+00:00",
       "last_error": null,
       "last_status": "ok"
     },
     "the-odyssey::reddit_rss": {
-      "blocked_alert_sent": false,
+      "blocked_alert_sent": true,
       "broken_alert_sent": false,
       "consecutive_parse_errors": 0,
       "known_showtimes": [
@@ -1654,9 +1654,9 @@
           "venue": "r/imax"
         }
       ],
-      "last_checked_at": "2026-08-05T16:23:07.557180+00:00",
-      "last_error": "1 of 2 feeds blocked (403/429) \u2014 partial coverage only",
-      "last_status": "ok"
+      "last_checked_at": "2026-08-05T16:48:17.068855+00:00",
+      "last_error": "2 feed(s) returned 403/429; rest unreachable",
+      "last_status": "blocked"
     }
   }
 }
