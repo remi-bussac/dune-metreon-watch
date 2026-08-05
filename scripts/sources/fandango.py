@@ -68,7 +68,21 @@ SF_LOCATION_COOKIES = [
 SF_ZIP_PATTERN = re.compile(r"\b941\d\d\b")
 
 DATE_BUTTON_SELECTOR = "button.date-picker__button"
-MAX_DATES = 12  # bounded so an unexpectedly huge calendar can't stall a run
+
+# How many calendar buttons we will even look at. Reading a button's label
+# is free -- no click, no request -- so this is set high enough to see an
+# entire engagement. The old limit of 12 applied to *reading* as well as
+# clicking, which silently capped The Odyssey at Aug 5-16 while its run
+# actually extended into mid-September. The truncation was recorded in the
+# result's error field and never surfaced anywhere the user would see it.
+LABEL_CAP = 60
+
+# Clicking a date IS a request, so clicks are rationed. Every date we have
+# never seen before is always scanned (a new date is the signal we care
+# about most), plus the nearest few known dates, where same-day showtimes
+# get added. Everything else is skipped: monitor.py unions results across
+# runs, so a date scanned once stays known even when later passes skip it.
+NEAR_TERM_RESCAN = 6
 
 MONTH_NAMES = {
     "january": 1, "february": 2, "march": 3, "april": 4, "may": 5, "june": 6,
@@ -145,7 +159,7 @@ def _click_date(page, date_str: str, today: date) -> bool:
     because clicking re-renders the carousel."""
     try:
         buttons = page.locator(DATE_BUTTON_SELECTOR)
-        for i in range(min(buttons.count(), MAX_DATES)):
+        for i in range(min(buttons.count(), LABEL_CAP)):
             button = buttons.nth(i)
             if _button_date(button.inner_text(), today) != date_str:
                 continue
@@ -158,9 +172,10 @@ def _click_date(page, date_str: str, today: date) -> bool:
     return False
 
 
-def check(target: dict) -> SourceResult:
+def check(target: dict, known_dates: set[str] | None = None) -> SourceResult:
     url = target["fandango_film_url"]
     today = date.today()
+    known_dates = known_dates or set()
 
     with polite_page() as page:
         page.context.add_cookies(
@@ -202,7 +217,7 @@ def check(target: dict) -> SourceResult:
 
         try:
             buttons = page.locator(DATE_BUTTON_SELECTOR)
-            labels = [buttons.nth(i).inner_text() for i in range(min(buttons.count(), MAX_DATES))]
+            labels = [buttons.nth(i).inner_text() for i in range(min(buttons.count(), LABEL_CAP))]
         except Exception as e:
             return SourceResult(
                 source=SOURCE_NAME, target_id=target["id"], status="parse_error",
@@ -214,7 +229,16 @@ def check(target: dict) -> SourceResult:
             # between waves — not an error.
             return SourceResult(source=SOURCE_NAME, target_id=target["id"], status="ok", showtimes=[])
 
-        wanted_dates = [d for d in (_button_date(lbl, today) for lbl in labels) if d]
+        all_dates = [d for d in (_button_date(lbl, today) for lbl in labels) if d]
+
+        # Ration the clicks: every date we have never seen, plus the nearest
+        # few we have, in calendar order. A brand-new date -- a run being
+        # extended, or a new wave opening -- is always scanned the very run
+        # it appears. Known far-future dates are left alone; monitor.py's
+        # union means they stay known regardless.
+        unseen = [d for d in all_dates if d not in known_dates]
+        near_term = [d for d in all_dates if d in known_dates][:NEAR_TERM_RESCAN]
+        wanted_dates = [d for d in all_dates if d in set(unseen) | set(near_term)]
 
         showtimes: list[Showtime] = []
         missed: list[str] = []
@@ -236,8 +260,11 @@ def check(target: dict) -> SourceResult:
         error = None
         if missed:
             error = f"could not read {len(missed)} of {len(wanted_dates)} dates: {', '.join(missed)}"
-        if len(labels) >= MAX_DATES:
-            note = f"calendar truncated at MAX_DATES={MAX_DATES}; later dates not checked"
+        if len(labels) >= LABEL_CAP:
+            note = (
+                f"calendar hit LABEL_CAP={LABEL_CAP}; dates beyond that are not even "
+                f"being listed — raise the cap"
+            )
             error = f"{error}; {note}" if error else note
 
     return SourceResult(

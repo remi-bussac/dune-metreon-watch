@@ -190,6 +190,28 @@ Default interval is **600s (10 minutes)**. Each pass is roughly 15–20 requests
 
 ---
 
+## Why you get an email (and why you don't)
+
+A 🎟️ ticket alert fires when a `(date, time, format, venue)` combination is seen that has **never** been seen before. That means:
+
+| Event | Email? |
+|---|---|
+| New date appears (run extended, new wave) | ✅ Yes |
+| New time added to a date already known | ✅ Yes |
+| Seats freed up on a showtime already known | ❌ No — availability is never read |
+| A showtime disappears | ❌ No — only additions alert |
+| A flaky scrape misses some showtimes | ❌ No — see below |
+
+**The known set is a union, never a replacement.** Early on it *was* a replacement, and that caused a real bug: Fandango's scrape returned 103 showtimes on some passes and 110 on others, so a flaky pass shrank the known set and the next healthy pass re-reported those 7 as brand new. The symptom was two "new showtimes" emails with nothing actually released in between, the second appearing to "complete" the first. A union cannot do this — a partial scrape simply contributes nothing.
+
+Past showtimes are pruned (they can't be bought); Reddit mentions are kept 30 days, far longer than the ~3 days of posts a feed carries, so a pruned post can't scroll back and re-alert.
+
+**Clicks are rationed, coverage is not.** Reading a date button's label is free, so all dates up to `LABEL_CAP=60` are listed every run. Clicking is a request, so only *unseen* dates plus the nearest `NEAR_TERM_RESCAN=6` known ones get scanned. A brand-new date is always scanned the run it appears. This is both cheaper and more complete than the old fixed `MAX_DATES=12`, which silently capped The Odyssey at Aug 5–16 while its run reached mid-September.
+
+**Reddit alerts require on-sale wording**, not just a film mention. `ONSALE_KEYWORDS` demands phrasing like "on sale", "presale", "tickets are live". The earlier rule accepted "imax" or "70mm" as context, which inside r/imax matches nearly every post — it emailed a photo of film strips, a Colorado show report, and a London screening announcement, none of them Metreon on-sale signals. This source exists solely to catch an announcement in the ~30 minutes before Fandango lists it; discussion posts can't do that job.
+
+---
+
 ## Troubleshooting
 
 ### `535 5.7.8 Username and Password not accepted`

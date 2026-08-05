@@ -13,7 +13,7 @@ from __future__ import annotations
 
 import json
 import sys
-from datetime import datetime, timedelta, timezone
+from datetime import date, datetime, timedelta, timezone
 from pathlib import Path
 
 REPO_ROOT = Path(__file__).resolve().parent.parent
@@ -72,6 +72,45 @@ def default_source_entry() -> dict:
     }
 
 
+MENTION_RETENTION = timedelta(days=30)
+
+
+def merge_known(known: list[dict], current: list[Showtime], kind: str) -> list[dict]:
+    """Union of what we already knew with what this run saw, pruned of
+    entries that can no longer matter.
+
+    Union, emphatically NOT replacement. Replacing meant a single flaky
+    scrape shrank the known set, and the next healthy run then re-reported
+    those same showtimes as brand new. That produced exactly the observed
+    bug: two "new showtimes" emails for The Odyssey with nothing actually
+    released in between, the second one "completing" the first. Fandango's
+    scrape was measured returning 103 showtimes on some passes and 110 on
+    others, so the flap was routine, not exceptional.
+
+    Because a union never shrinks, a partial scrape is now harmless: it
+    simply contributes nothing that pass.
+
+    Pruning keeps it bounded. Showtimes in the past are dropped outright --
+    they cannot be bought. Reddit mentions are kept for 30 days, comfortably
+    longer than the ~3 days of posts an RSS feed actually carries, so a
+    pruned post can never scroll back into the feed and re-alert."""
+    today = date.today()
+    merged = {tuple(sorted(d.items())): d for d in known}
+    for showtime in current:
+        d = showtime.to_dict()
+        merged[tuple(sorted(d.items()))] = d
+
+    if kind == "showtime":
+        cutoff = today.isoformat()
+    else:
+        cutoff = (today - MENTION_RETENTION).isoformat()
+
+    return sorted(
+        (d for d in merged.values() if d.get("date", "") >= cutoff or d.get("date") == "unknown"),
+        key=lambda d: (d.get("date", ""), d.get("time", "")),
+    )
+
+
 def process_result(target: dict, result: SourceResult, state: dict) -> bool:
     """Update state for one source result, sending alerts as needed.
 
@@ -118,7 +157,9 @@ def process_result(target: dict, result: SourceResult, state: dict) -> bool:
                 # a drop that was found and then silently forgotten.
                 return False
 
-        entry["known_showtimes"] = [s.to_dict() for s in result.showtimes]
+        entry["known_showtimes"] = merge_known(
+            entry["known_showtimes"], result.showtimes, result.kind
+        )
         entry["consecutive_parse_errors"] = 0
         entry["broken_alert_sent"] = False
         entry["blocked_alert_sent"] = False
@@ -202,8 +243,13 @@ def main() -> None:
 
     for target in targets:
         for module in SOURCE_MODULES:
+            # Dates we already have showtimes for. fandango uses this to
+            # decide which dates are worth spending a click on: an unseen
+            # date always gets scanned, a known one only if it is near-term.
+            prior = state["sources"].get(state_key(target["id"], module.SOURCE_NAME), {})
+            known_dates = {s.get("date") for s in prior.get("known_showtimes", [])}
             try:
-                result = module.check(target)
+                result = module.check(target, known_dates=known_dates)
             except Exception as e:
                 result = SourceResult(
                     source=module.SOURCE_NAME,

@@ -44,7 +44,34 @@ HEADERS = {
     "+https://github.com/remi-bussac/dune-metreon-watch)"
 }
 
-EXTRA_KEYWORDS = ("70mm", "70 mm", "ticket", "on sale", "onsale", "imax")
+# A match needs the film name AND a phrase that means "tickets just became
+# buyable". The old rule accepted "imax", "70mm" or a bare "ticket" as
+# sufficient context, which inside r/imax matches essentially every post --
+# the three things it actually caught were a photo of film strips, a show
+# report from a cinema in Colorado, and a London screening announcement.
+# None were Metreon on-sale signals, and all three were emailed.
+#
+# This source exists for exactly one job: catching an on-sale announcement
+# in the ~30 minutes before Fandango lists it, which is what happened with
+# Dune 3's April wave. Discussion posts cannot do that job, so they are no
+# longer treated as signal at all.
+ONSALE_KEYWORDS = (
+    "on sale",
+    "onsale",
+    "on-sale",
+    "presale",
+    "pre-sale",
+    "tickets are live",
+    "tickets go live",
+    "tickets are now",
+    "tickets available",
+    "tickets just went",
+    "tickets just dropped",
+    "ticket drop",
+    "tickets drop",
+    "booking now open",
+    "now booking",
+)
 
 _FEED_CACHE: dict[str, tuple[str, object]] = {}  # url -> ("ok"|"blocked"|"error", feedparser result or None)
 
@@ -72,11 +99,13 @@ def _fetch(subreddit: str, url: str) -> tuple[str, object]:
 def _matches(title: str, summary: str, target: dict) -> bool:
     text = f"{title} {summary}".lower()
     has_film = any(kw in text for kw in target["film_keywords"])
-    has_context = any(kw in text for kw in EXTRA_KEYWORDS)
-    return has_film and has_context
+    is_onsale_news = any(kw in text for kw in ONSALE_KEYWORDS)
+    return has_film and is_onsale_news
 
 
-def check(target: dict) -> SourceResult:
+def check(target: dict, known_dates: set[str] | None = None) -> SourceResult:
+    # known_dates is accepted for a uniform source signature; RSS entries are
+    # deduplicated by monitor.py against the whole known set, not by date.
     successes = 0
     blocked_count = 0
     entries: list[Showtime] = []
