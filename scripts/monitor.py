@@ -47,6 +47,26 @@ BLOCKED_ALERT_COOLDOWN = timedelta(hours=6)
 # 22 emails in a week) and none of them were Metreon on-sale signals.
 MENTION_ALERTS_ENABLED = False
 
+# A brand-new DATE always alerts. A new TIME on a date we already knew only
+# alerts if that date is at least this far out.
+#
+# The point is to drop routine schedule churn -- a cinema finalising next
+# week's times -- without dropping a real wave. Both are "new showtimes";
+# only the lead time separates them. Measured from the actual false
+# positives this produced:
+#
+#     detected Aug 5 -> showtimes Aug 8   lead 3 days   (churn)
+#     detected Aug 5 -> showtimes Aug 7   lead 2 days   (churn)
+#
+# and from RESEARCH.md, the shortest lead time of any real 70mm wave ever
+# recorded is 22 days (Sinners); the rest run 29-256. So anything from 4 to
+# 21 separates the two cleanly. 6 is chosen at the cautious end: it clears
+# observed churn by 2x while still firing on anything a week or more out,
+# deliberately accepting some false positives rather than risk a miss.
+# US cinemas schedule on a weekly cycle, so churn at 4-7 days is plausible
+# on a week not yet observed -- if that shows up, raise this toward 14.
+MIN_LEAD_DAYS = 6
+
 SOURCE_MODULES = [fandango, reddit_rss]
 
 # Retained in the tree but NOT polled. amc_showtimes, amc_film_page and
@@ -130,6 +150,29 @@ def merge_known(known: list[dict], current: list[Showtime], kind: str) -> list[d
     )
 
 
+def alertable_showtimes(
+    new: list[Showtime], known_dates: set[str], today: date
+) -> tuple[list[Showtime], list[Showtime]]:
+    """Split newly-detected showtimes into (worth emailing, routine churn).
+
+    Suppressed entries are still merged into known_showtimes by the caller,
+    so they are recorded and never re-evaluated -- they simply do not send
+    an email. Anything whose date cannot be parsed is treated as alertable:
+    when in doubt, tell the user."""
+    alert_these, churn = [], []
+    for showtime in new:
+        if showtime.date not in known_dates:
+            alert_these.append(showtime)  # a date we have never seen: always
+            continue
+        try:
+            lead = (date.fromisoformat(showtime.date) - today).days
+        except ValueError:
+            alert_these.append(showtime)
+            continue
+        (alert_these if lead >= MIN_LEAD_DAYS else churn).append(showtime)
+    return alert_these, churn
+
+
 def _blocked_cooldown_expired(entry: dict) -> bool:
     """True if enough time has passed since the last blocked email. Stops a
     long outage from producing one email per run once the threshold is met."""
@@ -163,6 +206,20 @@ def process_result(target: dict, result: SourceResult, state: dict) -> bool:
     if result.status == "ok":
         known = [Showtime.from_dict(d) for d in entry["known_showtimes"]]
         new = diff_showtimes(known, result.showtimes)
+
+        if new and result.kind == "showtime":
+            # Lead-time policy applies to real showtimes only. Reddit mentions
+            # carry a post date, not a showtime date, so the notion of "lead"
+            # is meaningless for them.
+            new, churn = alertable_showtimes(
+                new, {s.date for s in known}, date.today()
+            )
+            if churn:
+                print(
+                    f"  ({len(churn)} new showtime(s) suppressed as schedule churn "
+                    f"for {key} — under {MIN_LEAD_DAYS} days out on a known date)"
+                )
+
         if new:
             alert_result = SourceResult(
                 source=result.source,

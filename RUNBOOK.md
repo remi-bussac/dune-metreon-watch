@@ -196,11 +196,16 @@ A 🎟️ ticket alert fires when a `(date, time, format, venue)` combination is
 
 | Event | Email? |
 |---|---|
-| New date appears (run extended, new wave) | ✅ Yes |
-| New time added to a date already known | ✅ Yes |
+| New date appears (run extended, new wave) | ✅ **Always**, regardless of how soon it is |
+| New time on a known date, **≥6 days** out | ✅ Yes |
+| New time on a known date, **<6 days** out | ❌ No — routine schedule churn |
 | Seats freed up on a showtime already known | ❌ No — availability is never read |
 | A showtime disappears | ❌ No — only additions alert |
 | A flaky scrape misses some showtimes | ❌ No — see below |
+
+**Where the 6-day cutoff comes from.** A cinema finalising next week's times and a real ticket wave both look like "new showtimes"; only lead time separates them. Measured from actual false positives this produced — showtimes for Aug 8 detected Aug 5 (3 days), and Aug 7 detected Aug 5 (2 days) — against `RESEARCH.md`, where the shortest lead of any real 70mm wave on record is 22 days (Sinners) and the rest run 29–256. Anything from 4 to 21 separates them cleanly. 6 sits at the cautious end: 2× clear of observed churn, still fires on anything a week or more out, deliberately trading some false positives for a lower chance of a miss. US cinemas schedule weekly, so churn at 4–7 days is plausible on a week not yet seen; if that appears, raise `MIN_LEAD_DAYS` in `monitor.py` toward 14.
+
+Note the suppression only ever applies to a **date already known**. Everything about Dune is unaffected until roughly Dec 11, since its dates sit ~130 days out.
 
 **The known set is a union, never a replacement.** Early on it *was* a replacement, and that caused a real bug: Fandango's scrape returned 103 showtimes on some passes and 110 on others, so a flaky pass shrank the known set and the next healthy pass re-reported those 7 as brand new. The symptom was two "new showtimes" emails with nothing actually released in between, the second appearing to "complete" the first. A union cannot do this — a partial scrape simply contributes nothing.
 
