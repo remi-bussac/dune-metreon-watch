@@ -81,12 +81,17 @@ def send_broken_alert(source_name: str, target_id: str, consecutive_failures: in
     _send(subject, body)
 
 
-def send_blocked_alert(source_name: str, target_id: str, error: str | None) -> None:
-    subject = f"🚫 BLOCKED: {source_name} ({target_id})"
+def send_blocked_alert(
+    source_name: str, target_id: str, error: str | None, consecutive: int = 1
+) -> None:
+    subject = f"🚫 BLOCKED: {source_name} ({target_id}) — {consecutive} runs in a row"
     body = (
-        f"{source_name} got an HTTP 403/429 or hit a waiting-room interstitial while checking "
-        f"target '{target_id}'.\n\n"
+        f"{source_name} has been blocked for {consecutive} consecutive runs while checking "
+        f"target '{target_id}' (HTTP 403/429 or a waiting-room interstitial).\n\n"
         f"Detail: {error}\n\n"
+        "Nothing has been lost: known showtimes are stored as a union, so a blocked run "
+        "contributes nothing rather than erasing anything. This is only worth acting on "
+        "if it persists.\n\n"
         "This could mean: (a) this source is now blocking the monitor's requests, or "
         "(b) a real traffic spike is happening right now — possibly the drop itself. "
         "Worth checking the site manually either way."

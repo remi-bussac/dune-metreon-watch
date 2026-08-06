@@ -30,6 +30,23 @@ STATE_PATH = REPO_ROOT / "state" / "state.json"
 PARSE_ERROR_THRESHOLD = 3  # consecutive runs before the "monitor broken" alert fires
 HEARTBEAT_INTERVAL = timedelta(days=7)
 
+# Being blocked is not urgent. Because known_showtimes is a union, a blocked
+# run simply contributes nothing -- no state is lost and nothing is missed
+# permanently. What matters is whether it stays blocked. Alerting on the
+# first 403 meant every blocked -> ok -> blocked flap produced a fresh pair
+# of emails; 4 of 6 blocked emails in one week came from exactly that, while
+# Fandango rate-limited us in bursts. So: only speak up once it is sustained,
+# and then at most once every few hours.
+BLOCKED_THRESHOLD = 3
+BLOCKED_ALERT_COOLDOWN = timedelta(hours=6)
+
+# Reddit "leading indicator" emails are OFF. The source still runs on every
+# pass and everything it finds is still recorded in state.json, so the data
+# keeps accumulating for a future decision about how to filter it -- it just
+# does not reach the inbox. It was the single largest source of noise (10 of
+# 22 emails in a week) and none of them were Metreon on-sale signals.
+MENTION_ALERTS_ENABLED = False
+
 SOURCE_MODULES = [fandango, reddit_rss]
 
 # Retained in the tree but NOT polled. amc_showtimes, amc_film_page and
@@ -64,8 +81,10 @@ def default_source_entry() -> dict:
     return {
         "known_showtimes": [],
         "consecutive_parse_errors": 0,
+        "consecutive_blocked": 0,
         "broken_alert_sent": False,
         "blocked_alert_sent": False,
+        "last_blocked_alert_at": None,
         "last_status": None,
         "last_checked_at": None,
         "last_error": None,
@@ -111,6 +130,15 @@ def merge_known(known: list[dict], current: list[Showtime], kind: str) -> list[d
     )
 
 
+def _blocked_cooldown_expired(entry: dict) -> bool:
+    """True if enough time has passed since the last blocked email. Stops a
+    long outage from producing one email per run once the threshold is met."""
+    last = entry.get("last_blocked_alert_at")
+    if not last:
+        return True
+    return datetime.now(timezone.utc) - datetime.fromisoformat(last) >= BLOCKED_ALERT_COOLDOWN
+
+
 def process_result(target: dict, result: SourceResult, state: dict) -> bool:
     """Update state for one source result, sending alerts as needed.
 
@@ -147,8 +175,11 @@ def process_result(target: dict, result: SourceResult, state: dict) -> bool:
             try:
                 if result.kind == "showtime":
                     alert.send_ticket_alert(target, alert_result)
-                else:
+                elif MENTION_ALERTS_ENABLED:
                     alert.send_mention_alert(target, alert_result)
+                else:
+                    # Recorded below and visible in the logs, just not emailed.
+                    print(f"  (mention alert suppressed: {len(new)} new for {key})")
             except Exception as e:
                 print(f"  !! alert delivery FAILED for {key}: {e}")
                 entry["last_error"] = f"alert delivery failed: {e}"
@@ -161,6 +192,7 @@ def process_result(target: dict, result: SourceResult, state: dict) -> bool:
             entry["known_showtimes"], result.showtimes, result.kind
         )
         entry["consecutive_parse_errors"] = 0
+        entry["consecutive_blocked"] = 0
         entry["broken_alert_sent"] = False
         entry["blocked_alert_sent"] = False
 
@@ -177,13 +209,22 @@ def process_result(target: dict, result: SourceResult, state: dict) -> bool:
                 delivered = False
 
     elif result.status == "blocked":
-        if not entry["blocked_alert_sent"]:
+        entry["consecutive_blocked"] = entry.get("consecutive_blocked", 0) + 1
+        if entry["consecutive_blocked"] >= BLOCKED_THRESHOLD and _blocked_cooldown_expired(entry):
             try:
-                alert.send_blocked_alert(result.source, target["id"], result.error)
+                alert.send_blocked_alert(
+                    result.source, target["id"], result.error, entry["consecutive_blocked"]
+                )
+                entry["last_blocked_alert_at"] = datetime.now(timezone.utc).isoformat()
                 entry["blocked_alert_sent"] = True
             except Exception as e:
                 print(f"  !! blocked-alert delivery FAILED for {key}: {e}")
                 delivered = False
+        else:
+            print(
+                f"  (blocked x{entry['consecutive_blocked']} for {key} — "
+                f"not alerting yet; threshold {BLOCKED_THRESHOLD})"
+            )
 
     elif result.status == "no_data":
         pass  # transient network hiccup; visible in state/heartbeat, not alert-worthy on its own
