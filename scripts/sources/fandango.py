@@ -84,6 +84,17 @@ LABEL_CAP = 60
 # runs, so a date scanned once stays known even when later passes skip it.
 NEAR_TERM_RESCAN = 6
 
+# How long to wait for the page to confirm it switched to the requested date
+# before giving up and recording it as missed. Generous, because the failure
+# this guards against showed up on a laptop waking from sleep.
+DATE_CONFIRM_TIMEOUT_MS = 12_000
+DATE_CONFIRM_POLL_MS = 400
+
+# Fandango reflects the selected date in its own URL. We never construct such
+# a URL ourselves -- robots.txt disallows ?date= -- we only read the one the
+# site sets after a normal click, as proof of which date is on screen.
+URL_DATE_PATTERN = re.compile(r"[?&]date=(\d{4}-\d\d-\d\d)")
+
 MONTH_NAMES = {
     "january": 1, "february": 2, "march": 3, "april": 4, "may": 5, "june": 6,
     "july": 7, "august": 8, "september": 9, "october": 10, "november": 11, "december": 12,
@@ -153,22 +164,56 @@ def _extract_showtimes(body_text: str, target: dict, date_str: str, url: str) ->
     return list(out.values())
 
 
-def _click_date(page, date_str: str, today: date) -> bool:
-    """Select `date_str` in the calendar carousel. Returns False if the
-    button can't be found or clicked. Buttons are looked up fresh each call
-    because clicking re-renders the carousel."""
+def _selected_date(page) -> str | None:
+    """Which date the page is actually showing right now.
+
+    Fandango puts the active date in the URL (?date=YYYY-MM-DD) and repeats
+    it on each showtime's seat-map button (data-showtime-date). Either is a
+    far better source of truth than "we clicked something 2 seconds ago"."""
+    match = URL_DATE_PATTERN.search(page.url)
+    if match:
+        return match.group(1)
     try:
-        buttons = page.locator(DATE_BUTTON_SELECTOR)
-        for i in range(min(buttons.count(), LABEL_CAP)):
-            button = buttons.nth(i)
-            if _button_date(button.inner_text(), today) != date_str:
-                continue
-            button.scroll_into_view_if_needed(timeout=3_000)  # carousel may have it off-screen
-            button.click(timeout=5_000)
-            page.wait_for_timeout(2_000)  # let the showtime list re-render
-            return True
+        el = page.locator("[data-showtime-date]").first
+        if el.count():
+            return el.get_attribute("data-showtime-date")
+    except Exception:
+        pass
+    return None
+
+
+def _click_date(page, date_str: str, today: date) -> bool:
+    """Select `date_str` and CONFIRM the page is really showing it.
+
+    Returns False if the button is missing, the click fails, or the page
+    never actually switches to that date -- in which case the caller records
+    the date as missed rather than reading whatever happens to be on screen.
+
+    That confirmation is the whole point. The previous version clicked, slept
+    a flat 2 seconds and parsed the DOM regardless. Under normal conditions
+    that works; on a laptop just waking from sleep, rendering lagged past the
+    sleep and it captured the PREVIOUS date's showtimes and filed them under
+    this one. That produced a real false alert: Sep 12 and Sep 13 were
+    recorded with Sep 11's exact showtimes (10:00/14:00/18:00/22:00) when
+    Metreon in fact had no screenings on either date. Sleeping longer would
+    only have made the race rarer, not fixed it."""
+    try:
+        button = page.locator(f'{DATE_BUTTON_SELECTOR}[data-show-time-date="{date_str}"]').first
+        if not button.count():
+            return False
+        button.scroll_into_view_if_needed(timeout=3_000)  # carousel may have it off-screen
+        button.click(timeout=5_000)
     except Exception:
         return False
+
+    # Poll until the page agrees it is showing this date.
+    waited = 0
+    while waited < DATE_CONFIRM_TIMEOUT_MS:
+        page.wait_for_timeout(DATE_CONFIRM_POLL_MS)
+        waited += DATE_CONFIRM_POLL_MS
+        if _selected_date(page) == date_str:
+            page.wait_for_timeout(500)  # let the list finish painting
+            return True
     return False
 
 
