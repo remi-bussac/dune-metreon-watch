@@ -90,6 +90,10 @@ NEAR_TERM_RESCAN = 6
 DATE_CONFIRM_TIMEOUT_MS = 12_000
 DATE_CONFIRM_POLL_MS = 400
 
+# How long the showtime list must stay empty before we believe the date
+# genuinely has no screenings, rather than the fetch simply being in flight.
+EMPTY_SETTLE_MS = 2_500
+
 # Fandango reflects the selected date in its own URL. We never construct such
 # a URL ourselves -- robots.txt disallows ?date= -- we only read the one the
 # site sets after a normal click, as proof of which date is on screen.
@@ -164,22 +168,33 @@ def _extract_showtimes(body_text: str, target: dict, date_str: str, url: str) ->
     return list(out.values())
 
 
-def _selected_date(page) -> str | None:
-    """Which date the page is actually showing right now.
+def _rendered_showtime_dates(page) -> list[str]:
+    """Dates stamped on the showtime elements currently in the DOM.
 
-    Fandango puts the active date in the URL (?date=YYYY-MM-DD) and repeats
-    it on each showtime's seat-map button (data-showtime-date). Either is a
-    far better source of truth than "we clicked something 2 seconds ago"."""
-    match = URL_DATE_PATTERN.search(page.url)
-    if match:
-        return match.group(1)
+    Every bookable showtime carries data-showtime-date. This is the only
+    signal tied to the *content*, which is what we actually parse."""
     try:
-        el = page.locator("[data-showtime-date]").first
-        if el.count():
-            return el.get_attribute("data-showtime-date")
+        return page.eval_on_selector_all(
+            "[data-showtime-date]",
+            "els => els.map(e => e.getAttribute('data-showtime-date'))",
+        )
     except Exception:
-        pass
-    return None
+        return []
+
+
+def _content_state(page, date_str: str) -> str:
+    """Is the rendered showtime list the one we asked for?
+
+    "ready" - showtimes are present and every one belongs to date_str
+    "stale" - showtimes are present but some belong to another date
+    "empty" - no showtimes in the DOM at all: either this date genuinely has
+              none, or the fetch has not landed yet. Indistinguishable from a
+              single sample, so the caller waits it out.
+    """
+    dates = set(_rendered_showtime_dates(page))
+    if not dates:
+        return "empty"
+    return "ready" if dates == {date_str} else "stale"
 
 
 def _click_date(page, date_str: str, today: date) -> bool:
@@ -189,14 +204,16 @@ def _click_date(page, date_str: str, today: date) -> bool:
     never actually switches to that date -- in which case the caller records
     the date as missed rather than reading whatever happens to be on screen.
 
-    That confirmation is the whole point. The previous version clicked, slept
-    a flat 2 seconds and parsed the DOM regardless. Under normal conditions
-    that works; on a laptop just waking from sleep, rendering lagged past the
-    sleep and it captured the PREVIOUS date's showtimes and filed them under
-    this one. That produced a real false alert: Sep 12 and Sep 13 were
-    recorded with Sep 11's exact showtimes (10:00/14:00/18:00/22:00) when
-    Metreon in fact had no screenings on either date. Sleeping longer would
-    only have made the race rarer, not fixed it."""
+    Verified against the CONTENT, deliberately not against the URL. Fandango
+    rewrites ?date=... optimistically the moment you click, before the
+    theatre list is re-fetched. An earlier version of this check trusted that
+    URL and still produced a false alert -- Sep 13 through Sep 16 were
+    reported with Sep 11's showtimes, because the URL had already flipped
+    while the DOM had not. The only trustworthy signal is the date stamped on
+    the showtime elements we actually parse.
+
+    Sleeping longer was never the fix: the race is unbounded, so any fixed
+    delay is a guess. This waits for a specific observable state instead."""
     try:
         button = page.locator(f'{DATE_BUTTON_SELECTOR}[data-show-time-date="{date_str}"]').first
         if not button.count():
@@ -206,14 +223,25 @@ def _click_date(page, date_str: str, today: date) -> bool:
     except Exception:
         return False
 
-    # Poll until the page agrees it is showing this date.
     waited = 0
+    empty_for = 0
     while waited < DATE_CONFIRM_TIMEOUT_MS:
         page.wait_for_timeout(DATE_CONFIRM_POLL_MS)
         waited += DATE_CONFIRM_POLL_MS
-        if _selected_date(page) == date_str:
-            page.wait_for_timeout(500)  # let the list finish painting
+        state = _content_state(page, date_str)
+
+        if state == "ready":
             return True
+        if state == "stale":
+            empty_for = 0          # previous date still on screen; keep waiting
+            continue
+        # "empty": no showtimes rendered. Could be a date with no screenings
+        # anywhere, or a fetch still in flight. Only believe it once it has
+        # stayed empty long enough that a pending fetch would have landed.
+        empty_for += DATE_CONFIRM_POLL_MS
+        if empty_for >= EMPTY_SETTLE_MS:
+            return True            # genuinely nothing on this date
+
     return False
 
 
@@ -300,7 +328,26 @@ def check(target: dict, known_dates: set[str] | None = None) -> SourceResult:
             except Exception:
                 missed.append(date_str)
                 continue
-            showtimes.extend(_extract_showtimes(day_text, target, date_str, url))
+
+            # Last line of defence. The text scrape reads a venue block out of
+            # rendered prose, which cannot itself prove which date that prose
+            # belongs to. The showtime elements CAN: each is stamped with its
+            # own date. If nothing in the DOM is stamped with the date we
+            # asked for, then whatever text is on screen belongs to some other
+            # date, and emitting it would invent showtimes that do not exist.
+            # This is the check that would have stopped the Sep 13-16 alert.
+            rendered = set(_rendered_showtime_dates(page))
+            if rendered and date_str not in rendered:
+                missed.append(date_str)
+                continue
+
+            found = _extract_showtimes(day_text, target, date_str, url)
+            if found and not rendered:
+                # Text says there are showtimes but no showtime element carries
+                # a date. Contradictory -- trust the DOM, not the prose.
+                missed.append(date_str)
+                continue
+            showtimes.extend(found)
 
         error = None
         if missed:
