@@ -20,6 +20,20 @@ if [[ -z "$IP" ]]; then
   exit 1
 fi
 
+# Gate. Nothing reaches the VM unless the suite is green -- every false
+# alert this project sent was shipped after a change that "looked fine when
+# I ran it once". Skip only in a genuine emergency:  SKIP_TESTS=1 ./deploy.sh
+if [[ "${SKIP_TESTS:-0}" != "1" ]]; then
+  echo "==> running tests before deploying"
+  if ! "$REPO_DIR/.venv/bin/python" -m pytest "$REPO_DIR/tests" -q; then
+    echo
+    echo "TESTS FAILED — refusing to deploy."
+    echo "Fix them, or override deliberately with: SKIP_TESTS=1 $0 $IP"
+    exit 1
+  fi
+  echo
+fi
+
 echo "==> pushing code to $USER_NAME@$IP"
 # --delete keeps the VM identical to local, so a removed file here is removed
 # there too. The excludes matter: .venv is x86 on the laptop and would break

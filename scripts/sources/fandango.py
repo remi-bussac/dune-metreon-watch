@@ -361,5 +361,6 @@ def check(target: dict, known_dates: set[str] | None = None) -> SourceResult:
 
     return SourceResult(
         source=SOURCE_NAME, target_id=target["id"], status="ok", kind="showtime",
-        showtimes=showtimes, error=error,
+        showtimes=showtimes, calendar_dates=all_dates,
+        evaluated_dates=[d for d in wanted_dates if d not in missed], error=error,
     )

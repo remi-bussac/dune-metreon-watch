@@ -61,6 +61,17 @@ class SourceResult:
     # gets a distinctly-labeled, lower-certainty alert.
     kind: Kind = "showtime"
     showtimes: list[Showtime] = field(default_factory=list)
+    # Every date the source's calendar OFFERED this run, whether or not we
+    # managed to read its showtimes. Reading these costs nothing (they are
+    # button labels, no clicks), and they are what lets monitor.py tell
+    # "the calendar gained a date" from "we finally read a date it already
+    # had" -- the distinction the Aug 25 false alert turned on.
+    calendar_dates: list[str] = field(default_factory=list)
+    # Dates we actually managed to READ this pass (confirmed + parsed),
+    # whether or not they held showtimes for our venue. The difference
+    # between "we checked and it was empty" and "we never managed to check"
+    # is what separates a real release from a backfill.
+    evaluated_dates: list[str] = field(default_factory=list)
     error: str | None = None
     checked_at: str = field(default_factory=lambda: datetime.now(timezone.utc).isoformat())
 
@@ -71,6 +82,8 @@ class SourceResult:
             "status": self.status,
             "kind": self.kind,
             "showtimes": [s.to_dict() for s in self.showtimes],
+            "calendar_dates": self.calendar_dates,
+            "evaluated_dates": self.evaluated_dates,
             "error": self.error,
             "checked_at": self.checked_at,
         }

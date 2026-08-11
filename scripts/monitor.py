@@ -100,6 +100,8 @@ def save_state(state: dict) -> None:
 def default_source_entry() -> dict:
     return {
         "known_showtimes": [],
+        "known_calendar_dates": [],
+        "known_evaluated_dates": [],
         "consecutive_parse_errors": 0,
         "consecutive_blocked": 0,
         "broken_alert_sent": False,
@@ -151,26 +153,67 @@ def merge_known(known: list[dict], current: list[Showtime], kind: str) -> list[d
 
 
 def alertable_showtimes(
-    new: list[Showtime], known_dates: set[str], today: date
+    new: list[Showtime],
+    scraped_dates: set[str],
+    calendar_dates: set[str],
+    evaluated_dates: set[str],
+    today: date,
+    first_pass: bool = False,
 ) -> tuple[list[Showtime], list[Showtime]]:
-    """Split newly-detected showtimes into (worth emailing, routine churn).
+    """Split newly-detected showtimes into (worth emailing, not worth it).
 
-    Suppressed entries are still merged into known_showtimes by the caller,
-    so they are recorded and never re-evaluated -- they simply do not send
-    an email. Anything whose date cannot be parsed is treated as alertable:
-    when in doubt, tell the user."""
-    alert_these, churn = [], []
+    Three different things all look like "a showtime we have not got", and
+    only one of them means tickets were released:
+
+      calendar grew    the date is not one the calendar has ever offered, so
+                       a run was extended or a wave opened     -> ALERT
+      backfill         the calendar already offered this date, we simply had
+                       not managed to read it yet. Nothing was released; we
+                       just got a clean scrape at last          -> silent
+      new time         a date we HAD already read gained a time -> ALERT if
+                       far enough out (MIN_LEAD_DAYS), else churn
+
+    The backfill case is what produced the Aug 25 false alert: an earlier
+    pass skipped that date (a date-confirm failure recorded it as missed),
+    so when a later pass read it successfully all four showtimes looked
+    brand new. Reading the calendar's date buttons costs nothing -- no
+    clicks, no requests -- so tracking what the calendar has offered is what
+    separates "released" from "finally readable".
+
+    first_pass silences everything: on a target's very first run every date
+    is new to us and none of it is news. That is the cold start that emailed
+    ~170 Odyssey showtimes when the VM came up with empty state.
+    """
+    if first_pass:
+        return [], list(new)
+
+    alert_these, quiet = [], []
     for showtime in new:
-        if showtime.date not in known_dates:
-            alert_these.append(showtime)  # a date we have never seen: always
+        if showtime.date not in calendar_dates:
+            alert_these.append(showtime)     # the calendar itself grew
+            continue
+        if showtime.date not in evaluated_dates:
+            # We have never managed to READ this date -- a skipped click, or
+            # rationed away. Its showtimes may have been on sale all along,
+            # so this is a backfill, not news. (The Aug 25 false alert.)
+            quiet.append(showtime)
+            continue
+        if showtime.date not in scraped_dates:
+            # We DID read this date before and it held nothing for our venue.
+            # It now does. That is a release, and it is the single most
+            # likely shape of the Dune wave: Dec 17-20 have been in the
+            # calendar and read clean on every pass since Metreon's April
+            # allocation sold out. Treating this as backfill made the wave
+            # silent -- caught by test_wave_on_existing_dates_fires.
+            alert_these.append(showtime)
             continue
         try:
             lead = (date.fromisoformat(showtime.date) - today).days
         except ValueError:
-            alert_these.append(showtime)
+            alert_these.append(showtime)     # unparseable: when in doubt, tell the user
             continue
-        (alert_these if lead >= MIN_LEAD_DAYS else churn).append(showtime)
-    return alert_these, churn
+        (alert_these if lead >= MIN_LEAD_DAYS else quiet).append(showtime)
+    return alert_these, quiet
 
 
 def _blocked_cooldown_expired(entry: dict) -> bool:
@@ -208,17 +251,25 @@ def process_result(target: dict, result: SourceResult, state: dict) -> bool:
         new = diff_showtimes(known, result.showtimes)
 
         if new and result.kind == "showtime":
-            # Lead-time policy applies to real showtimes only. Reddit mentions
-            # carry a post date, not a showtime date, so the notion of "lead"
-            # is meaningless for them.
-            new, churn = alertable_showtimes(
-                new, {s.date for s in known}, date.today()
+            # Lead-time and backfill policy apply to real showtimes only.
+            # Reddit mentions carry a post date, not a showtime date, so the
+            # notion of "lead" is meaningless for them.
+            prior_calendar = set(entry.get("known_calendar_dates", []))
+            # No calendar recorded yet => this is the target's first pass.
+            first_pass = not entry.get("known_calendar_dates")
+            new, quiet = alertable_showtimes(
+                new,
+                scraped_dates={s.date for s in known},
+                calendar_dates=prior_calendar,
+                evaluated_dates=set(entry.get("known_evaluated_dates", [])),
+                today=date.today(),
+                first_pass=first_pass,
             )
-            if churn:
-                print(
-                    f"  ({len(churn)} new showtime(s) suppressed as schedule churn "
-                    f"for {key} — under {MIN_LEAD_DAYS} days out on a known date)"
+            if quiet:
+                reason = "first pass — recording baseline" if first_pass else (
+                    "backfill or under the lead-time floor"
                 )
+                print(f"  ({len(quiet)} new showtime(s) not alerted for {key} — {reason})")
 
         if new:
             alert_result = SourceResult(
@@ -248,6 +299,16 @@ def process_result(target: dict, result: SourceResult, state: dict) -> bool:
         entry["known_showtimes"] = merge_known(
             entry["known_showtimes"], result.showtimes, result.kind
         )
+        # Union, same reasoning as known_showtimes: a pass that fails to read
+        # the calendar must not make previously-offered dates look new again.
+        if result.calendar_dates:
+            entry["known_calendar_dates"] = sorted(
+                set(entry.get("known_calendar_dates", [])) | set(result.calendar_dates)
+            )
+        if result.evaluated_dates:
+            entry["known_evaluated_dates"] = sorted(
+                set(entry.get("known_evaluated_dates", [])) | set(result.evaluated_dates)
+            )
         entry["consecutive_parse_errors"] = 0
         entry["consecutive_blocked"] = 0
         entry["broken_alert_sent"] = False
@@ -333,7 +394,42 @@ def meaningful_fingerprint(state: dict) -> str:
     )
 
 
+def enable_dry_run() -> None:
+    """Print what would be emailed instead of sending it, and never touch
+    state.json.
+
+    Exists because every change to this project used to be validated by
+    letting it email the user for real -- which is how several false alerts
+    got discovered in an inbox rather than in a test. Run:
+
+        .venv/bin/python scripts/monitor.py --dry-run
+    """
+    def show(label):
+        def send(*args, **kwargs):
+            target = args[0] if args and isinstance(args[0], dict) else None
+            result = args[1] if len(args) > 1 else None
+            name = target.get("film_name", "?") if target else args[0] if args else "?"
+            print(f"  [DRY-RUN] would send {label}: {name}")
+            if result is not None and getattr(result, "showtimes", None):
+                for s in result.showtimes[:12]:
+                    print(f"             {s.date} {s.time} · {s.format} · {s.venue}")
+                if len(result.showtimes) > 12:
+                    print(f"             ... and {len(result.showtimes) - 12} more")
+        return send
+
+    alert.send_ticket_alert = show("TICKET ALERT")
+    alert.send_mention_alert = show("mention")
+    alert.send_blocked_alert = show("BLOCKED")
+    alert.send_broken_alert = show("BROKEN")
+    alert.send_heartbeat = lambda summary: print("  [DRY-RUN] would send heartbeat")
+
+
 def main() -> None:
+    dry_run = "--dry-run" in sys.argv
+    if dry_run:
+        enable_dry_run()
+        print("=== DRY RUN: nothing will be emailed, state.json will not be written ===")
+
     targets = load_targets()
     state = load_state()
     before = meaningful_fingerprint(state)
@@ -362,7 +458,9 @@ def main() -> None:
     if not maybe_send_heartbeat(state):
         all_delivered = False
 
-    if meaningful_fingerprint(state) != before:
+    if dry_run:
+        print("dry run — state.json left untouched")
+    elif meaningful_fingerprint(state) != before:
         save_state(state)
         print("state changed — written to disk for commit")
     else:
