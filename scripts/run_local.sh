@@ -11,7 +11,9 @@
 
 set -uo pipefail
 
-REPO="/Users/remibussac/Documents/PERSO/Watcher-AMC"
+# Derived from this script's own location, not hardcoded, so the same file
+# works on the laptop and on the Oracle VM.
+REPO="$(cd "$(dirname "${BASH_SOURCE[0]}")/.." && pwd)"
 ENV_FILE="$HOME/.dune-metreon-watch.env"
 STAMP="$(date '+%Y-%m-%d %H:%M:%S %Z')"
 

@@ -22,7 +22,9 @@
 
 set -uo pipefail
 
-REPO="/Users/remibussac/Documents/PERSO/Watcher-AMC"
+# Derived from this script's own location, not hardcoded, so the same file
+# works on the laptop and on the Oracle VM.
+REPO="$(cd "$(dirname "${BASH_SOURCE[0]}")/.." && pwd)"
 INTERVAL="${DUNE_WATCH_INTERVAL:-600}"
 LOG="$REPO/local-run.log"
 

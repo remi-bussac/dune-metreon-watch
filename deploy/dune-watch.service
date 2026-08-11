@@ -1,0 +1,27 @@
+[Unit]
+Description=Dune Metreon 70mm monitor - one pass
+# Do not bother running if the box has no network yet (e.g. straight after boot).
+After=network-online.target
+Wants=network-online.target
+
+[Service]
+Type=oneshot
+User=__USER__
+WorkingDirectory=__HOME__/dune-metreon-watch
+
+# Credentials live outside the repo so they can never be committed.
+EnvironmentFile=__HOME__/.dune-metreon-watch.env
+
+ExecStart=__HOME__/dune-metreon-watch/.venv/bin/python scripts/monitor.py
+
+# A pass is normally 1-2 minutes. If one wedges (a hung browser, a site that
+# never responds), kill it rather than letting it block every later run --
+# systemd will not start the next pass while this one is alive.
+TimeoutStartSec=10min
+
+# monitor.py exits non-zero when an alert could not be delivered. That is
+# information, not a reason to spam restarts.
+Restart=no
+
+StandardOutput=journal
+StandardError=journal

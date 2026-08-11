@@ -1,0 +1,27 @@
+[Unit]
+Description=Run the Dune Metreon 70mm monitor on an interval
+
+[Timer]
+# THE CADENCE LIVES HERE. One line to change, then:
+#     sudo systemctl daemon-reload && sudo systemctl restart dune-watch.timer
+#
+#   5min   December / an expected on-sale window
+#   10min  Oct-Nov
+#   15min  now
+#
+# Oracle's Always Free tier bills nothing regardless of how often this runs,
+# so the only real constraint is being polite to Fandango.
+OnUnitActiveSec=15min
+
+# First run 2 minutes after boot, so a reboot does not leave a long gap.
+OnBootSec=2min
+
+# If the VM was off when a run was due, run once on the next start rather
+# than pretending the gap did not happen.
+Persistent=true
+
+# Spread runs slightly so we never hit the site at exactly :00, :15, :30.
+RandomizedDelaySec=60
+
+[Install]
+WantedBy=timers.target
