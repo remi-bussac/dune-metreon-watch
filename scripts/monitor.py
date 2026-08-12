@@ -42,12 +42,21 @@ HEARTBEAT_INTERVAL = timedelta(days=7)
 BLOCKED_THRESHOLD = 3
 BLOCKED_ALERT_COOLDOWN = timedelta(hours=6)
 
-# Reddit "leading indicator" emails are OFF. The source still runs on every
-# pass and everything it finds is still recorded in state.json, so the data
-# keeps accumulating for a future decision about how to filter it -- it just
-# does not reach the inbox. It was the single largest source of noise (10 of
-# 22 emails in a week) and none of them were Metreon on-sale signals.
-MENTION_ALERTS_ENABLED = False
+# Reddit "leading indicator" emails are back ON.
+#
+# They were switched off because 10 of 22 emails in a week were Reddit noise
+# and none were on-sale signals. The source kept running and kept recording,
+# which is what settled the question: on 2026-08-11 it caught
+#
+#   r/dune  16:15 PT  "The next opportunity to get DUNE: PART THREE tickets
+#                      will arrive in one week on Tuesday"
+#   r/imax  19:06 PT  same announcement
+#
+# roughly a day before the news arrived by any other route -- into a channel
+# that was muted. That is precisely the job this source exists for, so it is
+# audible again, with the matching tightened (film must be named in the post
+# TITLE) so the noise that justified muting it does not come back.
+MENTION_ALERTS_ENABLED = True
 
 # A brand-new DATE always alerts. A new TIME on a date we already knew only
 # alerts if that date is at least this far out.

@@ -124,10 +124,23 @@ def _fetch(subreddit: str, url: str) -> tuple[str, object]:
 
 
 def _matches(title: str, summary: str, target: dict) -> bool:
-    text = f"{title} {summary}".lower()
-    has_film = any(kw in text for kw in target["film_keywords"])
-    is_onsale_news = any(kw in text for kw in AVAILABILITY_KEYWORDS)
-    return has_film and is_onsale_news
+    """The film must be named in the TITLE; the availability wording may be
+    anywhere.
+
+    That asymmetry is drawn from the real posts. Both announcements of the
+    Aug 18 on-sale put the film in the title ("The next opportunity to get
+    DUNE: PART THREE tickets...") but the actual "on sale" wording in the
+    body -- so demanding both in the title would silence the single most
+    valuable signal this source has produced.
+
+    Searching the BODY for the film name is what created the noise: an
+    Odyssey write-up that mentioned Dune 3 in passing was filed as Dune
+    news. A post that is genuinely about a film names it up front."""
+    title_l = title.lower()
+    everywhere = f"{title} {summary}".lower()
+    is_about_film = any(kw in title_l for kw in target["film_keywords"])
+    mentions_availability = any(kw in everywhere for kw in AVAILABILITY_KEYWORDS)
+    return is_about_film and mentions_availability
 
 
 def check(target: dict, known_dates: set[str] | None = None) -> SourceResult:
