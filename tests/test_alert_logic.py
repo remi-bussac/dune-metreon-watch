@@ -192,3 +192,26 @@ def test_idempotency_second_identical_pass_alerts_nothing():
         evaluated_dates=cal, today=TODAY
     )
     assert new == [] and alerts == []
+
+
+# --------------------------------------------------------------------------
+# Owner decisions, pinned so they cannot drift back silently
+# --------------------------------------------------------------------------
+
+def test_reddit_mentions_are_muted_but_still_recorded():
+    """Owner's standing decision: leading-indicator emails stay OFF, while
+    the source keeps running and keeps logging.
+
+    Pinned deliberately. This flag has been flipped twice on evidence, and a
+    future change should have to argue with a failing test rather than move
+    it in passing. The mute is a product decision, not a bug: a
+    pre-announced drop is not what this project is for, and Reddit noise
+    degrades the channel that must stay trustworthy for unannounced ones.
+    """
+    import monitor
+    assert monitor.MENTION_ALERTS_ENABLED is False, (
+        "leading-indicator emails must stay muted; the source still records to state"
+    )
+    assert monitor.reddit_rss in monitor.SOURCE_MODULES, (
+        "muted means silent, not removed -- the log must keep accumulating"
+    )

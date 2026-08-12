@@ -42,21 +42,21 @@ HEARTBEAT_INTERVAL = timedelta(days=7)
 BLOCKED_THRESHOLD = 3
 BLOCKED_ALERT_COOLDOWN = timedelta(hours=6)
 
-# Reddit "leading indicator" emails are back ON.
+# Reddit "leading indicator" emails stay OFF. Owner's decision, deliberately
+# held after reviewing the evidence both ways.
 #
-# They were switched off because 10 of 22 emails in a week were Reddit noise
-# and none were on-sale signals. The source kept running and kept recording,
-# which is what settled the question: on 2026-08-11 it caught
+# The source still runs on every pass and everything it matches is still
+# recorded in state.json -- this is a mute, not a removal, and the log keeps
+# accumulating for a future call.
 #
-#   r/dune  16:15 PT  "The next opportunity to get DUNE: PART THREE tickets
-#                      will arrive in one week on Tuesday"
-#   r/imax  19:06 PT  same announcement
-#
-# roughly a day before the news arrived by any other route -- into a channel
-# that was muted. That is precisely the job this source exists for, so it is
-# audible again, with the matching tightened (film must be named in the post
-# TITLE) so the noise that justified muting it does not come back.
-MENTION_ALERTS_ENABLED = True
+# For the record, because it argues the other way: on 2026-08-11 this source
+# caught both announcements of the Aug 18 on-sale (r/dune 16:15 PT, r/imax
+# 19:06 PT) roughly a day early, and they went unseen because of this flag.
+# The counter-argument, which is the one that holds: a pre-announced drop is
+# not what this project is for. It exists to catch releases that arrive with
+# no warning, where Fandango polling is the only thing that can help. Reddit
+# noise degrades the channel that has to stay trustworthy for that case.
+MENTION_ALERTS_ENABLED = False
 
 # A brand-new DATE always alerts. A new TIME on a date we already knew only
 # alerts if that date is at least this far out.
