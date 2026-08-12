@@ -31,7 +31,7 @@ from pathlib import Path
 sys.path.insert(0, str(Path(__file__).resolve().parent.parent))
 
 from browser import goto_and_classify, polite_page  # noqa: E402
-from normalize import Showtime, SourceResult  # noqa: E402
+from normalize import Showtime, SourceResult, venue_today  # noqa: E402
 
 JSON_BLOB_PATTERN = re.compile(
     r'<script[^>]+(?:id="__NEXT_DATA__"|type="application/json")[^>]*>(.*?)</script>',
@@ -108,7 +108,7 @@ def extract_showtimes_from_text(
     the 70mm requirement is what keeps the monitor scoped to 70mm only (the
     hard constraint); the date requirement means an ambiguous match is
     skipped rather than stamped with a guessed date that could be wrong."""
-    today = date.today()
+    today = venue_today()
     lowered = text.lower()
     found: dict[tuple, Showtime] = {}
 

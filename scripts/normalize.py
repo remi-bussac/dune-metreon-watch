@@ -10,8 +10,27 @@ is unit-testable without touching a browser.
 from __future__ import annotations
 
 from dataclasses import dataclass, field
-from datetime import datetime, timezone
+from datetime import date, datetime, timezone
 from typing import Literal
+from zoneinfo import ZoneInfo
+
+# Every date this system handles is a cinema-local date: Fandango's calendar
+# buttons, the showtimes themselves, the "is it in the past" cutoff, the
+# lead-time arithmetic. So "today" must mean today AT THE VENUE, never on
+# whatever machine happens to be running.
+#
+# Reading date.today() worked by accident while this ran on a laptop in PDT
+# and broke the day it moved to a UTC VM: from 17:00 Pacific onward the host
+# was already on tomorrow's date, so merge_known pruned the CURRENT Pacific
+# day's showtimes as "past", the next scrape re-found them, and they looked
+# brand new. Three identical alerts landed 16 minutes apart on 2026-08-11
+# before this was caught. In December (PST) the broken window is 8 hours.
+VENUE_TZ = ZoneInfo("America/Los_Angeles")
+
+
+def venue_today() -> date:
+    """Today's date at the cinema, independent of the host's timezone."""
+    return datetime.now(VENUE_TZ).date()
 
 Status = Literal["ok", "no_data", "blocked", "parse_error"]
 

@@ -40,7 +40,7 @@ sys.path.insert(0, str(Path(__file__).resolve().parent.parent))
 
 from browser import goto_and_classify, polite_page  # noqa: E402
 from _common import _dismiss_cookie_banner  # noqa: E402
-from normalize import Showtime, SourceResult  # noqa: E402
+from normalize import Showtime, SourceResult, venue_today  # noqa: E402
 
 SOURCE_NAME = "fandango"
 
@@ -247,7 +247,7 @@ def _click_date(page, date_str: str, today: date) -> bool:
 
 def check(target: dict, known_dates: set[str] | None = None) -> SourceResult:
     url = target["fandango_film_url"]
-    today = date.today()
+    today = venue_today()
     known_dates = known_dates or set()
 
     with polite_page() as page:

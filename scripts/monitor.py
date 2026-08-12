@@ -21,7 +21,9 @@ sys.path.insert(0, str(REPO_ROOT / "scripts"))
 sys.path.insert(0, str(REPO_ROOT / "scripts" / "sources"))
 
 import alert  # noqa: E402
-from normalize import Showtime, SourceResult, diff_showtimes, state_key  # noqa: E402
+from normalize import (  # noqa: E402
+    Showtime, SourceResult, diff_showtimes, state_key, venue_today,
+)
 from sources import amc_showtimes, amc_film_page, imax_page, fandango, reddit_rss  # noqa: E402
 
 TARGETS_PATH = REPO_ROOT / "config" / "targets.json"
@@ -135,7 +137,7 @@ def merge_known(known: list[dict], current: list[Showtime], kind: str) -> list[d
     they cannot be bought. Reddit mentions are kept for 30 days, comfortably
     longer than the ~3 days of posts an RSS feed actually carries, so a
     pruned post can never scroll back into the feed and re-alert."""
-    today = date.today()
+    today = venue_today()
     merged = {tuple(sorted(d.items())): d for d in known}
     for showtime in current:
         d = showtime.to_dict()
@@ -262,7 +264,7 @@ def process_result(target: dict, result: SourceResult, state: dict) -> bool:
                 scraped_dates={s.date for s in known},
                 calendar_dates=prior_calendar,
                 evaluated_dates=set(entry.get("known_evaluated_dates", [])),
-                today=date.today(),
+                today=venue_today(),
                 first_pass=first_pass,
             )
             if quiet:
