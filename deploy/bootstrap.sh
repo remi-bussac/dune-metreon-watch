@@ -37,12 +37,16 @@ if [[ ! -f "$ENV_FILE" ]]; then
   # parses KEY=value and does NOT understand shell syntax -- an "export"
   # prefix silently becomes part of the variable name and the monitor then
   # fails to authenticate. Plain KEY=value also still works with `source`.
+  # Addresses are placeholders, not real ones. This file is committed, so a
+  # real address here is published to anyone who can read the repo and gets
+  # harvested by spam crawlers -- the same reason the Reddit user-agent
+  # points at the repo URL rather than a mailbox.
   cat > "$ENV_FILE" <<'EOF'
 # Credentials for dune-metreon-watch.
 # Format is deliberately bare KEY=value (no "export") so systemd can read it.
-GMAIL_ADDRESS=kdozalert@gmail.com
+GMAIL_ADDRESS=YOUR_SENDER_ACCOUNT@gmail.com
 GMAIL_APP_PASSWORD=PUT_YOUR_16_CHAR_APP_PASSWORD_HERE
-ALERT_EMAIL_TO=remi.bussac@gmail.com
+ALERT_EMAIL_TO=WHERE_ALERTS_SHOULD_LAND@example.com
 EOF
   chmod 600 "$ENV_FILE"
   echo "    created $ENV_FILE  <-- YOU MUST EDIT THIS AND ADD THE PASSWORD"

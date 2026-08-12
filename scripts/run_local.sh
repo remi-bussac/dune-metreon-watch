@@ -1,6 +1,6 @@
 #!/bin/bash
 # Local stopgap runner, driven by the macOS LaunchAgent
-# (~/Library/LaunchAgents/com.remibussac.dune-metreon-watch.plist).
+# (a macOS LaunchAgent plist, since retired -- see RUNBOOK.md).
 #
 # Exists because the GitHub Actions schedule is disabled while the account
 # review is open. This runs whenever the laptop is awake -- partial

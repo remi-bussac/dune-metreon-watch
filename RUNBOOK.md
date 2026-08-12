@@ -171,7 +171,7 @@ State accumulates in `state/state.json` across manual runs and is *not* auto-com
 Rather than remembering to run it, keep a loop alive in tmux. It inherits your interactive shell's permissions, so it sidesteps the TCC problem below entirely, and it survives closing the terminal window.
 
 ```bash
-tmux new-session -d -s dune "bash /Users/remibussac/Documents/PERSO/Watcher-AMC/scripts/run_loop.sh"
+tmux new-session -d -s dune "bash $(pwd)/scripts/run_loop.sh"
 ```
 
 | Task | Command |
