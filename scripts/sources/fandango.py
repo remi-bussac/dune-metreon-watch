@@ -15,12 +15,20 @@ real data on 2026-07-31:
     so the old source would have stayed completely silent through exactly
     the event this monitor exists to catch.
 
-Fandango publishes a separate film entry per premium format, so the "IMAX
-70MM Experience" page is inherently scoped to 70mm — its calendar lists only
-dates that have 70mm showtimes (currently exactly Dec 17-20), and each date
-lists the specific theaters and times. That gives film + format + venue +
-date + time in one place, with no regular-programming noise, and it changes
-when a wave adds either a new date or a new showtime on an existing date.
+Fandango publishes a separate film entry per premium format, so this page is
+the film's 70mm entry: its calendar lists the dates that entry plays, and
+each date lists the specific theaters and times. That gives film + format +
+venue + date + time in one place, with no regular-programming noise, and it
+changes when a wave adds either a new date or a new showtime on an existing
+date.
+
+It is NOT true that everything on the page is 70mm, which an earlier version
+of this docstring claimed. Under a 70mm date, Fandango also lists nearby
+theaters showing the same film in their own premium format: on 2026-12-18 the
+page carried Apple Cinemas Van Ness (plain reserved seating), Alamo New
+Mission (HDR by Barco) and AMC Bay Street (IMAX with Laser) alongside
+Metreon's 70mm. So format is filtered per amenity group, per theater, and
+never assumed from the URL.
 
 Politeness: only the plain movie-overview URL is ever navigated to (no query
 params — Fandango's robots.txt disallows `*?*date=*`, `/api/` and `/napi/*`,
@@ -32,8 +40,9 @@ from __future__ import annotations
 
 import re
 import sys
-from datetime import date
+from datetime import date, timedelta
 from pathlib import Path
+from urllib.parse import unquote
 
 sys.path.insert(0, str(Path(__file__).resolve().parent))
 sys.path.insert(0, str(Path(__file__).resolve().parent.parent))
@@ -108,8 +117,64 @@ BUTTON_DATE_PATTERN = re.compile(
     re.IGNORECASE,
 )
 TIME_PATTERN = re.compile(r"\b(1[0-2]|0?[1-9]):([0-5][0-9])\s*([AaPp])\.?[Mm]?\b")
-DISTANCE_PATTERN = re.compile(r"\d+\.\d+\s*mi")
 FORMAT_70MM_PATTERN = re.compile(r"70\s?mm", re.IGNORECASE)
+
+# One theater's card, and the per-format blocks inside it. Reading these
+# instead of the rendered prose is what lets the parser tell a showtime you
+# can buy from one that is merely printed. See AVAILABLE_CLASS below.
+THEATER_CARD_SELECTOR = ".js-movie-showtime-theater"
+THEATER_NAME_SELECTOR = ".shared-theater-header__name"
+AMENITY_GROUP_SELECTOR = ".shared-showtimes__amenity-group"
+AMENITIES_SELECTOR = ".shared-showtimes__amenities"
+SHOWTIME_BTN_SELECTOR = ".showtime-btn"
+
+# THE distinction this whole module now turns on.
+#
+# Fandango renders a buyable showtime and an unbuyable one with identical
+# text -- "8:30a" either way -- and the words "sold out" appear NOWHERE in
+# the page text, so no text-level parser can tell them apart. It exists only
+# in the markup:
+#
+#   buyable  <a    class="... showtime-btn--available" href="tickets.fandango.com/...">
+#   locked   <span class="... showtime-btn--soldout" data-type="soldout">
+#
+# This matters because of what AMC actually did on 2026-08-18: it published
+# Dec 27 through Jan 14 at Metreon as complete schedules with every single
+# time locked, and put only Dec 18-26 on sale. The old text parser read all
+# of it as a release. The one alert sent that day listed 147 showtimes, of
+# which 101 could never be bought, which is what "the email listed dates
+# through January that I could not buy" means. Those 101 are still sitting
+# on the page today, so this is a live bug, not a historical one.
+AVAILABLE_CLASS = "showtime-btn--available"
+
+# Fandango percent-encodes the buy link, so "sdate=2026-12-18%2B08%3A00"
+# decodes to "2026-12-18+08:00". That stamp is the showtime's own record of
+# which date and time it belongs to, which makes it proof rather than
+# inference: see _date_matches.
+SDATE_PATTERN = re.compile(r"[?&]sdate=(\d{4}-\d\d-\d\d)[+ ](\d\d):(\d\d)")
+
+# The JS that lifts the whole date's structure out in one call. Kept as data
+# (theater -> format group -> showtime) so everything downstream of it is
+# plain Python that tests can drive without a browser.
+CARD_SCRAPE_JS = f"""
+() => Array.from(document.querySelectorAll('{THEATER_CARD_SELECTOR}')).map(card => {{
+  const name = card.querySelector('{THEATER_NAME_SELECTOR}');
+  return {{
+    theater: name ? name.innerText.trim() : '',
+    groups: Array.from(card.querySelectorAll('{AMENITY_GROUP_SELECTOR}')).map(group => {{
+      const amenities = group.querySelector('{AMENITIES_SELECTOR}');
+      return {{
+        amenities: amenities ? amenities.innerText.trim() : '',
+        showtimes: Array.from(group.querySelectorAll('{SHOWTIME_BTN_SELECTOR}')).map(btn => ({{
+          label: (btn.innerText || '').trim(),
+          available: btn.classList.contains('{AVAILABLE_CLASS}'),
+          href: btn.getAttribute('href') || ''
+        }}))
+      }};
+    }})
+  }};
+}});
+"""
 
 
 def _button_date(label: str, today: date) -> str | None:
@@ -127,45 +192,110 @@ def _button_date(label: str, today: date) -> str | None:
     return f"{year:04d}-{month:02d}-{day:02d}"
 
 
-def _venue_block(body_text: str, venue: str) -> str | None:
-    """Slice out just the target venue's section of the results list.
-
-    Fandango lists each theater as "<name> / <distance> mi / <formats> /
-    <times>", so the block ends where the *next* theater's distance marker
-    begins. Without this cut, a neighbouring theater's showtimes would be
-    misattributed to Metreon."""
-    start = body_text.lower().find(venue.lower())
-    if start == -1:
+def _label_to_24h(label: str) -> str | None:
+    """"8:30a" -> "08:30". Used only for locked showtimes, which carry no
+    machine-readable stamp of their own."""
+    match = TIME_PATTERN.search(label)
+    if not match:
         return None
-    rest = body_text[start:]
-    distances = list(DISTANCE_PATTERN.finditer(rest))
-    if len(distances) >= 2:
-        rest = rest[: distances[1].start()]  # first distance is this venue's own
-    return rest
+    hour, minute, meridiem = match.groups()
+    h = int(hour)
+    is_pm = meridiem.lower().startswith("p")
+    if is_pm and h != 12:
+        h += 12
+    if not is_pm and h == 12:
+        h = 0
+    return f"{h:02d}:{minute}"
 
 
-def _extract_showtimes(body_text: str, target: dict, date_str: str, url: str) -> list[Showtime]:
-    block = _venue_block(body_text, target["venue"])
-    if not block or not FORMAT_70MM_PATTERN.search(block):
-        return []
-    out = {}
-    for match in TIME_PATTERN.finditer(block):
-        hour, minute, meridiem = match.groups()
-        h = int(hour)
-        is_pm = meridiem.lower().startswith("p")
-        if is_pm and h != 12:
-            h += 12
-        if not is_pm and h == 12:
-            h = 0
-        st = Showtime(
-            date=date_str,
-            time=f"{h:02d}:{minute}",
-            format=target["format"],
-            venue=target["venue"],
-            booking_url=url,
-        )
-        out[st.key()] = st
-    return list(out.values())
+def _date_matches(stamped: str, date_str: str) -> bool:
+    """Does a buy link's own sdate belong to the calendar date we asked for?
+
+    Not a plain equality check, because a cinema's day runs past midnight.
+    Metreon's 2:30a show sits under FRIDAY DEC 18 in the calendar but its
+    link is stamped sdate=2026-12-19+02:30, which is the honest wall-clock
+    answer. So the day after is accepted too, and the showtime keeps the
+    calendar's date -- the same business-day convention already in
+    state.json, so nothing already known re-alerts as new.
+
+    Anything further out means the page still had another date on screen
+    when we read it. That is the stale-render bug that once reported Sep
+    13-16 with Sep 11's showtimes, and here it is caught by the showtime
+    itself rather than by anything we infer about the page."""
+    try:
+        wanted = date.fromisoformat(date_str)
+    except ValueError:
+        return False
+    return stamped in (date_str, (wanted + timedelta(days=1)).isoformat())
+
+
+def showtimes_from_cards(
+    cards: list[dict], target: dict, date_str: str
+) -> tuple[list[Showtime], list[Showtime]]:
+    """One date's scraped theater cards -> (buyable, locked) for our venue.
+
+    Only the first list is ever alerted on. The second is kept so a run can
+    say out loud how much of what it saw was unbuyable, which is the number
+    that used to be silently emailed as news.
+
+    Three filters, in order, and each one has drawn blood before:
+
+      venue    the card's own theater name. Was a text slice between
+               "29.55 mi" distance markers, which is how a neighbouring
+               cinema's times could land under Metreon's name.
+      format   the amenity group's own text must say 70mm. The page lists
+               other theaters in their own premium formats (IMAX with
+               Laser, HDR by Barco), and a laser IMAX seat is not what this
+               is watching for.
+      buyable  the class on the button. See AVAILABLE_CLASS.
+    """
+    venue = target["venue"].lower()
+    available: dict[tuple, Showtime] = {}
+    locked: dict[tuple, Showtime] = {}
+
+    for card in cards:
+        if venue not in (card.get("theater") or "").lower():
+            continue
+        for group in card.get("groups") or []:
+            if not FORMAT_70MM_PATTERN.search(group.get("amenities") or ""):
+                continue
+            for button in group.get("showtimes") or []:
+                if button.get("available"):
+                    href = unquote(button.get("href") or "")
+                    match = SDATE_PATTERN.search(href)
+                    if not match:
+                        # Marked buyable but carries no link we can read.
+                        # Not proof of a release, so it is not treated as one.
+                        continue
+                    stamped, hour, minute = match.groups()
+                    if not _date_matches(stamped, date_str):
+                        continue
+                    showtime = Showtime(
+                        date=date_str,
+                        time=f"{hour}:{minute}",
+                        format=target["format"],
+                        venue=target["venue"],
+                        # The deep link for THIS showtime, not the generic
+                        # film page. The stamp in it is a content hash, not
+                        # a session token (verified stable across separate
+                        # page loads), so it is safe to keep in state.
+                        booking_url=button.get("href") or "",
+                    )
+                    available[showtime.key()] = showtime
+                else:
+                    time_24h = _label_to_24h(button.get("label") or "")
+                    if time_24h is None:
+                        continue
+                    showtime = Showtime(
+                        date=date_str,
+                        time=time_24h,
+                        format=target["format"],
+                        venue=target["venue"],
+                        booking_url="",  # there is nothing to link to
+                    )
+                    locked[showtime.key()] = showtime
+
+    return list(available.values()), list(locked.values())
 
 
 def _rendered_showtime_dates(page) -> list[str]:
@@ -314,6 +444,7 @@ def check(target: dict, known_dates: set[str] | None = None) -> SourceResult:
         wanted_dates = [d for d in all_dates if d in set(unseen) | set(near_term)]
 
         showtimes: list[Showtime] = []
+        locked: list[Showtime] = []
         missed: list[str] = []
         for date_str in wanted_dates:
             # Re-resolve the button every iteration and match on its parsed
@@ -323,31 +454,33 @@ def check(target: dict, known_dates: set[str] | None = None) -> SourceResult:
             if not _click_date(page, date_str, today):
                 missed.append(date_str)
                 continue
-            try:
-                day_text = page.inner_text("body")
-            except Exception:
-                missed.append(date_str)
-                continue
 
-            # Last line of defence. The text scrape reads a venue block out of
-            # rendered prose, which cannot itself prove which date that prose
-            # belongs to. The showtime elements CAN: each is stamped with its
-            # own date. If nothing in the DOM is stamped with the date we
-            # asked for, then whatever text is on screen belongs to some other
-            # date, and emitting it would invent showtimes that do not exist.
-            # This is the check that would have stopped the Sep 13-16 alert.
+            # Belt: if the DOM is stamped with dates and ours is not among
+            # them, the click has not landed and everything on screen belongs
+            # to some other date. This is the check that would have stopped
+            # the Sep 13-16 alert.
             rendered = set(_rendered_showtime_dates(page))
             if rendered and date_str not in rendered:
                 missed.append(date_str)
                 continue
 
-            found = _extract_showtimes(day_text, target, date_str, url)
-            if found and not rendered:
-                # Text says there are showtimes but no showtime element carries
-                # a date. Contradictory -- trust the DOM, not the prose.
+            try:
+                cards = page.evaluate(CARD_SCRAPE_JS)
+            except Exception:
                 missed.append(date_str)
                 continue
+
+            # Braces: every buyable showtime is then checked against its own
+            # sdate stamp, so a stale render cannot smuggle another date's
+            # showtimes in here even if the belt above passes. That per-
+            # showtime proof replaces an older guard which treated "times in
+            # the prose but no date-stamped element" as contradictory: with
+            # nothing left reading prose, the absence of a seat-map button
+            # proves nothing, and rejecting on it risked dropping a real
+            # release at a theater that simply has no seat map.
+            found, found_locked = showtimes_from_cards(cards, target, date_str)
             showtimes.extend(found)
+            locked.extend(found_locked)
 
         error = None
         if missed:
@@ -361,6 +494,6 @@ def check(target: dict, known_dates: set[str] | None = None) -> SourceResult:
 
     return SourceResult(
         source=SOURCE_NAME, target_id=target["id"], status="ok", kind="showtime",
-        showtimes=showtimes, calendar_dates=all_dates,
+        showtimes=showtimes, locked_showtimes=locked, calendar_dates=all_dates,
         evaluated_dates=[d for d in wanted_dates if d not in missed], error=error,
     )

@@ -1,0 +1,677 @@
+[
+  {
+    "theater": "Apple Cinemas Van Ness",
+    "groups": [
+      {
+        "amenities": "Reserved seating",
+        "showtimes": [
+          {
+            "label": "2:00p",
+            "available": true,
+            "href": "https://tickets.fandango.com/transaction/ticketing/mobile/jump.aspx?sdate=2026-12-17%2B14%3A00&from=mov_det_showtimes&source=desktop&mid=246859&tid=aagbk&dfam=webbrowser&showtimehashcode=v2-48bf95cb73f9b788f2c757ca94504c34611497ca1e0784ff3a2161ca925935ea"
+          },
+          {
+            "label": "6:00p",
+            "available": true,
+            "href": "https://tickets.fandango.com/transaction/ticketing/mobile/jump.aspx?sdate=2026-12-17%2B18%3A00&from=mov_det_showtimes&source=desktop&mid=246859&tid=aagbk&dfam=webbrowser&showtimehashcode=v2-2de507c9677dfd8627f079ce5deac8aa9c563849811ac4f83e9dc7489da3bae8"
+          },
+          {
+            "label": "9:00p",
+            "available": true,
+            "href": "https://tickets.fandango.com/transaction/ticketing/mobile/jump.aspx?sdate=2026-12-17%2B21%3A00&from=mov_det_showtimes&source=desktop&mid=246859&tid=aagbk&dfam=webbrowser&showtimehashcode=v2-bc2167c529257171c9a9da74c9b59ccb4e613a9f7637775bdfd161908cae10b5"
+          }
+        ]
+      }
+    ]
+  },
+  {
+    "theater": "AMC Metreon 16",
+    "groups": [
+      {
+        "amenities": "IMAX\u00ae 70MM Film, Reserved seating",
+        "showtimes": [
+          {
+            "label": "7:00p",
+            "available": false,
+            "href": ""
+          },
+          {
+            "label": "11:00p",
+            "available": false,
+            "href": ""
+          }
+        ]
+      }
+    ]
+  },
+  {
+    "theater": "Alamo Drafthouse Cinema New Mission",
+    "groups": [
+      {
+        "amenities": "HDR By Barco, Reserved seating, Accessibility devices available, Dine-In Delivery to Seat, HDR, Ad Free Preshow",
+        "showtimes": [
+          {
+            "label": "2:00p",
+            "available": true,
+            "href": "https://tickets.fandango.com/transaction/ticketing/mobile/jump.aspx?sdate=2026-12-17%2B14%3A00&from=mov_det_showtimes&source=desktop&mid=246860&tid=aaxpv&dfam=webbrowser&showtimehashcode=v2-be8d4659300ee78555d253c34698d823d73136b8b2e76b6811faf1d3ef57386d"
+          }
+        ]
+      }
+    ]
+  },
+  {
+    "theater": "Regal Stonestown Galleria ScreenX, 4DX, & RPX",
+    "groups": [
+      {
+        "amenities": "RPX, HDR By Barco, Reserved seating, No passes, Closed caption, Accessibility devices available",
+        "showtimes": [
+          {
+            "label": "9:00p",
+            "available": true,
+            "href": "https://tickets.fandango.com/transaction/ticketing/mobile/jump.aspx?sdate=2026-12-17%2B21%3A00&from=mov_det_showtimes&source=desktop&mid=246860&tid=aayum&dfam=webbrowser&showtimehashcode=v2-4ebf669e2b79e2073bf592c455b32e58bea5f09dfdda0b1b4bc519fa12671d9c"
+          }
+        ]
+      }
+    ]
+  },
+  {
+    "theater": "Cinemark Century Daly City 20 XD and IMAX",
+    "groups": [
+      {
+        "amenities": "Reserved seating",
+        "showtimes": [
+          {
+            "label": "2:00p",
+            "available": true,
+            "href": "https://tickets.fandango.com/transaction/ticketing/mobile/jump.aspx?sdate=2026-12-17%2B14%3A00&from=mov_det_showtimes&source=desktop&mid=246859&tid=aaqlt&dfam=webbrowser&showtimehashcode=v2-33dfb3a933b9fa3a985c27d88f16295c27247fbb00398e196a12ed21d298d3d8"
+          },
+          {
+            "label": "5:35p",
+            "available": true,
+            "href": "https://tickets.fandango.com/transaction/ticketing/mobile/jump.aspx?sdate=2026-12-17%2B17%3A35&from=mov_det_showtimes&source=desktop&mid=246859&tid=aaqlt&dfam=webbrowser&showtimehashcode=v2-d9add3c97957e7d2984a3da5b265843a27d048983a14b1e31e6cbce1996747b9"
+          },
+          {
+            "label": "9:10p",
+            "available": true,
+            "href": "https://tickets.fandango.com/transaction/ticketing/mobile/jump.aspx?sdate=2026-12-17%2B21%3A10&from=mov_det_showtimes&source=desktop&mid=246859&tid=aaqlt&dfam=webbrowser&showtimehashcode=v2-3d3ce88168336860020381108253efdf34850ba4ba6df3d15de6f75674679b67"
+          },
+          {
+            "label": "12:45a",
+            "available": true,
+            "href": "https://tickets.fandango.com/transaction/ticketing/mobile/jump.aspx?sdate=2026-12-18%2B00%3A45&from=mov_det_showtimes&source=desktop&mid=246859&tid=aaqlt&dfam=webbrowser&showtimehashcode=v2-6e79c14ae9efa46017d368755c6fa160569af4ad703483b810e761a395c1053e"
+          }
+        ]
+      }
+    ]
+  },
+  {
+    "theater": "AMC Bay Street 16",
+    "groups": [
+      {
+        "amenities": "IMAX with Laser, Reserved seating, Closed caption, Accessibility devices available",
+        "showtimes": [
+          {
+            "label": "2:00p",
+            "available": true,
+            "href": "https://tickets.fandango.com/transaction/ticketing/mobile/jump.aspx?sdate=2026-12-17%2B14%3A00&from=mov_det_showtimes&source=desktop&mid=246859&tid=aaqqa&dfam=webbrowser&showtimehashcode=v2-6afb1a18af4d59f7c0241934b8d051d81e2609a705c25c49550b152b7475eb3f"
+          },
+          {
+            "label": "5:20p",
+            "available": true,
+            "href": "https://tickets.fandango.com/transaction/ticketing/mobile/jump.aspx?sdate=2026-12-17%2B17%3A20&from=mov_det_showtimes&source=desktop&mid=246859&tid=aaqqa&dfam=webbrowser&showtimehashcode=v2-9c0f52722674e12b2235db61972e21ac4737f1e101d2f9f63049a3443e861a81"
+          },
+          {
+            "label": "8:40p",
+            "available": true,
+            "href": "https://tickets.fandango.com/transaction/ticketing/mobile/jump.aspx?sdate=2026-12-17%2B20%3A40&from=mov_det_showtimes&source=desktop&mid=246859&tid=aaqqa&dfam=webbrowser&showtimehashcode=v2-b5e77970c3d7b641a66e1c42bcc4418de9cd38aab21f5c5ef33079ce669407c8"
+          },
+          {
+            "label": "12:00a",
+            "available": true,
+            "href": "https://tickets.fandango.com/transaction/ticketing/mobile/jump.aspx?sdate=2026-12-18%2B00%3A00&from=mov_det_showtimes&source=desktop&mid=246859&tid=aaqqa&dfam=webbrowser&showtimehashcode=v2-a24010d703d91121ee868ca6317f8c48d7a4a1c2fb1d1ca5eadf3f43d3b59773"
+          }
+        ]
+      },
+      {
+        "amenities": "XL at AMC, Reserved seating, Closed caption, Accessibility devices available",
+        "showtimes": [
+          {
+            "label": "3:00p",
+            "available": true,
+            "href": "https://tickets.fandango.com/transaction/ticketing/mobile/jump.aspx?sdate=2026-12-17%2B15%3A00&from=mov_det_showtimes&source=desktop&mid=246860&tid=aaqqa&dfam=webbrowser&showtimehashcode=v2-b2fb17eebd10aa5ff32b9e44b6032a67acf487c3bf8326f30d803764198fbc11"
+          },
+          {
+            "label": "6:30p",
+            "available": true,
+            "href": "https://tickets.fandango.com/transaction/ticketing/mobile/jump.aspx?sdate=2026-12-17%2B18%3A30&from=mov_det_showtimes&source=desktop&mid=246860&tid=aaqqa&dfam=webbrowser&showtimehashcode=v2-e430087d6a9f5f9c5e4fa67fca96c5922087fb0f373eb07d54bab5c3af66978e"
+          },
+          {
+            "label": "10:00p",
+            "available": true,
+            "href": "https://tickets.fandango.com/transaction/ticketing/mobile/jump.aspx?sdate=2026-12-17%2B22%3A00&from=mov_det_showtimes&source=desktop&mid=246860&tid=aaqqa&dfam=webbrowser&showtimehashcode=v2-e91cfacff4e528eab33da8103ae0e3c3c9b08d2509deb3e647cd30bf35cd3398"
+          }
+        ]
+      }
+    ]
+  },
+  {
+    "theater": "Cinemark Century at Tanforan and XD",
+    "groups": [
+      {
+        "amenities": "Cinemark XD, Reserved seating",
+        "showtimes": [
+          {
+            "label": "5:00p",
+            "available": true,
+            "href": "https://tickets.fandango.com/transaction/ticketing/mobile/jump.aspx?sdate=2026-12-17%2B17%3A00&from=mov_det_showtimes&source=desktop&mid=246860&tid=aautx&dfam=webbrowser&showtimehashcode=v2-38417b43771e8087fa486c15f3f3d6b7e5a08f759b540a0d53fd6d296c235c9f"
+          }
+        ]
+      }
+    ]
+  },
+  {
+    "theater": "CinemaWest Rheem Theatre & Giant Screen with Laser",
+    "groups": [
+      {
+        "amenities": "GIANT SCREEN, Giant Screen with Dolby ATMOS, Dolby Atmos, Reserved seating, Closed caption, Recliner Seats, Accessibility devices available, Luxury Electric Recliners, Laser Projection",
+        "showtimes": [
+          {
+            "label": "4:50p",
+            "available": true,
+            "href": "https://tickets.fandango.com/transaction/ticketing/mobile/jump.aspx?sdate=2026-12-17%2B16%3A50&from=mov_det_showtimes&source=desktop&mid=246860&tid=aafwk&dfam=webbrowser&showtimehashcode=v2-fe498f3fe28cb0549b25d614a8a3cd0beb975130f2262d74487290d7d3e4cf12"
+          },
+          {
+            "label": "11:50p",
+            "available": true,
+            "href": "https://tickets.fandango.com/transaction/ticketing/mobile/jump.aspx?sdate=2026-12-17%2B23%3A50&from=mov_det_showtimes&source=desktop&mid=246860&tid=aafwk&dfam=webbrowser&showtimehashcode=v2-94d56ef0486f58d73064d80dfe643c39d1739d45205c0b4a44ed04ae6d2bb3ef"
+          }
+        ]
+      }
+    ]
+  },
+  {
+    "theater": "CinemaWest Fairfax Theatre & Giant Screen",
+    "groups": [
+      {
+        "amenities": "Giant Screen with Dolby ATMOS, Reserved seating, Closed caption, Recliner Seats, Accessibility devices available, Luxury Electric Recliners, Laser Projection",
+        "showtimes": [
+          {
+            "label": "4:50p",
+            "available": false,
+            "href": ""
+          }
+        ]
+      }
+    ]
+  },
+  {
+    "theater": "Cinemark Century Walnut Creek 14 and XD",
+    "groups": [
+      {
+        "amenities": "Cinemark XD, Reserved seating, Luxury Lounge Recliners",
+        "showtimes": [
+          {
+            "label": "5:05p",
+            "available": true,
+            "href": "https://tickets.fandango.com/transaction/ticketing/mobile/jump.aspx?sdate=2026-12-17%2B17%3A05&from=mov_det_showtimes&source=desktop&mid=246860&tid=aarar&dfam=webbrowser&showtimehashcode=v2-706b7ed9742ee88a8bbe66f7af4e9b590a417a26ce2a96f6bcd70f4f1502ceaf"
+          }
+        ]
+      }
+    ]
+  },
+  {
+    "theater": "Cinemark Century Downtown Pleasant Hill 16 and XD",
+    "groups": [
+      {
+        "amenities": "Cinemark XD, Reserved seating, Digital, Luxury Lounge Recliners",
+        "showtimes": [
+          {
+            "label": "5:05p",
+            "available": true,
+            "href": "https://tickets.fandango.com/transaction/ticketing/mobile/jump.aspx?sdate=2026-12-17%2B17%3A05&from=mov_det_showtimes&source=desktop&mid=246860&tid=aaqam&dfam=webbrowser&showtimehashcode=v2-b7f105dcfc8b78f83a89767aa7bb2721b873ef61446c56c33c9ce63baee98c7a"
+          }
+        ]
+      }
+    ]
+  },
+  {
+    "theater": "Cinemark Century Redwood Downtown 20 and XD",
+    "groups": [
+      {
+        "amenities": "Cinemark XD, D-Box, Reserved seating, Luxury Lounge Recliners",
+        "showtimes": [
+          {
+            "label": "2:00p",
+            "available": true,
+            "href": "https://tickets.fandango.com/transaction/ticketing/mobile/jump.aspx?sdate=2026-12-17%2B14%3A00&from=mov_det_showtimes&source=desktop&mid=246860&tid=aaubf&dfam=webbrowser&showtimehashcode=v2-592285d3d587f6fb3bf59062293f9ae6e96b762c0f091c70b4998306ad20fb3a"
+          },
+          {
+            "label": "7:00p",
+            "available": true,
+            "href": "https://tickets.fandango.com/transaction/ticketing/mobile/jump.aspx?sdate=2026-12-17%2B19%3A00&from=mov_det_showtimes&source=desktop&mid=246860&tid=aaubf&dfam=webbrowser&showtimehashcode=v2-c7ac2dcee65fcef14f7e3d59d96e5e54084b709b078a0b2734287cb2e3e4208b"
+          },
+          {
+            "label": "10:30p",
+            "available": true,
+            "href": "https://tickets.fandango.com/transaction/ticketing/mobile/jump.aspx?sdate=2026-12-17%2B22%3A30&from=mov_det_showtimes&source=desktop&mid=246860&tid=aaubf&dfam=webbrowser&showtimehashcode=v2-b192af246f5b0bde98542f246e43052d4d3697f947d9e0d5e826d43a5b924ca0"
+          }
+        ]
+      },
+      {
+        "amenities": "Cinemark XD, Reserved seating, Luxury Lounge Recliners",
+        "showtimes": [
+          {
+            "label": "2:00p",
+            "available": true,
+            "href": "https://tickets.fandango.com/transaction/ticketing/mobile/jump.aspx?sdate=2026-12-17%2B14%3A00&from=mov_det_showtimes&source=desktop&mid=246860&tid=aaubf&dfam=webbrowser&showtimehashcode=v2-7d6cd39c9618dd0b2ae2a889736185cc989ca202c99e1d5b8c5c645610aab99c"
+          },
+          {
+            "label": "7:00p",
+            "available": true,
+            "href": "https://tickets.fandango.com/transaction/ticketing/mobile/jump.aspx?sdate=2026-12-17%2B19%3A00&from=mov_det_showtimes&source=desktop&mid=246860&tid=aaubf&dfam=webbrowser&showtimehashcode=v2-54036111211bf8e792324823ef672080b90aee40ba2d5b948a64dada3e5af8a1"
+          },
+          {
+            "label": "10:30p",
+            "available": true,
+            "href": "https://tickets.fandango.com/transaction/ticketing/mobile/jump.aspx?sdate=2026-12-17%2B22%3A30&from=mov_det_showtimes&source=desktop&mid=246860&tid=aaubf&dfam=webbrowser&showtimehashcode=v2-3eedbc3de0a11057edde2360260fe35885e1ad53b8533d9f45bf8fa143137795"
+          }
+        ]
+      }
+    ]
+  },
+  {
+    "theater": "Cinemark Century Union Landing 25 and XD",
+    "groups": [
+      {
+        "amenities": "Cinemark XD, Reserved seating, Luxury Lounge Recliners",
+        "showtimes": [
+          {
+            "label": "5:05p",
+            "available": true,
+            "href": "https://tickets.fandango.com/transaction/ticketing/mobile/jump.aspx?sdate=2026-12-17%2B17%3A05&from=mov_det_showtimes&source=desktop&mid=246860&tid=aanay&dfam=webbrowser&showtimehashcode=v2-ad00363c74ecc3fe4adc837530cb23edb3aff6e5d1ef8a17bff8b1753efc54d7"
+          }
+        ]
+      }
+    ]
+  },
+  {
+    "theater": "CinemaWest Veranda Luxe IMAX, 4DX, & ScreenX",
+    "groups": [
+      {
+        "amenities": "Reserved seating, Closed caption, Accessibility devices available",
+        "showtimes": [
+          {
+            "label": "2:10p",
+            "available": true,
+            "href": "https://tickets.fandango.com/transaction/ticketing/mobile/jump.aspx?sdate=2026-12-17%2B14%3A10&from=mov_det_showtimes&source=desktop&mid=246859&tid=aaygq&dfam=webbrowser&showtimehashcode=v2-763db68b61617b1f24046d6145658e718b8fe86abac72990a3d52adf99521d94"
+          },
+          {
+            "label": "5:15p",
+            "available": true,
+            "href": "https://tickets.fandango.com/transaction/ticketing/mobile/jump.aspx?sdate=2026-12-17%2B17%3A15&from=mov_det_showtimes&source=desktop&mid=246859&tid=aaygq&dfam=webbrowser&showtimehashcode=v2-7a858e51bea932b5b48a3a5a17901986d4e3cf3e177d6e53955a26d1ad1830c6"
+          },
+          {
+            "label": "8:20p",
+            "available": true,
+            "href": "https://tickets.fandango.com/transaction/ticketing/mobile/jump.aspx?sdate=2026-12-17%2B20%3A20&from=mov_det_showtimes&source=desktop&mid=246859&tid=aaygq&dfam=webbrowser&showtimehashcode=v2-516690bf7f5be08dbe9bceca6032f1aea2994f12ca4d37667e1e095e65055180"
+          },
+          {
+            "label": "11:20p",
+            "available": true,
+            "href": "https://tickets.fandango.com/transaction/ticketing/mobile/jump.aspx?sdate=2026-12-17%2B23%3A20&from=mov_det_showtimes&source=desktop&mid=246859&tid=aaygq&dfam=webbrowser&showtimehashcode=v2-928da5a6b09dfedc4f841825375e39d44f8792c15ee89ff7518eb43863850f78"
+          },
+          {
+            "label": "2:20a",
+            "available": true,
+            "href": "https://tickets.fandango.com/transaction/ticketing/mobile/jump.aspx?sdate=2026-12-18%2B02%3A20&from=mov_det_showtimes&source=desktop&mid=246859&tid=aaygq&dfam=webbrowser&showtimehashcode=v2-3aee13bf6d3685425346795ec5ff181db042c4c955ddbebba21b66be447dd85a"
+          }
+        ]
+      },
+      {
+        "amenities": "Giant Screen - Laser, Giant Screen with Dolby ATMOS, Reserved seating, Closed caption, Recliner Seats, Accessibility devices available, Luxury Electric Recliners",
+        "showtimes": [
+          {
+            "label": "3:20p",
+            "available": true,
+            "href": "https://tickets.fandango.com/transaction/ticketing/mobile/jump.aspx?sdate=2026-12-17%2B15%3A20&from=mov_det_showtimes&source=desktop&mid=246860&tid=aaygq&dfam=webbrowser&showtimehashcode=v2-fa463ac1e1d13260356887b51e030a8f9de958064eb2752102a89984c380e6f5"
+          },
+          {
+            "label": "6:20p",
+            "available": true,
+            "href": "https://tickets.fandango.com/transaction/ticketing/mobile/jump.aspx?sdate=2026-12-17%2B18%3A20&from=mov_det_showtimes&source=desktop&mid=246860&tid=aaygq&dfam=webbrowser&showtimehashcode=v2-075e9b85999aea270d8d4d23c7be16935a7a31fe95d463cf07256815c4a6fca3"
+          },
+          {
+            "label": "9:20p",
+            "available": true,
+            "href": "https://tickets.fandango.com/transaction/ticketing/mobile/jump.aspx?sdate=2026-12-17%2B21%3A20&from=mov_det_showtimes&source=desktop&mid=246860&tid=aaygq&dfam=webbrowser&showtimehashcode=v2-8de08652c86e2eac1fee4bce43ed21998a961e0e166afe2eac5028d2fa0a215b"
+          },
+          {
+            "label": "12:20a",
+            "available": true,
+            "href": "https://tickets.fandango.com/transaction/ticketing/mobile/jump.aspx?sdate=2026-12-18%2B00%3A20&from=mov_det_showtimes&source=desktop&mid=246860&tid=aaygq&dfam=webbrowser&showtimehashcode=v2-23a7d68c56abf24ea0c92c745b69ab5a9e19b3d8babf20f8f5dfcb2307d5ea1a"
+          },
+          {
+            "label": "3:20a",
+            "available": true,
+            "href": "https://tickets.fandango.com/transaction/ticketing/mobile/jump.aspx?sdate=2026-12-18%2B03%3A20&from=mov_det_showtimes&source=desktop&mid=246860&tid=aaygq&dfam=webbrowser&showtimehashcode=v2-c5bd54b98aedeab0dd8a151bd20afbcb915b13b4636a308e694f7da8ee025d91"
+          }
+        ]
+      }
+    ]
+  },
+  {
+    "theater": "Brenden Concord 14 & JBX",
+    "groups": [
+      {
+        "amenities": "JBX, Dolby Atmos, Reserved seating, Luxury Electric Recliners",
+        "showtimes": [
+          {
+            "label": "2:00p",
+            "available": true,
+            "href": "https://tickets.fandango.com/transaction/ticketing/mobile/jump.aspx?sdate=2026-12-17%2B14%3A00&from=mov_det_showtimes&source=desktop&mid=246860&tid=aafwg&dfam=webbrowser&showtimehashcode=v2-58a59cd67f8ccef8c1c88971d86a605d1a0b361f4de07f875d4bb2793ac16c59"
+          },
+          {
+            "label": "5:00p",
+            "available": true,
+            "href": "https://tickets.fandango.com/transaction/ticketing/mobile/jump.aspx?sdate=2026-12-17%2B17%3A00&from=mov_det_showtimes&source=desktop&mid=246860&tid=aafwg&dfam=webbrowser&showtimehashcode=v2-513f15b46b22c2434b3a420ce2fe83bf015eb430c8616183c53ecc03ca82237c"
+          },
+          {
+            "label": "8:00p",
+            "available": true,
+            "href": "https://tickets.fandango.com/transaction/ticketing/mobile/jump.aspx?sdate=2026-12-17%2B20%3A00&from=mov_det_showtimes&source=desktop&mid=246860&tid=aafwg&dfam=webbrowser&showtimehashcode=v2-808d202936b1eda198978e65394be40ec85ba46cb4815d84cc6f3d117bfc26e4"
+          }
+        ]
+      }
+    ]
+  },
+  {
+    "theater": "AMC NewPark 12",
+    "groups": [
+      {
+        "amenities": "IMAX with Laser, Reserved seating, Closed caption, Accessibility devices available",
+        "showtimes": [
+          {
+            "label": "2:00p",
+            "available": true,
+            "href": "https://tickets.fandango.com/transaction/ticketing/mobile/jump.aspx?sdate=2026-12-17%2B14%3A00&from=mov_det_showtimes&source=desktop&mid=246859&tid=aaxse&dfam=webbrowser&showtimehashcode=v2-990894834861c71509dbc7f01c310ddf7fde4d4d5b04a4bced628ce433ca9fb3"
+          },
+          {
+            "label": "5:15p",
+            "available": true,
+            "href": "https://tickets.fandango.com/transaction/ticketing/mobile/jump.aspx?sdate=2026-12-17%2B17%3A15&from=mov_det_showtimes&source=desktop&mid=246859&tid=aaxse&dfam=webbrowser&showtimehashcode=v2-53a7cd8e9d27b14a8fa1ebee479ce50c758f1cf25bac711d2c9a7596b455de6e"
+          },
+          {
+            "label": "8:30p",
+            "available": true,
+            "href": "https://tickets.fandango.com/transaction/ticketing/mobile/jump.aspx?sdate=2026-12-17%2B20%3A30&from=mov_det_showtimes&source=desktop&mid=246859&tid=aaxse&dfam=webbrowser&showtimehashcode=v2-5bdbd5fe854816b2c937a3f1157e5783024661ea9c1addd04fb18a88fd85d637"
+          },
+          {
+            "label": "12:00a",
+            "available": true,
+            "href": "https://tickets.fandango.com/transaction/ticketing/mobile/jump.aspx?sdate=2026-12-18%2B00%3A00&from=mov_det_showtimes&source=desktop&mid=246859&tid=aaxse&dfam=webbrowser&showtimehashcode=v2-9d5d58e989cb635709df5d52e49a0e5fe24d1ece52ec8ded2118bf7e2d27740f"
+          }
+        ]
+      }
+    ]
+  },
+  {
+    "theater": "Regal Hacienda Crossings ScreenX, IMAX & RPX",
+    "groups": [
+      {
+        "amenities": "IMAX\u00ae 70MM Film, Reserved seating, No passes, Stadium Seating, Laser Projection",
+        "showtimes": [
+          {
+            "label": "3:10p",
+            "available": false,
+            "href": ""
+          }
+        ]
+      },
+      {
+        "amenities": "IMAX\u00ae 70MM Film, Reserved seating, No passes, Stadium Seating",
+        "showtimes": [
+          {
+            "label": "7:00p",
+            "available": false,
+            "href": ""
+          },
+          {
+            "label": "10:45p",
+            "available": false,
+            "href": ""
+          }
+        ]
+      }
+    ]
+  },
+  {
+    "theater": "Alamo Drafthouse Mountain View",
+    "groups": [
+      {
+        "amenities": "The Big Show, Dolby Atmos, Reserved seating, Recliner Seats, Accessibility devices available, Dine-In Delivery to Seat, Ad Free Preshow",
+        "showtimes": [
+          {
+            "label": "2:15p",
+            "available": true,
+            "href": "https://tickets.fandango.com/transaction/ticketing/mobile/jump.aspx?sdate=2026-12-17%2B14%3A15&from=mov_det_showtimes&source=desktop&mid=246860&tid=aaymf&dfam=webbrowser&showtimehashcode=v2-ffe92c8779e1492d0ffee3b63748ec27c420e3b062b349ddfddc11132cc71b3d"
+          },
+          {
+            "label": "7:00p",
+            "available": true,
+            "href": "https://tickets.fandango.com/transaction/ticketing/mobile/jump.aspx?sdate=2026-12-17%2B19%3A00&from=mov_det_showtimes&source=desktop&mid=246860&tid=aaymf&dfam=webbrowser&showtimehashcode=v2-364c65fc795294d3a0ff94945fc9dcd3634ff887be9abf14d2e2f9f7b0e63f87"
+          },
+          {
+            "label": "9:00p",
+            "available": true,
+            "href": "https://tickets.fandango.com/transaction/ticketing/mobile/jump.aspx?sdate=2026-12-17%2B21%3A00&from=mov_det_showtimes&source=desktop&mid=246860&tid=aaymf&dfam=webbrowser&showtimehashcode=v2-b62394e45c844d7bad3f750859a0aafa8acc264beb0d96be475556dd72111e84"
+          },
+          {
+            "label": "10:35p",
+            "available": true,
+            "href": "https://tickets.fandango.com/transaction/ticketing/mobile/jump.aspx?sdate=2026-12-17%2B22%3A35&from=mov_det_showtimes&source=desktop&mid=246860&tid=aaymf&dfam=webbrowser&showtimehashcode=v2-17c1739885433c185bc123741acaf30c359aac668c17b73305c35429c7c3e43e"
+          }
+        ]
+      }
+    ]
+  },
+  {
+    "theater": "Cinemark Century at Pacific Commons and XD",
+    "groups": [
+      {
+        "amenities": "Cinemark XD, Reserved seating, Luxury Lounge Recliners",
+        "showtimes": [
+          {
+            "label": "4:50p",
+            "available": true,
+            "href": "https://tickets.fandango.com/transaction/ticketing/mobile/jump.aspx?sdate=2026-12-17%2B16%3A50&from=mov_det_showtimes&source=desktop&mid=246860&tid=aawqb&dfam=webbrowser&showtimehashcode=v2-be360b45c3b144149592f267704cb082bdb8af96fa7a43130e88d18de1c9662b"
+          }
+        ]
+      }
+    ]
+  },
+  {
+    "theater": "CinemaWest Boulevard IMAX & ScreenX",
+    "groups": [
+      {
+        "amenities": "Giant Screen - Laser, Reserved seating, Closed caption, Recliner Seats, Accessibility devices available, Luxury Electric Recliners, Laser Projection",
+        "showtimes": [
+          {
+            "label": "2:20p",
+            "available": true,
+            "href": "https://tickets.fandango.com/transaction/ticketing/mobile/jump.aspx?sdate=2026-12-17%2B14%3A20&from=mov_det_showtimes&source=desktop&mid=246859&tid=aaits&dfam=webbrowser&showtimehashcode=v2-89d7dc816c939fa3d951dffd4ba5aa218d511ba309a71a0ab7bf8bc767ba3dcd"
+          },
+          {
+            "label": "5:20p",
+            "available": true,
+            "href": "https://tickets.fandango.com/transaction/ticketing/mobile/jump.aspx?sdate=2026-12-17%2B17%3A20&from=mov_det_showtimes&source=desktop&mid=246859&tid=aaits&dfam=webbrowser&showtimehashcode=v2-cc69c7913f22b11ad96fb0a7ecc3a632d7a3bc7b1b3336e93e56a76c9f2b45d5"
+          },
+          {
+            "label": "8:20p",
+            "available": true,
+            "href": "https://tickets.fandango.com/transaction/ticketing/mobile/jump.aspx?sdate=2026-12-17%2B20%3A20&from=mov_det_showtimes&source=desktop&mid=246859&tid=aaits&dfam=webbrowser&showtimehashcode=v2-3bb2f5725777a3266c6a239b48ee750eed3b96e7b4c466d5a43a53f73cee21c5"
+          },
+          {
+            "label": "11:20p",
+            "available": true,
+            "href": "https://tickets.fandango.com/transaction/ticketing/mobile/jump.aspx?sdate=2026-12-17%2B23%3A20&from=mov_det_showtimes&source=desktop&mid=246859&tid=aaits&dfam=webbrowser&showtimehashcode=v2-20cb93be6e9d8e7f437bb64d710ee78d80443f8e4cb5e78b3aa0fb619afe912c"
+          }
+        ]
+      }
+    ]
+  },
+  {
+    "theater": "AMC Sunnyvale 12",
+    "groups": [
+      {
+        "amenities": "IMAX with Laser, Reserved seating, Closed caption, Accessibility devices available, Recliner Seats",
+        "showtimes": [
+          {
+            "label": "3:00p",
+            "available": true,
+            "href": "https://tickets.fandango.com/transaction/ticketing/mobile/jump.aspx?sdate=2026-12-17%2B15%3A00&from=mov_det_showtimes&source=desktop&mid=246859&tid=aaytc&dfam=webbrowser&showtimehashcode=v2-5a56486021dbfe29131e681ddcb139116fd9fe39a33e2c8b670949b802dd153e"
+          },
+          {
+            "label": "6:15p",
+            "available": true,
+            "href": "https://tickets.fandango.com/transaction/ticketing/mobile/jump.aspx?sdate=2026-12-17%2B18%3A15&from=mov_det_showtimes&source=desktop&mid=246859&tid=aaytc&dfam=webbrowser&showtimehashcode=v2-45e69e816448f0bdfdb3778fd892b4d11b4ba8770e47df82115cbfb3d183f1d2"
+          },
+          {
+            "label": "9:30p",
+            "available": true,
+            "href": "https://tickets.fandango.com/transaction/ticketing/mobile/jump.aspx?sdate=2026-12-17%2B21%3A30&from=mov_det_showtimes&source=desktop&mid=246859&tid=aaytc&dfam=webbrowser&showtimehashcode=v2-69c6480a5962fb3b5c93453a3289644f3c54c8ea0924084b0648dbbdfb3019fd"
+          },
+          {
+            "label": "12:45a",
+            "available": true,
+            "href": "https://tickets.fandango.com/transaction/ticketing/mobile/jump.aspx?sdate=2026-12-18%2B00%3A45&from=mov_det_showtimes&source=desktop&mid=246859&tid=aaytc&dfam=webbrowser&showtimehashcode=v2-7fc586c35a123b87bce64d6b2f58db4bcd70dc480806fb712be55cd5a11e9e4b"
+          }
+        ]
+      }
+    ]
+  },
+  {
+    "theater": "AMC Mercado 20",
+    "groups": [
+      {
+        "amenities": "IMAX with Laser, Reserved seating, Closed caption, Accessibility devices available",
+        "showtimes": [
+          {
+            "label": "3:15p",
+            "available": true,
+            "href": "https://tickets.fandango.com/transaction/ticketing/mobile/jump.aspx?sdate=2026-12-17%2B15%3A15&from=mov_det_showtimes&source=desktop&mid=246859&tid=aadyn&dfam=webbrowser&showtimehashcode=v2-9a63b84f9f18f64954801a84952e7315cd393f762a61f4f5c41fd0a39060a356"
+          },
+          {
+            "label": "6:45p",
+            "available": true,
+            "href": "https://tickets.fandango.com/transaction/ticketing/mobile/jump.aspx?sdate=2026-12-17%2B18%3A45&from=mov_det_showtimes&source=desktop&mid=246859&tid=aadyn&dfam=webbrowser&showtimehashcode=v2-541b299610ab8720ac0d8023a5e0f12e8620d852f6cb4f0341563111b131d4e4"
+          },
+          {
+            "label": "10:15p",
+            "available": true,
+            "href": "https://tickets.fandango.com/transaction/ticketing/mobile/jump.aspx?sdate=2026-12-17%2B22%3A15&from=mov_det_showtimes&source=desktop&mid=246859&tid=aadyn&dfam=webbrowser&showtimehashcode=v2-9d7a3d2a49e70547bed477c1d0acd9ff9cb5b1bb222b5f7b65dcc639a4528c2c"
+          }
+        ]
+      },
+      {
+        "amenities": "PRIME at AMC, Reserved seating, Closed caption, Accessibility devices available, Recliner Seats",
+        "showtimes": [
+          {
+            "label": "11:15p",
+            "available": true,
+            "href": "https://tickets.fandango.com/transaction/ticketing/mobile/jump.aspx?sdate=2026-12-17%2B23%3A15&from=mov_det_showtimes&source=desktop&mid=246860&tid=aadyn&dfam=webbrowser&showtimehashcode=v2-2546aa3d13b257b5a0bbfae023daa02414f497d68b6f8618cfe844351e219d08"
+          }
+        ]
+      }
+    ]
+  },
+  {
+    "theater": "CinemaWest Livermore & Giant Screen with Laser",
+    "groups": [
+      {
+        "amenities": "Giant Screen - Laser, Giant Screen with Dolby ATMOS, Reserved seating, Closed caption, Recliner Seats, Accessibility devices available, Luxury Electric Recliners",
+        "showtimes": [
+          {
+            "label": "4:50p",
+            "available": true,
+            "href": "https://tickets.fandango.com/transaction/ticketing/mobile/jump.aspx?sdate=2026-12-17%2B16%3A50&from=mov_det_showtimes&source=desktop&mid=246860&tid=aaugn&dfam=webbrowser&showtimehashcode=v2-b0ce319675dd36c1df9868a8321fc2340066dd195d8144235a9759ed5b7c145b"
+          },
+          {
+            "label": "11:50p",
+            "available": true,
+            "href": "https://tickets.fandango.com/transaction/ticketing/mobile/jump.aspx?sdate=2026-12-17%2B23%3A50&from=mov_det_showtimes&source=desktop&mid=246860&tid=aaugn&dfam=webbrowser&showtimehashcode=v2-8d08b5f7c1270d38d9de0edfab2f78bcf46407a61d236793166ac1964c4378cc"
+          }
+        ]
+      }
+    ]
+  },
+  {
+    "theater": "Regal Edwards Fairfield & IMAX",
+    "groups": [
+      {
+        "amenities": "Reserved seating, No passes, Closed caption, Accessibility devices available, Stadium Seating",
+        "showtimes": [
+          {
+            "label": "2:45p",
+            "available": true,
+            "href": "https://tickets.fandango.com/transaction/ticketing/mobile/jump.aspx?sdate=2026-12-17%2B14%3A45&from=mov_det_showtimes&source=desktop&mid=246859&tid=aandk&dfam=webbrowser&showtimehashcode=v2-c6b3df8d0de85309490aa42ef947876b43d5dbd949a2cb7cd4a18607f47b788a"
+          },
+          {
+            "label": "6:35p",
+            "available": true,
+            "href": "https://tickets.fandango.com/transaction/ticketing/mobile/jump.aspx?sdate=2026-12-17%2B18%3A35&from=mov_det_showtimes&source=desktop&mid=246859&tid=aandk&dfam=webbrowser&showtimehashcode=v2-13de0c033c4786d0d20b0bbbd708eaa085ce6eeb5f52cbbd515fd275783e0440"
+          },
+          {
+            "label": "10:20p",
+            "available": true,
+            "href": "https://tickets.fandango.com/transaction/ticketing/mobile/jump.aspx?sdate=2026-12-17%2B22%3A20&from=mov_det_showtimes&source=desktop&mid=246859&tid=aandk&dfam=webbrowser&showtimehashcode=v2-d4ea078b70900a2e845094b7fad32df452edd1560b267960785e0dd93bfe7827"
+          }
+        ]
+      }
+    ]
+  },
+  {
+    "theater": "AMC Brentwood 14",
+    "groups": [
+      {
+        "amenities": "Reserved seating, Closed caption, Accessibility devices available",
+        "showtimes": [
+          {
+            "label": "2:00p",
+            "available": true,
+            "href": "https://tickets.fandango.com/transaction/ticketing/mobile/jump.aspx?sdate=2026-12-17%2B14%3A00&from=mov_det_showtimes&source=desktop&mid=246859&tid=aawww&dfam=webbrowser&showtimehashcode=v2-026dbe9dd79abd3ad1b76aa39c3e9e7989141f17e5e8d3bc0996ff4a9825fa3c"
+          },
+          {
+            "label": "5:30p",
+            "available": true,
+            "href": "https://tickets.fandango.com/transaction/ticketing/mobile/jump.aspx?sdate=2026-12-17%2B17%3A30&from=mov_det_showtimes&source=desktop&mid=246859&tid=aawww&dfam=webbrowser&showtimehashcode=v2-cfef4e2999ee9c03d5a729a9d3adbe02b3c84f10ae80ed665a275175ff654fd2"
+          },
+          {
+            "label": "9:15p",
+            "available": true,
+            "href": "https://tickets.fandango.com/transaction/ticketing/mobile/jump.aspx?sdate=2026-12-17%2B21%3A15&from=mov_det_showtimes&source=desktop&mid=246859&tid=aawww&dfam=webbrowser&showtimehashcode=v2-7fb6c49dd87e298f65c98d0ed746634d6ed79d2f83489597dbc94a2f0094058b"
+          }
+        ]
+      },
+      {
+        "amenities": "XL at AMC, Reserved seating, Closed caption, Accessibility devices available",
+        "showtimes": [
+          {
+            "label": "3:00p",
+            "available": true,
+            "href": "https://tickets.fandango.com/transaction/ticketing/mobile/jump.aspx?sdate=2026-12-17%2B15%3A00&from=mov_det_showtimes&source=desktop&mid=246860&tid=aawww&dfam=webbrowser&showtimehashcode=v2-104a968237e6739cfbd74c1ec2e4e27b14324f99119db70c34150da388218b19"
+          },
+          {
+            "label": "6:15p",
+            "available": true,
+            "href": "https://tickets.fandango.com/transaction/ticketing/mobile/jump.aspx?sdate=2026-12-17%2B18%3A15&from=mov_det_showtimes&source=desktop&mid=246860&tid=aawww&dfam=webbrowser&showtimehashcode=v2-60e91952b9a91b54df8aad783dd401706555258106a8c682ee3534e5387f5dc8"
+          },
+          {
+            "label": "9:30p",
+            "available": true,
+            "href": "https://tickets.fandango.com/transaction/ticketing/mobile/jump.aspx?sdate=2026-12-17%2B21%3A30&from=mov_det_showtimes&source=desktop&mid=246860&tid=aawww&dfam=webbrowser&showtimehashcode=v2-a512537d716d846743b0a41e8b5cc6fe77e903df24e94db44594756d8b4032db"
+          }
+        ]
+      }
+    ]
+  }
+]

@@ -22,8 +22,7 @@ sys.path.insert(0, str(REPO / "scripts" / "sources"))
 from browser import goto_and_classify, polite_page  # noqa: E402
 from sources._common import _dismiss_cookie_banner  # noqa: E402
 from sources.fandango import (  # noqa: E402
-    SF_LOCATION_COOKIES, DATE_BUTTON_SELECTOR,
-    DATE_CONFIRM_POLL_MS, DATE_CONFIRM_TIMEOUT_MS, _content_state,
+    CARD_SCRAPE_JS, SF_LOCATION_COOKIES, DATE_BUTTON_SELECTOR, _click_date,
 )
 
 OUT = Path(__file__).resolve().parent / "fixtures"
@@ -35,13 +34,24 @@ WANTED = [
     ("odyssey_date_without_metreon", "the-odyssey",     "2026-09-13", "venue absent"),
     ("dune_event_date",              "dune-part-three", "2026-12-17", "event booking"),
     ("dune_default_landing",         "dune-part-three", None,         "no date selected"),
+    # The three states a date can be in, captured from the real page the day
+    # after the 2026-08-18 on-sale. These are what the availability tests
+    # run against, and dune_locked_only is the false alert itself, frozen.
+    ("dune_on_sale_mixed",  "dune-part-three", "2026-12-18", "on sale, one time sold out"),
+    ("dune_on_sale_all",    "dune-part-three", "2026-12-20", "on sale, nothing sold out"),
+    ("dune_locked_only",    "dune-part-three", "2027-01-08", "listed but never released"),
 ]
 
 
 def main() -> None:
     targets = {t["id"]: t for t in json.loads((REPO / "config" / "targets.json").read_text())}
     today = date.today()
-    manifest = {}
+    # Merge, never replace. A date that has rolled out of the calendar is
+    # SKIPped below, and rewriting the manifest from scratch would then
+    # silently delete a fixture that tests still depend on, turning a stale
+    # capture into a collapsed test suite.
+    manifest_path = OUT / "manifest.json"
+    manifest = json.loads(manifest_path.read_text()) if manifest_path.exists() else {}
 
     for name, target_id, want_date, note in WANTED:
         target = targets[target_id]
@@ -62,17 +72,22 @@ def main() -> None:
                 if not page.locator(sel).count():
                     print(f"  SKIP {name}: no button for {want_date} (calendar moved on)")
                     continue
-                page.locator(sel).first.scroll_into_view_if_needed(timeout=3_000)
-                page.locator(sel).first.click(timeout=5_000)
-                waited = 0
-                while waited < DATE_CONFIRM_TIMEOUT_MS:
-                    page.wait_for_timeout(DATE_CONFIRM_POLL_MS)
-                    waited += DATE_CONFIRM_POLL_MS
-                    if _content_state(page, want_date) in ("ready", "empty"):
-                        break
+                # Use the monitor's own confirmed click, and believe its
+                # answer. Rolling this by hand here captured 2026-12-22 while
+                # the page was still showing 2026-12-15, and wrote it out as
+                # a Dec 22 fixture: a test built on that would have asserted
+                # against the wrong day forever. If the click cannot be
+                # confirmed, there is no fixture, which is the honest result.
+                if not _click_date(page, want_date, today):
+                    print(f"  SKIP {name}: page never confirmed it switched to {want_date}")
+                    continue
                 page.wait_for_timeout(800)
 
             body = page.inner_text("body")
+            # The structure the parser actually reads. Saved alongside the
+            # text so a fixture records both what a person would have seen
+            # and what the machine did.
+            cards = page.evaluate(CARD_SCRAPE_JS)
             rendered = page.eval_on_selector_all(
                 "[data-showtime-date]",
                 "els => els.map(e => e.getAttribute('data-showtime-date'))",
@@ -84,6 +99,7 @@ def main() -> None:
             ]
 
         (OUT / f"{name}.txt").write_text(body)
+        (OUT / f"{name}.cards.json").write_text(json.dumps(cards, indent=2) + "\n")
         manifest[name] = {
             "target_id": target_id,
             "selected_date": want_date,
@@ -92,7 +108,16 @@ def main() -> None:
             "rendered_showtime_dates": sorted(set(d for d in rendered if d)),
             "calendar_dates": [c for c in cal if c],
         }
-        print(f"  saved {name}.txt  ({len(body)} chars, {len(set(rendered))} rendered date(s))")
+        buyable = sum(
+            1 for c in cards for g in c["groups"] for s in g["showtimes"] if s["available"]
+        )
+        locked = sum(
+            1 for c in cards for g in c["groups"] for s in g["showtimes"] if not s["available"]
+        )
+        print(
+            f"  saved {name}  ({len(body)} chars, {len(cards)} theater card(s), "
+            f"{buyable} buyable / {locked} locked across all venues)"
+        )
 
     (OUT / "manifest.json").write_text(json.dumps(manifest, indent=2, sort_keys=True) + "\n")
     print(f"\nwrote {len(manifest)} fixtures to {OUT}")

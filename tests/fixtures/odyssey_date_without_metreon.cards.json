@@ -1,0 +1,32 @@
+[
+  {
+    "theater": "Regal Hacienda Crossings ScreenX, IMAX & RPX",
+    "groups": [
+      {
+        "amenities": "IMAX\u00ae 70MM Film, Reserved seating, No passes, Stadium Seating, Laser Projection",
+        "showtimes": [
+          {
+            "label": "10:10a",
+            "available": true,
+            "href": "https://tickets.fandango.com/transaction/ticketing/mobile/jump.aspx?sdate=2026-09-13%2B10%3A10&from=mov_det_showtimes&source=desktop&mid=241386&tid=aaopk&dfam=webbrowser&showtimehashcode=v2-2872cbd2455d663950a792df2ac16989ffead9bd3d73b3dbe01a65a2ea91008c"
+          },
+          {
+            "label": "2:10p",
+            "available": true,
+            "href": "https://tickets.fandango.com/transaction/ticketing/mobile/jump.aspx?sdate=2026-09-13%2B14%3A10&from=mov_det_showtimes&source=desktop&mid=241386&tid=aaopk&dfam=webbrowser&showtimehashcode=v2-422696c041a33da2b7037623271f4d31556c37a91cca691b445e03efa3b3b9ad"
+          },
+          {
+            "label": "6:10p",
+            "available": true,
+            "href": "https://tickets.fandango.com/transaction/ticketing/mobile/jump.aspx?sdate=2026-09-13%2B18%3A10&from=mov_det_showtimes&source=desktop&mid=241386&tid=aaopk&dfam=webbrowser&showtimehashcode=v2-682a4498ae09f01915917821883b86c846f7224080affb87d4c7a001dee13f79"
+          },
+          {
+            "label": "10:10p",
+            "available": true,
+            "href": "https://tickets.fandango.com/transaction/ticketing/mobile/jump.aspx?sdate=2026-09-13%2B22%3A10&from=mov_det_showtimes&source=desktop&mid=241386&tid=aaopk&dfam=webbrowser&showtimehashcode=v2-8b9926228b2396567a183038e8bb2e721e3b643a84c08b2f6ce4811d77edf720"
+          }
+        ]
+      }
+    ]
+  }
+]

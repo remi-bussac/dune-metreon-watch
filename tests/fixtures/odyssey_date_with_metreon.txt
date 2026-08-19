@@ -31,40 +31,8 @@ Calendar for movie times. Friday, Sept 11 is selected.
 Skip to Movie and Times
 Movie Times Calendar
 Go to previous set of dates
-TUESDAY, AUGUST 11
-TODAY
-AUG
-11
-WEDNESDAY, AUGUST 12
-WED
-AUG
-12
-THURSDAY, AUGUST 13
-THU
-AUG
-13
-FRIDAY, AUGUST 14
-FRI
-AUG
-14
-SATURDAY, AUGUST 15
-SAT
-AUG
-15
-SUNDAY, AUGUST 16
-SUN
-AUG
-16
-MONDAY, AUGUST 17
-MON
-AUG
-17
-TUESDAY, AUGUST 18
-TUE
-AUG
-18
 WEDNESDAY, AUGUST 19
-WED
+TODAY
 AUG
 19
 THURSDAY, AUGUST 20
@@ -221,19 +189,19 @@ How long is The Odyssey - The IMAX 70MM Experience (2026)?
 The Odyssey - The IMAX 70MM Experience (2026) is 2 hr 52 min long.
 NEW & COMING SOON
 
-The End of Oak Street (2026)
-
 Spider-Man: Brand New Day (2026)
+
+Insidious: Out of the Further (2026)
+
+PAW Patrol: The Dino Movie (2026)
 
 One Night Only (2026)
 
-Minions & Monsters (2026)
+The End of Oak Street (2026)
+
+Mutiny (2026)
 
 The Odyssey (2026)
-
-Moana (2026)
-
-Super Troopers 3 (2026)
 
 Toy Story 5 (2026)
 

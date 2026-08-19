@@ -11,7 +11,6 @@ Gift Cards
 Offers
 FanClub
 Dune: Part Three - The IMAX 70MM Experience (2026)
-Opens Dec 18
 NR
  - -
  - -
@@ -21,13 +20,11 @@ Details for In Theaters
 THEATERS NEAR
 
 94102
-Calendar for movie times. Tuesday, Dec 15 is selected.
+Calendar for movie times. undefined, Dec 20 is selected.
 Skip to Movie and Times
 Movie Times Calendar
-TODAY
-AUG
-19
-TUESDAY, DECEMBER 15, SELECTED DAY
+Go to previous set of dates
+TUESDAY, DECEMBER 15
 TUE
 DEC
 15
@@ -43,7 +40,7 @@ SATURDAY, DECEMBER 19
 SAT
 DEC
 19
-SUNDAY, DECEMBER 20
+SUNDAY, DECEMBER 20, SELECTED DAY
 SUN
 DEC
 20
@@ -152,6 +149,8 @@ Filter movie times by screen format. all format is selected.
 Filter Movie times by Screen Format
 ALL
 FORMATS
+IMAX 70MM
+FORMAT
 IMAX
 FORMAT
 Apple Cinemas Van Ness
@@ -159,42 +158,99 @@ Apple Cinemas Van Ness
 Sign In or Join to add this theater to my favorites
 Premium Format
 Reserved seating
+9:00a
+12:00p
+3:00p
 6:00p
+9:00p
+Check Seats
+AMC Metreon 16
+0.91 mi
+Order Food and Drinks
+Sign In or Join to add this theater to my favorites
+Premium Format
+IMAX® 70MM Film, Reserved seating
+8:30a
+12:00p
+3:30p
+7:00p
+11:00p
+Check Seats
+Alamo Drafthouse Cinema New Mission
+1.61 mi
+Sign In or Join to add this theater to my favorites
+Premium Format
+HDR By Barco, Reserved seating, Accessibility devices available, Dine-In Delivery to Seat, HDR, Ad Free Preshow
+2:10p
+6:00p
+Check Seats
+Regal Stonestown Galleria ScreenX, 4DX, & RPX
+4.74 mi
+Sign In or Join to add this theater to my favorites
+Premium Format
+RPX, HDR By Barco, Reserved seating, No passes, Closed caption, Accessibility devices available
+6:40p
+Check Seats
+Cinemark Century Daly City 20 XD and IMAX
+6.02 mi
+Sign In or Join to add this theater to my favorites
+Premium Format
+Reserved seating
+8:00a
+11:45a
+3:25p
+7:00p
+10:35p
+Check Seats
+AMC Bay Street 16
+7.89 mi
+Order Food and Drinks
+Sign In or Join to add this theater to my favorites
+Premium Format
+IMAX with Laser, Reserved seating, Closed caption, Accessibility devices available
+8:45a
+12:05p
+3:25p
+6:45p
+10:05p
+Check Seats
+XL at AMC, Reserved seating, Closed caption, Accessibility devices available
+9:45a
+1:05p
+4:25p
+7:45p
+11:05p
+Check Seats
+Cinemark Century at Tanforan and XD
+9.78 mi
+Sign In or Join to add this theater to my favorites
+Premium Format
+Cinemark XD, Reserved seating
+7:20a
 Check Seats
 CinemaWest Rheem Theatre & Giant Screen with Laser
 16.94 mi
 Sign In or Join to add this theater to my favorites
 Premium Format
 GIANT SCREEN, Giant Screen with Dolby ATMOS, Dolby Atmos, Reserved seating, Closed caption, Recliner Seats, Accessibility devices available, Luxury Electric Recliners, Laser Projection
-6:00p
+3:50p
+10:50p
 Check Seats
 CinemaWest Fairfax Theatre & Giant Screen
 17.01 mi
 Sign In or Join to add this theater to my favorites
 Premium Format
 Giant Screen with Dolby ATMOS, Reserved seating, Closed caption, Recliner Seats, Accessibility devices available, Luxury Electric Recliners, Laser Projection
-6:00p
-CinemaWest Veranda Luxe IMAX, 4DX, & ScreenX
-23.86 mi
+2:50p
+9:50p
+Cinemark Century Walnut Creek 14 and XD
+21.14 mi
 Sign In or Join to add this theater to my favorites
 Premium Format
-Reserved seating, Closed caption, Accessibility devices available
-6:00p
+Cinemark XD, Reserved seating, Luxury Lounge Recliners
+7:40p
 Check Seats
-CinemaWest Boulevard IMAX & ScreenX
-33.54 mi
-Sign In or Join to add this theater to my favorites
-Premium Format
-Giant Screen - Laser, Reserved seating, Closed caption, Recliner Seats, Accessibility devices available, Luxury Electric Recliners, Laser Projection
-6:00p
-Check Seats
-CinemaWest Livermore & Giant Screen with Laser
-36.13 mi
-Sign In or Join to add this theater to my favorites
-Premium Format
-Giant Screen - Laser, Giant Screen with Dolby ATMOS, Reserved seating, Closed caption, Recliner Seats, Accessibility devices available, Luxury Electric Recliners
-6:00p
-Check Seats
+SEE MORE THEATERS
 More Info
 
 Directed by Denis Villeneuve and written by Villeneuve and Brian K. Vaughan, Dune: Part Three is based on the novel Dune Messiah by Frank Herbert and delivers the epic conclusion to Villeneuve’s trilogy.

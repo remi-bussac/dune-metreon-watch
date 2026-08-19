@@ -1,0 +1,62 @@
+[
+  {
+    "theater": "AMC Metreon 16",
+    "groups": [
+      {
+        "amenities": "IMAX\u00ae 70MM Film, Reserved seating",
+        "showtimes": [
+          {
+            "label": "10:00a",
+            "available": true,
+            "href": "https://tickets.fandango.com/transaction/ticketing/mobile/jump.aspx?sdate=2026-09-11%2B10%3A00&from=mov_det_showtimes&source=desktop&mid=241386&tid=aanem&dfam=webbrowser&showtimehashcode=v2-88513ed6446a0e1ced13fac58c176197df3c4f018b3e106c44016775bf6c4928"
+          },
+          {
+            "label": "2:00p",
+            "available": true,
+            "href": "https://tickets.fandango.com/transaction/ticketing/mobile/jump.aspx?sdate=2026-09-11%2B14%3A00&from=mov_det_showtimes&source=desktop&mid=241386&tid=aanem&dfam=webbrowser&showtimehashcode=v2-1bc94ecccc6ea86212549c7eb84b69afb0d8d804939b36fe4fa655536154172f"
+          },
+          {
+            "label": "6:00p",
+            "available": true,
+            "href": "https://tickets.fandango.com/transaction/ticketing/mobile/jump.aspx?sdate=2026-09-11%2B18%3A00&from=mov_det_showtimes&source=desktop&mid=241386&tid=aanem&dfam=webbrowser&showtimehashcode=v2-6ba84584c96c64c63f9cc009c922bf5d451bceea5e0d66ba0bfecebf26f77777"
+          },
+          {
+            "label": "10:00p",
+            "available": true,
+            "href": "https://tickets.fandango.com/transaction/ticketing/mobile/jump.aspx?sdate=2026-09-11%2B22%3A00&from=mov_det_showtimes&source=desktop&mid=241386&tid=aanem&dfam=webbrowser&showtimehashcode=v2-57eaf416d92b20a2a1a6b4d6576a0dfc2d8a41a59d49acdf4327f23115572d33"
+          }
+        ]
+      }
+    ]
+  },
+  {
+    "theater": "Regal Hacienda Crossings ScreenX, IMAX & RPX",
+    "groups": [
+      {
+        "amenities": "IMAX\u00ae 70MM Film, Reserved seating, No passes, Stadium Seating",
+        "showtimes": [
+          {
+            "label": "10:10a",
+            "available": true,
+            "href": "https://tickets.fandango.com/transaction/ticketing/mobile/jump.aspx?sdate=2026-09-11%2B10%3A10&from=mov_det_showtimes&source=desktop&mid=241386&tid=aaopk&dfam=webbrowser&showtimehashcode=v2-97b30aee1abaf32db0cf42c311e1244b525cffe10163c6ff39b01d62978a9f1d"
+          },
+          {
+            "label": "2:10p",
+            "available": true,
+            "href": "https://tickets.fandango.com/transaction/ticketing/mobile/jump.aspx?sdate=2026-09-11%2B14%3A10&from=mov_det_showtimes&source=desktop&mid=241386&tid=aaopk&dfam=webbrowser&showtimehashcode=v2-87c3e402279881bfa9d9a1627dab3603e860d5c03bbdfbde6a90d71120af3e26"
+          },
+          {
+            "label": "6:10p",
+            "available": true,
+            "href": "https://tickets.fandango.com/transaction/ticketing/mobile/jump.aspx?sdate=2026-09-11%2B18%3A10&from=mov_det_showtimes&source=desktop&mid=241386&tid=aaopk&dfam=webbrowser&showtimehashcode=v2-5192ece1c59aa17b8b8d6d0363bb9a4d5ee59731e4272af78da77098a078f6ca"
+          },
+          {
+            "label": "10:10p",
+            "available": true,
+            "href": "https://tickets.fandango.com/transaction/ticketing/mobile/jump.aspx?sdate=2026-09-11%2B22%3A10&from=mov_det_showtimes&source=desktop&mid=241386&tid=aaopk&dfam=webbrowser&showtimehashcode=v2-4c189cd7a46e273d8a44c463c70c7b9c55d28a96db9b3b60e803fdf30fa505db"
+          }
+        ]
+      }
+    ]
+  }
+]
