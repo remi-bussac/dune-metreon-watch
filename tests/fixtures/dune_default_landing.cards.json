@@ -1,0 +1,92 @@
+[
+  {
+    "theater": "Apple Cinemas Van Ness",
+    "groups": [
+      {
+        "amenities": "Reserved seating",
+        "showtimes": [
+          {
+            "label": "6:00p",
+            "available": true,
+            "href": "https://tickets.fandango.com/transaction/ticketing/mobile/jump.aspx?sdate=2026-12-15%2B18%3A00&from=mov_det_showtimes&source=desktop&mid=246859&tid=aagbk&dfam=webbrowser&showtimehashcode=v2-35564b9b4d6d3ae9b22558bef246004bcc1217ea941f1e99b7bc73ab77992630"
+          }
+        ]
+      }
+    ]
+  },
+  {
+    "theater": "CinemaWest Rheem Theatre & Giant Screen with Laser",
+    "groups": [
+      {
+        "amenities": "GIANT SCREEN, Giant Screen with Dolby ATMOS, Dolby Atmos, Reserved seating, Closed caption, Recliner Seats, Accessibility devices available, Luxury Electric Recliners, Laser Projection",
+        "showtimes": [
+          {
+            "label": "6:00p",
+            "available": true,
+            "href": "https://tickets.fandango.com/transaction/ticketing/mobile/jump.aspx?sdate=2026-12-15%2B18%3A00&from=mov_det_showtimes&source=desktop&mid=246860&tid=aafwk&dfam=webbrowser&showtimehashcode=v2-da1cdf0e718b731e516e82517cfec18ea377d8655b89cccd734acb9318b388d9"
+          }
+        ]
+      }
+    ]
+  },
+  {
+    "theater": "CinemaWest Fairfax Theatre & Giant Screen",
+    "groups": [
+      {
+        "amenities": "Giant Screen with Dolby ATMOS, Reserved seating, Closed caption, Recliner Seats, Accessibility devices available, Luxury Electric Recliners, Laser Projection",
+        "showtimes": [
+          {
+            "label": "6:00p",
+            "available": false,
+            "href": ""
+          }
+        ]
+      }
+    ]
+  },
+  {
+    "theater": "CinemaWest Veranda Luxe IMAX, 4DX, & ScreenX",
+    "groups": [
+      {
+        "amenities": "Reserved seating, Closed caption, Accessibility devices available",
+        "showtimes": [
+          {
+            "label": "6:00p",
+            "available": true,
+            "href": "https://tickets.fandango.com/transaction/ticketing/mobile/jump.aspx?sdate=2026-12-15%2B18%3A00&from=mov_det_showtimes&source=desktop&mid=246859&tid=aaygq&dfam=webbrowser&showtimehashcode=v2-92fff2bb8353c9d3a7770b27e45061e5df15f36f57a0518b53290f2c7afc5352"
+          }
+        ]
+      }
+    ]
+  },
+  {
+    "theater": "CinemaWest Boulevard IMAX & ScreenX",
+    "groups": [
+      {
+        "amenities": "Giant Screen - Laser, Reserved seating, Closed caption, Recliner Seats, Accessibility devices available, Luxury Electric Recliners, Laser Projection",
+        "showtimes": [
+          {
+            "label": "6:00p",
+            "available": true,
+            "href": "https://tickets.fandango.com/transaction/ticketing/mobile/jump.aspx?sdate=2026-12-15%2B18%3A00&from=mov_det_showtimes&source=desktop&mid=246859&tid=aaits&dfam=webbrowser&showtimehashcode=v2-3d6ab278adb81e9eba99f2c63d052cd530ea2c8abfd6bb93fc13372ef891bafd"
+          }
+        ]
+      }
+    ]
+  },
+  {
+    "theater": "CinemaWest Livermore & Giant Screen with Laser",
+    "groups": [
+      {
+        "amenities": "Giant Screen - Laser, Giant Screen with Dolby ATMOS, Reserved seating, Closed caption, Recliner Seats, Accessibility devices available, Luxury Electric Recliners",
+        "showtimes": [
+          {
+            "label": "6:00p",
+            "available": true,
+            "href": "https://tickets.fandango.com/transaction/ticketing/mobile/jump.aspx?sdate=2026-12-15%2B18%3A00&from=mov_det_showtimes&source=desktop&mid=246860&tid=aaugn&dfam=webbrowser&showtimehashcode=v2-4e6bce6c7fc1abbf9d84e6f172af3957bc181619d74d5db448a275a74eab88e8"
+          }
+        ]
+      }
+    ]
+  }
+]

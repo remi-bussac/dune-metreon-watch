@@ -79,7 +79,15 @@ class SourceResult:
     # keywords — a leading indicator, not confirmation of an on-sale, so it
     # gets a distinctly-labeled, lower-certainty alert.
     kind: Kind = "showtime"
+    # Showtimes that can actually be bought right now. The ONLY list that is
+    # ever alerted on.
     showtimes: list[Showtime] = field(default_factory=list)
+    # Showtimes the site prints but will not sell. Deliberately kept apart
+    # rather than dropped on the floor: a run needs to be able to say "46
+    # buyable, 101 listed and locked", because for five weeks the locked
+    # ones were counted as a release and emailed as news. Nothing downstream
+    # alerts on these, and they are not written to state.
+    locked_showtimes: list[Showtime] = field(default_factory=list)
     # Every date the source's calendar OFFERED this run, whether or not we
     # managed to read its showtimes. Reading these costs nothing (they are
     # button labels, no clicks), and they are what lets monitor.py tell
@@ -101,6 +109,7 @@ class SourceResult:
             "status": self.status,
             "kind": self.kind,
             "showtimes": [s.to_dict() for s in self.showtimes],
+            "locked_showtimes": [s.to_dict() for s in self.locked_showtimes],
             "calendar_dates": self.calendar_dates,
             "evaluated_dates": self.evaluated_dates,
             "error": self.error,

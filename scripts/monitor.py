@@ -236,6 +236,55 @@ def _blocked_cooldown_expired(entry: dict) -> bool:
     return datetime.now(timezone.utc) - datetime.fromisoformat(last) >= BLOCKED_ALERT_COOLDOWN
 
 
+def rebuild_showtime_state(target: dict, result: SourceResult, state: dict) -> None:
+    """Replace a source's known showtimes with what it can see on sale NOW.
+
+    A one-time migration, and the fix is incomplete without it.
+
+    Until 2026-08-19 the parser could not tell a buyable showtime from one
+    the site merely prints, so state.json filled up with showtimes that were
+    never on sale: 101 of the 147 recorded for Dune. Leaving them there
+    breaks the next release in two separate ways, and the second one is
+    silent:
+
+      1. Click rationing scans "every date we have never seen, plus the
+         nearest few". A date with phantom showtimes counts as seen, so all
+         19 unreleased dates were excluded. The live monitor was reading 7
+         of 30 dates per run and had not looked at January since Aug 18.
+      2. The phantoms carry the same times the real showtimes will have when
+         they open. 2027-01-08 is recorded as 08:30, 12:00, 15:30, 19:00,
+         22:30, which is exactly what will go on sale. diff_showtimes keys
+         on (date, time, format, venue), so the release would have matched
+         entries already in state and alerted nobody.
+
+    So the very event this monitor exists to catch was, as of this morning,
+    guaranteed to pass in silence. Dropping the phantoms restores both: the
+    dates go back to unseen and get scanned every run, and their showtimes
+    become genuinely new when they arrive.
+
+    Deliberately keeps known_calendar_dates and known_evaluated_dates. They
+    are what tells "the calendar grew" from "we finally read a date", and
+    clearing them would make the next run look like a first pass and swallow
+    a real release as baseline. Mentions are left alone: they are pruned on
+    a 30-day window and re-alerting an old Reddit post is not a risk worth
+    the extra moving part.
+
+        .venv/bin/python scripts/monitor.py --rebuild-state
+    """
+    if result.status != "ok" or result.kind != "showtime":
+        return
+    key = state_key(target["id"], result.source)
+    entry = state["sources"].setdefault(key, default_source_entry())
+    before = len(entry["known_showtimes"])
+    entry["known_showtimes"] = merge_known([], result.showtimes, result.kind)
+    after = len(entry["known_showtimes"])
+    print(
+        f"  [REBUILD] {key}: {before} known -> {after} buyable "
+        f"({before - after} phantom showtime(s) dropped, {len(result.locked_showtimes)} "
+        f"still listed as sold out)"
+    )
+
+
 def process_result(target: dict, result: SourceResult, state: dict) -> bool:
     """Update state for one source result, sending alerts as needed.
 
@@ -437,9 +486,16 @@ def enable_dry_run() -> None:
 
 def main() -> None:
     dry_run = "--dry-run" in sys.argv
+    rebuild = "--rebuild-state" in sys.argv
     if dry_run:
         enable_dry_run()
         print("=== DRY RUN: nothing will be emailed, state.json will not be written ===")
+    if rebuild:
+        # Belt as well as braces: the rebuild path never calls the alert
+        # functions, and this makes sure a mistake there cannot email
+        # anything either. See rebuild_showtime_state.
+        enable_dry_run()
+        print("=== REBUILD: dropping showtimes that are not actually on sale ===")
 
     targets = load_targets()
     state = load_state()
@@ -453,6 +509,15 @@ def main() -> None:
             # date always gets scanned, a known one only if it is near-term.
             prior = state["sources"].get(state_key(target["id"], module.SOURCE_NAME), {})
             known_dates = {s.get("date") for s in prior.get("known_showtimes", [])}
+            if rebuild:
+                # A rebuild REPLACES state, so it has to see the whole
+                # calendar: passing the usual known_dates would ration the
+                # scan down to a handful of dates and then throw away every
+                # showtime it did not look at. Rehearsed against the live
+                # VM state, that dropped 123 of 147 and kept 24, including
+                # binning Dec 23-26, which are genuinely on sale and would
+                # have come back as a fresh "new showtimes" alert.
+                known_dates = set()
             try:
                 result = module.check(target, known_dates=known_dates)
             except Exception as e:
@@ -462,9 +527,28 @@ def main() -> None:
                     status="parse_error",
                     error=f"unhandled exception: {e}",
                 )
-            print(f"[{target['id']}] {result.source}: {result.status} ({len(result.showtimes)} showtimes)")
-            if not process_result(target, result, state):
+            # The locked count is worth a line of its own. It is the number
+            # that used to be emailed as a release: on 2026-08-18 the single
+            # alert of the day carried 101 showtimes nobody could buy. Seeing
+            # "46 buyable, 101 locked" in the journal is how you tell "the
+            # wave has not opened yet" from "the parser has gone blind".
+            locked = len(result.locked_showtimes)
+            summary = f"{len(result.showtimes)} showtimes"
+            if locked:
+                summary += f", {locked} locked (listed, not on sale)"
+            print(f"[{target['id']}] {result.source}: {result.status} ({summary})")
+            if rebuild:
+                rebuild_showtime_state(target, result, state)
+            elif not process_result(target, result, state):
                 all_delivered = False
+
+    if rebuild:
+        if dry_run:
+            print("dry run — rebuilt state NOT written")
+        else:
+            save_state(state)
+            print("state rebuilt from what is on sale now — nothing emailed")
+        return
 
     if not maybe_send_heartbeat(state):
         all_delivered = False
