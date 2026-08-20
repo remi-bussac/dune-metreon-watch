@@ -1,0 +1,67 @@
+[
+  {
+    "theater": "AMC Metreon 16",
+    "groups": [
+      {
+        "amenities": "IMAX\u00ae 70MM Film, Reserved seating",
+        "showtimes": [
+          {
+            "label": "8:30a",
+            "available": false,
+            "href": ""
+          },
+          {
+            "label": "12:00p",
+            "available": false,
+            "href": ""
+          },
+          {
+            "label": "3:30p",
+            "available": false,
+            "href": ""
+          },
+          {
+            "label": "7:00p",
+            "available": false,
+            "href": ""
+          },
+          {
+            "label": "10:30p",
+            "available": false,
+            "href": ""
+          }
+        ]
+      }
+    ]
+  },
+  {
+    "theater": "Regal Edwards Fairfield & IMAX",
+    "groups": [
+      {
+        "amenities": "Reserved seating, No passes, Closed caption, Accessibility devices available, Stadium Seating",
+        "showtimes": [
+          {
+            "label": "11:10a",
+            "available": true,
+            "href": "https://tickets.fandango.com/transaction/ticketing/mobile/jump.aspx?sdate=2027-01-08%2B11%3A10&from=mov_det_showtimes&source=desktop&mid=246859&tid=aandk&dfam=webbrowser&showtimehashcode=v2-0363c08f505b6fd773fbb5c41e0bb427a6f54fec3406574cfe855642158b79c9"
+          },
+          {
+            "label": "2:55p",
+            "available": true,
+            "href": "https://tickets.fandango.com/transaction/ticketing/mobile/jump.aspx?sdate=2027-01-08%2B14%3A55&from=mov_det_showtimes&source=desktop&mid=246859&tid=aandk&dfam=webbrowser&showtimehashcode=v2-1c091587fcce906c739b6677ed11ce4d9bf9c7945c412218f6366f6dce7ea07b"
+          },
+          {
+            "label": "6:45p",
+            "available": true,
+            "href": "https://tickets.fandango.com/transaction/ticketing/mobile/jump.aspx?sdate=2027-01-08%2B18%3A45&from=mov_det_showtimes&source=desktop&mid=246859&tid=aandk&dfam=webbrowser&showtimehashcode=v2-d2aadf9dd91f3f13102c40654af06e697765aceceafe62b7a4e6b2c08e0a8556"
+          },
+          {
+            "label": "10:35p",
+            "available": true,
+            "href": "https://tickets.fandango.com/transaction/ticketing/mobile/jump.aspx?sdate=2027-01-08%2B22%3A35&from=mov_det_showtimes&source=desktop&mid=246859&tid=aandk&dfam=webbrowser&showtimehashcode=v2-7c3e4fade8812d5fc5eaa6a9233308a71063fdbeff0cce5e4db20ca9d198d902"
+          }
+        ]
+      }
+    ]
+  }
+]
