@@ -199,9 +199,41 @@ A 🎟️ ticket alert fires when a `(date, time, format, venue)` combination is
 | New date appears (run extended, new wave) | ✅ **Always**, regardless of how soon it is |
 | New time on a known date, **≥6 days** out | ✅ Yes |
 | New time on a known date, **<6 days** out | ❌ No — routine schedule churn |
-| Seats freed up on a showtime already known | ❌ No — availability is never read |
+| A listed showtime you cannot actually buy | ❌ No — since 2026-08-19, see below |
+| Seats freed up on a showtime already known | ❌ No |
 | A showtime disappears | ❌ No — only additions alert |
 | A flaky scrape misses some showtimes | ❌ No — see below |
+
+**Listed is not the same as on sale.** This is the distinction the monitor got
+wrong for its first five weeks, and it is worth understanding because it is how
+AMC actually releases tickets.
+
+On 2026-08-18 AMC published Dec 27 2026 through Jan 14 2027 at Metreon as
+complete schedules with every showtime marked sold out, and put only Dec 18-26
+on sale. Nothing on those January dates has ever been buyable. Fandango renders
+both states with identical text (`8:30a` either way, and the phrase "sold out"
+appears nowhere on the page), so the old text parser counted all of it as a
+release: the one alert sent that day listed 147 showtimes, 101 of which could
+never be bought.
+
+The difference exists only in the markup, so the parser now reads the DOM:
+
+```
+buyable  <a    class="... showtime-btn--available" href="tickets.fandango.com/...">
+locked   <span class="... showtime-btn--soldout" data-type="soldout">
+```
+
+Only the first kind is ever alerted on, or written to state. The locked ones are
+counted and printed, so a run says `ok (46 showtimes, 101 locked (listed, not on
+sale))`. Reading that line is how you tell "the next wave has not opened yet"
+from "the parser has gone blind": 46 and 101 are healthy today, `0 showtimes, 0
+locked` would not be.
+
+Each buyable showtime also now carries its own deep link rather than the generic
+film page, taken from the `sdate` stamp in the buy URL. That stamp is also what
+proves which date a showtime belongs to, which is what allows a late-night show
+to be handled correctly: Metreon's 2:30a screening is listed under Dec 18 in the
+calendar but stamped `sdate=2026-12-19+02:30`, and both facts are kept.
 
 **Where the 6-day cutoff comes from.** A cinema finalising next week's times and a real ticket wave both look like "new showtimes"; only lead time separates them. Measured from actual false positives this produced — showtimes for Aug 8 detected Aug 5 (3 days), and Aug 7 detected Aug 5 (2 days) — against `RESEARCH.md`, where the shortest lead of any real 70mm wave on record is 22 days (Sinners) and the rest run 29–256. Anything from 4 to 21 separates them cleanly. 6 sits at the cautious end: 2× clear of observed churn, still fires on anything a week or more out, deliberately trading some false positives for a lower chance of a miss. US cinemas schedule weekly, so churn at 4–7 days is plausible on a week not yet seen; if that appears, raise `MIN_LEAD_DAYS` in `monitor.py` toward 14.
 
@@ -212,6 +244,42 @@ Note the suppression only ever applies to a **date already known**. Everything a
 Past showtimes are pruned (they can't be bought); Reddit mentions are kept 30 days, far longer than the ~3 days of posts a feed carries, so a pruned post can't scroll back and re-alert.
 
 **Clicks are rationed, coverage is not.** Reading a date button's label is free, so all dates up to `LABEL_CAP=60` are listed every run. Clicking is a request, so only *unseen* dates plus the nearest `NEAR_TERM_RESCAN=6` known ones get scanned. A brand-new date is always scanned the run it appears. This is both cheaper and more complete than the old fixed `MAX_DATES=12`, which silently capped The Odyssey at Aug 5–16 while its run reached mid-September.
+
+### One-time migration: `--rebuild-state`
+
+Rationing has a sharp edge that the availability bug walked straight into, and
+it needs a one-off repair on any state file written before 2026-08-19.
+
+Phantom showtimes recorded for the unreleased January dates made those dates
+count as *seen*, so they dropped out of the scan: the live monitor was reading
+**7 of 30 dates per run** and had not looked at January since Aug 18. Worse, the
+phantoms hold the same times the real showtimes will have when they open
+(`2027-01-08` was recorded as 08:30, 12:00, 15:30, 19:00, 22:30, exactly what
+will go on sale), and the diff keys on `(date, time, format, venue)`. So the
+release would have matched what state already held and alerted nobody. The one
+event this project exists for was set to pass in silence.
+
+Run once, on the box that holds the live state:
+
+```bash
+ssh ubuntu@<VM_IP> 'cd ~/dune-metreon-watch && .venv/bin/python scripts/monitor.py --rebuild-state'
+```
+
+It scans the **whole** calendar (rationing is bypassed, because a rebuild that
+only looked at seven dates would throw away the twenty-three it skipped), keeps
+only what is genuinely on sale, and emails nothing. `known_calendar_dates` and
+`known_evaluated_dates` are deliberately preserved: they are what separates "the
+calendar grew" from "we finally read a date", and clearing them would make the
+next run look like a first pass and swallow a real release as baseline.
+
+Expect roughly:
+
+```
+[REBUILD] dune-part-three::fandango: 147 known -> 46 buyable (101 phantom showtime(s) dropped)
+```
+
+after which the per-run scan goes from 7 dates to 27, and every unreleased date
+is back under watch.
 
 ### What the Reddit source can and cannot see
 

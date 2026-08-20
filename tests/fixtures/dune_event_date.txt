@@ -23,6 +23,11 @@ THEATERS NEAR
 Calendar for movie times. Thursday, Dec 17 is selected.
 Skip to Movie and Times
 Movie Times Calendar
+Go to previous set of dates
+TUESDAY, DECEMBER 15
+TUE
+DEC
+15
 THURSDAY, DECEMBER 17, SELECTED DAY
 THU
 DEC
@@ -39,6 +44,107 @@ SUNDAY, DECEMBER 20
 SUN
 DEC
 20
+MONDAY, DECEMBER 21
+MON
+DEC
+21
+TUESDAY, DECEMBER 22
+TUE
+DEC
+22
+WEDNESDAY, DECEMBER 23
+WED
+DEC
+23
+THURSDAY, DECEMBER 24
+THU
+DEC
+24
+FRIDAY, DECEMBER 25
+FRI
+DEC
+25
+SATURDAY, DECEMBER 26
+SAT
+DEC
+26
+SUNDAY, DECEMBER 27
+SUN
+DEC
+27
+MONDAY, DECEMBER 28
+MON
+DEC
+28
+TUESDAY, DECEMBER 29
+TUE
+DEC
+29
+WEDNESDAY, DECEMBER 30
+WED
+DEC
+30
+THURSDAY, DECEMBER 31
+THU
+DEC
+31
+FRIDAY, JANUARY 1
+FRI
+JAN
+01
+SATURDAY, JANUARY 2
+SAT
+JAN
+02
+SUNDAY, JANUARY 3
+SUN
+JAN
+03
+MONDAY, JANUARY 4
+MON
+JAN
+04
+TUESDAY, JANUARY 5
+TUE
+JAN
+05
+WEDNESDAY, JANUARY 6
+WED
+JAN
+06
+THURSDAY, JANUARY 7
+THU
+JAN
+07
+FRIDAY, JANUARY 8
+FRI
+JAN
+08
+SATURDAY, JANUARY 9
+SAT
+JAN
+09
+SUNDAY, JANUARY 10
+SUN
+JAN
+10
+MONDAY, JANUARY 11
+MON
+JAN
+11
+TUESDAY, JANUARY 12
+TUE
+JAN
+12
+WEDNESDAY, JANUARY 13
+WED
+JAN
+13
+THURSDAY, JANUARY 14
+THU
+JAN
+14
+Go to next set of dates
 Filter movie times by screen format. all format is selected.
 Filter Movie times by Screen Format
 ALL
@@ -47,13 +153,92 @@ IMAX 70MM
 FORMAT
 IMAX
 FORMAT
-Regal Hacienda Crossings ScreenX, IMAX & RPX
-29.55 mi
+Apple Cinemas Van Ness
+0.41 mi
 Sign In or Join to add this theater to my favorites
 Premium Format
-IMAX® 70MM Film, Reserved seating, No passes, Stadium Seating, Laser Projection
+Reserved seating
+2:00p
+6:00p
+9:00p
+Check Seats
+AMC Metreon 16
+0.91 mi
+Order Food and Drinks
+Sign In or Join to add this theater to my favorites
+Premium Format
+IMAX® 70MM Film, Reserved seating
 7:00p
-10:45p
+11:00p
+Alamo Drafthouse Cinema New Mission
+1.61 mi
+Sign In or Join to add this theater to my favorites
+Premium Format
+HDR By Barco, Reserved seating, Accessibility devices available, Dine-In Delivery to Seat, HDR, Ad Free Preshow
+2:00p
+Check Seats
+Regal Stonestown Galleria ScreenX, 4DX, & RPX
+4.74 mi
+Sign In or Join to add this theater to my favorites
+Premium Format
+RPX, HDR By Barco, Reserved seating, No passes, Closed caption, Accessibility devices available
+9:00p
+Check Seats
+Cinemark Century Daly City 20 XD and IMAX
+6.02 mi
+Sign In or Join to add this theater to my favorites
+Premium Format
+Reserved seating
+2:00p
+5:35p
+9:10p
+12:45a
+Check Seats
+AMC Bay Street 16
+7.89 mi
+Order Food and Drinks
+Sign In or Join to add this theater to my favorites
+Premium Format
+IMAX with Laser, Reserved seating, Closed caption, Accessibility devices available
+2:00p
+5:20p
+8:40p
+12:00a
+Check Seats
+XL at AMC, Reserved seating, Closed caption, Accessibility devices available
+3:00p
+6:30p
+10:00p
+Check Seats
+Cinemark Century at Tanforan and XD
+9.78 mi
+Sign In or Join to add this theater to my favorites
+Premium Format
+Cinemark XD, Reserved seating
+5:00p
+Check Seats
+CinemaWest Rheem Theatre & Giant Screen with Laser
+16.94 mi
+Sign In or Join to add this theater to my favorites
+Premium Format
+GIANT SCREEN, Giant Screen with Dolby ATMOS, Dolby Atmos, Reserved seating, Closed caption, Recliner Seats, Accessibility devices available, Luxury Electric Recliners, Laser Projection
+4:50p
+11:50p
+Check Seats
+CinemaWest Fairfax Theatre & Giant Screen
+17.01 mi
+Sign In or Join to add this theater to my favorites
+Premium Format
+Giant Screen with Dolby ATMOS, Reserved seating, Closed caption, Recliner Seats, Accessibility devices available, Luxury Electric Recliners, Laser Projection
+4:50p
+Cinemark Century Walnut Creek 14 and XD
+21.14 mi
+Sign In or Join to add this theater to my favorites
+Premium Format
+Cinemark XD, Reserved seating, Luxury Lounge Recliners
+5:05p
+Check Seats
+SEE MORE THEATERS
 More Info
 
 Directed by Denis Villeneuve and written by Villeneuve and Brian K. Vaughan, Dune: Part Three is based on the novel Dune Messiah by Frank Herbert and delivers the epic conclusion to Villeneuve’s trilogy.
@@ -72,22 +257,21 @@ Who directed Dune: Part Three - The IMAX 70MM Experience (2026)?
 Denis Villeneuve
 What is Dune: Part Three - The IMAX 70MM Experience (2026) about?
 Directed by Denis Villeneuve and written by Villeneuve and Brian K. Vaughan, Dune: Part Three is based on the novel Dune Messiah by Frank Herbert and delivers the epic conclusion to Villeneuve’s trilogy.
-Close
 NEW & COMING SOON
-
-The End of Oak Street (2026)
 
 Spider-Man: Brand New Day (2026)
 
+Insidious: Out of the Further (2026)
+
+PAW Patrol: The Dino Movie (2026)
+
 One Night Only (2026)
 
-Minions & Monsters (2026)
+The End of Oak Street (2026)
+
+Mutiny (2026)
 
 The Odyssey (2026)
-
-Moana (2026)
-
-Super Troopers 3 (2026)
 
 Toy Story 5 (2026)
 
