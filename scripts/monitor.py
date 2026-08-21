@@ -98,6 +98,20 @@ def load_targets() -> list[dict]:
     return [t for t in targets if t.get("active", True)]
 
 
+def modules_for(target: dict) -> list:
+    """Which sources this target wants, defaulting to all of them.
+
+    Exists because the same film is now watched at two venues, and running
+    Reddit twice for one film buys nothing: the feeds are cached per process
+    so it costs no extra requests, but it doubles the mentions in state and
+    the lines in the log for a source whose alerts are muted anyway.
+    """
+    wanted = target.get("sources")
+    if not wanted:
+        return SOURCE_MODULES
+    return [m for m in SOURCE_MODULES if m.SOURCE_NAME in wanted]
+
+
 def load_state() -> dict:
     if STATE_PATH.exists():
         return json.loads(STATE_PATH.read_text())
@@ -503,7 +517,7 @@ def main() -> None:
     all_delivered = True
 
     for target in targets:
-        for module in SOURCE_MODULES:
+        for module in modules_for(target):
             # Dates we already have showtimes for. fandango uses this to
             # decide which dates are worth spending a click on: an unseen
             # date always gets scanned, a known one only if it is near-term.

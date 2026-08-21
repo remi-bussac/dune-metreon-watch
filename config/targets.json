@@ -4,26 +4,43 @@
     "film_name": "Dune: Part Three",
     "film_keywords": ["dune: part three", "dune part three", "dune 3"],
     "venue": "AMC Metreon 16",
+    "zip": "94102",
     "format": "IMAX 70mm",
     "release_date": "2026-12-18",
     "amc_theatre_url": "https://www.amctheatres.com/movie-theatres/san-francisco/amc-metreon-16",
     "amc_film_url": "https://www.amctheatres.com/movies/dune-part-three-77032",
     "imax_url": "https://www.imax.com/movie/dune-part-three",
     "fandango_film_url": "https://www.fandango.com/dune-part-three-the-imax-70mm-experience-2026-245188/movie-overview",
-    "active": true
+    "active": true,
+    "note": "The one that matters. As of 2026-08-21: Dec 18-26 on sale, Dec 27 to Jan 14 published with every showtime locked. The January block is what we are waiting for."
+  },
+  {
+    "id": "dune-part-three-dublin",
+    "film_name": "Dune: Part Three",
+    "film_keywords": ["dune: part three", "dune part three", "dune 3"],
+    "venue": "Regal Hacienda Crossings",
+    "zip": "94568",
+    "format": "IMAX 70mm",
+    "release_date": "2026-12-18",
+    "imax_url": "https://www.imax.com/movie/dune-part-three",
+    "fandango_film_url": "https://www.fandango.com/dune-part-three-the-imax-70mm-experience-2026-245188/movie-overview",
+    "active": true,
+    "sources": ["fandango"],
+    "note": "Second IMAX 70mm house within driving distance, and a second read on what the chains are doing. NOT an AMC: Dublin's 70mm screen is Regal's. Watched from 94568 rather than San Francisco because Fandango caps its theater list at roughly ten cinemas by distance, so from 94102 this venue drops off the page on busy dates (it is 29.55 mi out). As of 2026-08-21 its 70mm run is Dec 17-24 only, with no January dates listed at all, so it is not a January fallback: if January appears here it will be a brand new calendar date and alert on its own."
   },
   {
     "id": "the-odyssey",
     "film_name": "The Odyssey",
     "film_keywords": ["the odyssey", "odyssey"],
     "venue": "AMC Metreon 16",
+    "zip": "94102",
     "format": "IMAX 70mm",
     "release_date": "2026-07-17",
     "amc_theatre_url": "https://www.amctheatres.com/movie-theatres/san-francisco/amc-metreon-16",
     "amc_film_url": "https://www.amctheatres.com/movies/the-odyssey-80679",
     "imax_url": "https://www.imax.com/movie/the-odyssey",
     "fandango_film_url": "https://www.fandango.com/the-odyssey-the-imax-70mm-experience-2026-241386/movie-overview",
-    "active": true,
-    "note": "TEMPORARY live validation target used to prove the pipeline works on real data (the film's IMAX 70mm run is being actively extended/expanded as of 2026-07-30, so new Metreon showtimes are expected soon). Remove this entry once a real alert has been received and confirmed correct — see RUNBOOK.md 'Live test' section."
+    "active": false,
+    "note": "PARKED, deliberately not deleted (owner's call, 2026-08-21). This was the live validation target and it did its job: it caught the run extension to Sept 16, the duplicate-alert bug, the cold-start flood and the timezone bug, all on real data. Now it is only cost: a full second scan every run for a film whose 70mm run ends 2026-09-16 and which nobody here is buying tickets for. Setting active:false stops it being polled while keeping the entry, its URLs and this history intact. Flip back to true to resume."
   }
 ]
