@@ -40,7 +40,7 @@
     "amc_film_url": "https://www.amctheatres.com/movies/the-odyssey-80679",
     "imax_url": "https://www.imax.com/movie/the-odyssey",
     "fandango_film_url": "https://www.fandango.com/the-odyssey-the-imax-70mm-experience-2026-241386/movie-overview",
-    "active": false,
-    "note": "PARKED, deliberately not deleted (owner's call, 2026-08-21). This was the live validation target and it did its job: it caught the run extension to Sept 16, the duplicate-alert bug, the cold-start flood and the timezone bug, all on real data. Now it is only cost: a full second scan every run for a film whose 70mm run ends 2026-09-16 and which nobody here is buying tickets for. Setting active:false stops it being polled while keeping the entry, its URLs and this history intact. Flip back to true to resume."
+    "active": true,
+    "note": "Watched for real, owner's call (2026-08-21). It started as the temporary live-validation target and earned that keep several times over: it caught the duplicate-alert bug, the cold-start flood, the timezone bug and the Sept 16 run extension, all on real data. It stays on. Its 70mm run currently ends 2026-09-16, so expect it to go quiet then rather than break, and a further extension would show up as new calendar dates."
   }
 ]
