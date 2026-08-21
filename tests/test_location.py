@@ -174,21 +174,25 @@ def test_the_configured_targets_are_coherent():
     by_id = {t["id"]: t for t in targets}
 
     active = [t for t in targets if t.get("active", True)]
-    assert {t["id"] for t in active} == {"dune-part-three", "dune-part-three-dublin"}, (
-        "only the two Dune venues should be polled")
+    assert {t["id"] for t in active} == {
+        "dune-part-three", "dune-part-three-dublin", "the-odyssey",
+    }, "all three targets are watched"
 
-    # The Odyssey is parked, not deleted. Losing the entry would lose the
-    # URLs and the history of what it was for.
-    assert "the-odyssey" in by_id, "the Odyssey entry must survive being switched off"
-    assert by_id["the-odyssey"]["active"] is False
+    # The Odyssey stays on. It was proposed for retirement on 2026-08-21 as
+    # its 70mm run winds down and the owner said keep it, so this is a
+    # decision pinned rather than an accident waiting to be tidied away.
+    assert by_id["the-odyssey"]["active"] is True
 
-    # Each venue is asked from its own metro. Sharing a ZIP is what silently
-    # drops the far venue off Fandango's distance-capped theater list.
-    assert by_id["dune-part-three"]["zip"] == "94102"
+    # Dublin is asked for from its own metro. Sharing San Francisco's is what
+    # silently drops it off Fandango's distance-capped theater list, and that
+    # is the failure this assertion exists to catch.
     assert by_id["dune-part-three-dublin"]["zip"] == "94568"
-    assert len({t["zip"] for t in active}) == len(active), "two venues, two metros"
+    assert by_id["dune-part-three"]["zip"] == "94102"
+    assert by_id["dune-part-three-dublin"]["zip"] != by_id["dune-part-three"]["zip"]
 
-    # Same film, same format, watched twice.
+    # Two venues playing the same film in the same format, plus one other
+    # film at Metreon. Every target names a metro and a format.
+    assert all(t.get("zip") for t in active), "a target with no ZIP cannot be trusted"
     assert {t["format"] for t in active} == {"IMAX 70mm"}
     assert by_id["dune-part-three-dublin"]["venue"] == "Regal Hacienda Crossings"
 
