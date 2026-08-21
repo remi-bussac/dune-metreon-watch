@@ -22,7 +22,7 @@ sys.path.insert(0, str(REPO / "scripts" / "sources"))
 
 import pytest  # noqa: E402
 
-from sources.fandango import SF_ZIP_PATTERN, showtimes_from_cards  # noqa: E402
+from sources.fandango import DEFAULT_ZIP, showtimes_from_cards  # noqa: E402
 
 FIXTURES = Path(__file__).resolve().parent / "fixtures"
 MANIFEST = json.loads((FIXTURES / "manifest.json").read_text())
@@ -46,11 +46,17 @@ def parse(name: str):
 
 
 @pytest.mark.parametrize("name", sorted(MANIFEST))
-def test_every_fixture_resolved_to_san_francisco(name):
-    """If the geo cookies stop working the page silently shows another metro,
-    and 'no Metreon showtimes' becomes a lie rather than a fact. The scraper
-    treats a missing SF ZIP as parse_error for this reason."""
-    assert SF_ZIP_PATTERN.search(body(name)), f"{name} did not resolve to a 941xx ZIP"
+def test_every_fixture_was_captured_from_the_right_metro(name):
+    """A fixture captured from the wrong city records a different set of
+    cinemas entirely, and every assertion built on it would be testing the
+    wrong page.
+
+    This is not hypothetical. On 2026-08-19 the VM silently started
+    resolving to San Jose, where Metreon does not appear at all, and every
+    run reported zero showtimes until the ZIP guard caught it."""
+    expected = TARGETS[MANIFEST[name]["target_id"]].get("zip", DEFAULT_ZIP)
+    assert expected in body(name), (
+        f"{name} was captured from the wrong metro (expected ZIP {expected})")
 
 
 def test_metreon_showtimes_are_extracted_when_present():

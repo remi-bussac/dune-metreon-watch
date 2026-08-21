@@ -22,7 +22,7 @@ sys.path.insert(0, str(REPO / "scripts" / "sources"))
 from browser import goto_and_classify, polite_page  # noqa: E402
 from sources._common import _dismiss_cookie_banner  # noqa: E402
 from sources.fandango import (  # noqa: E402
-    CARD_SCRAPE_JS, SF_LOCATION_COOKIES, DATE_BUTTON_SELECTOR, _click_date,
+    CARD_SCRAPE_JS, DEFAULT_ZIP, DATE_BUTTON_SELECTOR, _click_date, _ensure_metro,
 )
 
 OUT = Path(__file__).resolve().parent / "fixtures"
@@ -56,9 +56,6 @@ def main() -> None:
     for name, target_id, want_date, note in WANTED:
         target = targets[target_id]
         with polite_page() as page:
-            page.context.add_cookies(
-                [dict(c, domain=".fandango.com", path="/") for c in SF_LOCATION_COOKIES]
-            )
             goto_and_classify(page, target["fandango_film_url"])
             _dismiss_cookie_banner(page)
             try:
@@ -66,6 +63,12 @@ def main() -> None:
             except Exception:
                 pass
             page.wait_for_timeout(2_500)
+
+            # Fixtures must be captured from the metro the target is watched
+            # from, or they record another city's cinemas.
+            if not _ensure_metro(page, target.get("zip", DEFAULT_ZIP)):
+                print(f"  SKIP {name}: could not pin the page to {target.get('zip', DEFAULT_ZIP)}")
+                continue
 
             if want_date:
                 sel = f'{DATE_BUTTON_SELECTOR}[data-show-time-date="{want_date}"]'

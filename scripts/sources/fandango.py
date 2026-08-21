@@ -53,45 +53,36 @@ from normalize import Showtime, SourceResult, venue_today  # noqa: E402
 
 SOURCE_NAME = "fandango"
 
-# Fandango used to store the visitor's chosen location in plain cookies, and
-# seeding them before the first navigation was what pinned results to San
-# Francisco. THIS NO LONGER WORKS, confirmed on the VM 2026-08-19: the
-# cookies are sent, survive the load intact (zip=94102, searchcity=
-# SANFRANCISCO), and the page renders another metro anyway. Fandango now
-# resolves location from the IP, and the VM sits in San Jose, so every run
-# came back showing 95101 with no Metreon anywhere in the results.
+# Setting the location the way a person does.
 #
-# They are kept because they cost one request header, do no harm, and would
-# start working again if Fandango restored the behaviour. They are no longer
-# load-bearing: _ensure_san_francisco below is what actually sets the
-# location now.
-SF_LOCATION_COOKIES = [
-    {"name": "zip", "value": "94102"},
-    {"name": "akamai_set_zip", "value": "true"},
-    {"name": "searchcity", "value": "SANFRANCISCO"},
-    {"name": "searchstate", "value": "CA"},
-    {"name": "searchlocation",
-     "value": "lat%3D37.7795%26long%3D-122.4195%26name%3DSANFRANCISCO%252C%2520CA"},
-]
-
-# Proves the location actually took effect. Fandango renders the resolved
-# ZIP under "THEATERS NEAR"; 941xx is San Francisco. If this is missing the
-# page is showing some other metro, and "no Metreon showtimes" would be a
-# lie rather than a fact — so it's reported as parse_error and picked up by
-# the dead-man's switch instead of being read as "nothing on sale."
-SF_ZIP_PATTERN = re.compile(r"\b941\d\d\b")
-
-# Setting the location the way a person does, because the cookies stopped
-# working. Fandango puts the resolved ZIP on a button ("THEATERS NEAR
-# 95101") which opens an overlay with a location field; typing a ZIP there
+# Fandango used to honour plain location cookies, and seeding them before the
+# first navigation was what pinned results to a metro. THAT STOPPED WORKING
+# on 2026-08-19: the cookies were sent, survived the load intact (zip=94102,
+# searchcity=SANFRANCISCO), and the page rendered another metro anyway,
+# because Fandango now resolves location from the IP. The VM sits in San
+# Jose, so every run came back showing 95101 with no Metreon in the results
+# at all. The cookies have been removed rather than left in place: they did
+# nothing, and with more than one metro to watch they were actively
+# misleading, since seeding San Francisco while asking for Dublin describes
+# a request the code is not making.
+#
+# What works instead: the resolved ZIP sits on a button ("THEATERS NEAR
+# 95101") which opens an overlay with a location field. Typing a ZIP there
 # and pressing Enter re-renders the whole showtimes section for that metro.
-# Verified on the VM: 95101 -> 94102, after which its theater list matched a
-# residential SF connection exactly.
+# Verified on the VM (95101 -> 94102, after which its theater list matched a
+# residential SF connection exactly) and again for 10001 and 94568.
 #
-# This is the same principle the date carousel already follows. We are not
-# constructing a URL Fandango disallows or calling a private API, we are
-# using the control the site puts on the page for exactly this purpose.
-SF_ZIP = "94102"
+# Same principle the date carousel already follows. No URL Fandango
+# disallows, no private API, just the control the site puts on the page for
+# exactly this purpose.
+DEFAULT_ZIP = "94102"  # San Francisco, for targets that do not name one
+LOCATION_BUTTON_SELECTOR = "button.js-location-overlay"
+LOCATION_INPUT_SELECTOR = "#setLocationSearchInput"
+# Where the resolved ZIP is rendered, and the only proof the change landed.
+PAGE_ZIP_PATTERN = re.compile(r"THEATERS NEAR\s+(\d{5})")
+LOCATION_SETTLE_MS = 1_500
+LOCATION_CONFIRM_TIMEOUT_MS = 10_000
+LOCATION_POLL_MS = 500
 LOCATION_BUTTON_SELECTOR = "button.js-location-overlay"
 LOCATION_INPUT_SELECTOR = "#setLocationSearchInput"
 # Where the resolved ZIP is rendered, and the only proof the change landed.
@@ -225,28 +216,34 @@ def _page_zip(page) -> str | None:
     return match.group(1) if match else None
 
 
-def _ensure_san_francisco(page) -> bool:
-    """Make the page show San Francisco results, and prove that it does.
+def _ensure_metro(page, zip_code: str) -> bool:
+    """Make the page show `zip_code`'s results, and prove that it does.
 
-    Returns True only if an SF ZIP is on screen when this returns. Every
-    caller treats False as parse_error rather than "nothing on sale",
-    because from a San Jose metro Metreon is simply absent from the results
-    and reading that as "no showtimes" is a lie, not a fact. That confusion
-    is what this whole function exists to prevent: on 2026-08-19 Fandango
-    stopped honouring the location cookies, the VM started resolving to
-    95101, and every run reported zero Metreon showtimes.
+    Returns True only if that exact ZIP is on screen when this returns.
+    Every caller treats False as parse_error rather than "nothing on sale",
+    because from the wrong metro the target venue is simply absent from the
+    results, and reading that as "no showtimes" is a lie, not a fact. That
+    confusion is what this function exists to prevent: on 2026-08-19
+    Fandango stopped honouring the location cookies, the VM started
+    resolving to 95101, and every run reported zero Metreon showtimes.
 
-    Does nothing when the page already resolved to SF, which is the normal
-    case from a Bay Area connection, so this costs an interaction only on
-    the hosts that actually need it."""
-    if _page_zip(page) and SF_ZIP_PATTERN.search(_page_zip(page)):
+    The match is exact, not "some ZIP in the right city". Two venues are
+    watched from two different metros now, and a page that came back with a
+    neighbouring ZIP would be a page whose theater list we cannot reason
+    about: the list is capped at roughly ten cinemas by distance, so which
+    ZIP you ask from decides who makes the cut. Asking precisely is the only
+    way that stays true as venues are added.
+
+    Does nothing when the page already resolved to the ZIP we want, so this
+    costs an interaction only where it is actually needed."""
+    if _page_zip(page) == zip_code:
         return True
 
     try:
         page.locator(LOCATION_BUTTON_SELECTOR).first.click(timeout=5_000)
         page.wait_for_timeout(LOCATION_SETTLE_MS)
         box = page.locator(LOCATION_INPUT_SELECTOR).first
-        box.fill(SF_ZIP)
+        box.fill(zip_code)
         page.wait_for_timeout(LOCATION_SETTLE_MS)
         box.press("Enter")
     except Exception:
@@ -259,8 +256,7 @@ def _ensure_san_francisco(page) -> bool:
     while waited < LOCATION_CONFIRM_TIMEOUT_MS:
         page.wait_for_timeout(LOCATION_POLL_MS)
         waited += LOCATION_POLL_MS
-        current = _page_zip(page)
-        if current and SF_ZIP_PATTERN.search(current):
+        if _page_zip(page) == zip_code:
             return True
     return False
 
@@ -452,11 +448,13 @@ def check(target: dict, known_dates: set[str] | None = None) -> SourceResult:
     url = target["fandango_film_url"]
     today = venue_today()
     known_dates = known_dates or set()
+    # The metro to ask from. Metreon is watched from San Francisco and Regal
+    # Hacienda Crossings from Dublin, and because the theater list is capped
+    # by distance, asking from the wrong one can drop a venue off the page
+    # entirely even on a date it is playing.
+    zip_code = target.get("zip", DEFAULT_ZIP)
 
     with polite_page() as page:
-        page.context.add_cookies(
-            [dict(c, domain=".fandango.com", path="/") for c in SF_LOCATION_COOKIES]
-        )
         classification, response = goto_and_classify(page, url)
         if classification == "blocked":
             status_code = response.status if response else "?"
@@ -480,20 +478,12 @@ def check(target: dict, known_dates: set[str] | None = None) -> SourceResult:
         # Before anything is read, including the calendar: a different metro
         # offers different dates, so getting this wrong would poison the
         # calendar diff as well as the showtimes.
-        located = _ensure_san_francisco(page)
-
-        try:
-            body_text = page.inner_text("body")
-        except Exception as e:
-            return SourceResult(
-                source=SOURCE_NAME, target_id=target["id"], status="parse_error", error=str(e)
-            )
-
-        if not located or not SF_ZIP_PATTERN.search(body_text):
+        if not _ensure_metro(page, zip_code):
             return SourceResult(
                 source=SOURCE_NAME, target_id=target["id"], status="parse_error",
-                error=f"page is showing ZIP {_page_zip(page)}, not San Francisco, and the "
-                      f"location control did not fix it — venue results cannot be trusted",
+                error=f"page is showing ZIP {_page_zip(page)}, not the {zip_code} we asked "
+                      f"for, and the location control did not fix it — venue results "
+                      f"cannot be trusted",
             )
 
         try:
