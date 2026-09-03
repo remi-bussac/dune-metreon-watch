@@ -262,7 +262,7 @@ event this project exists for was set to pass in silence.
 Run once, on the box that holds the live state:
 
 ```bash
-ssh ubuntu@<VM_IP> 'cd ~/dune-metreon-watch && .venv/bin/python scripts/monitor.py --rebuild-state'
+ssh ubuntu@"$DUNE_VM_IP" 'cd ~/dune-metreon-watch && .venv/bin/python scripts/monitor.py --rebuild-state'
 ```
 
 It scans the **whole** calendar (rationing is bypassed, because a rebuild that
