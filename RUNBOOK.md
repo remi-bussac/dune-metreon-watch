@@ -131,7 +131,12 @@ You should get a real email within seconds. If this fails, the problem is your G
 
 ## Cadence
 
-Single cron line in `.github/workflows/monitor.yml`. Edit it by hand at these points (GitHub Actions cron is UTC — these are pre-converted to PT, split around DST transitions so no line is ambiguous):
+> **Stale below.** GitHub Actions was retired in `039e713`; there is no
+> `.github/` directory any more. The live cadence is `OnUnitActiveSec` in
+> `deploy/dune-watch.timer`, currently **15 min**, plus the morning burst
+> described in the next section. The phase table is kept as the plan of
+> record: read the "Cadence" column, ignore the "Cron" column, and apply
+> each change to the timer file instead.
 
 | Phase | Dates | Cadence | Cron |
 |---|---|---|---|
@@ -148,7 +153,56 @@ Note the 24/7 schedules are also DST-proof, which the old hour-bounded ones were
 
 Note: US DST resumes March 8, 2027, inside phase 4's window — the cron above is calculated for PST and will drift by an hour after that date. Not worth a mid-phase edit for an hourly catch-all check; ignore it unless you want to be precise.
 
-Each edit is a one-line change to the `- cron:` value under `on.schedule` in `.github/workflows/monitor.yml`, then commit and push.
+Each edit is a one-line change to `OnUnitActiveSec` in `deploy/dune-watch.timer`, then reinstall it on the VM and `daemon-reload`.
+
+---
+
+## Morning burst (experiment, started 2026-09-03)
+
+`deploy/dune-watch-burst.timer` adds **full passes every 3 minutes from 08:45 to
+09:15 PT**, eleven per day, on top of the 15-minute baseline. It drives the same
+`dune-watch.service`, so there is no separate code path.
+
+**Why that window.** Detection lag is entirely poll interval, not slow code. The
+journal for the two clean catches:
+
+| Event | Last clean pass | Detected | Publication window | Lag |
+|---|---|---|---|---|
+| The Odyssey, Thu 2026-09-03 | 09:01:22 PT | 09:17:09 PT | 09:01 to 09:16 | ≤ 16 min |
+| Dune 3, Tue 2026-08-18 | 08:21:50 PT | 08:35:48 PT | 08:22 to 08:35 | ≤ 14 min |
+
+Both landed mid-morning. `RESEARCH.md` has both 2026 announced waves going on
+sale at 9:00am PT sharp, with Dune 3's announcement only ~30 minutes ahead.
+
+**The open question is rate limiting.** A full pass is roughly 21 page loads, so
+this window costs about 230 against a ~2,000/day baseline. We were 403'd once
+before, on 2026-08-05. This runs as an experiment precisely to find out whether
+a short dense push is tolerated.
+
+**Reading the result:**
+
+```bash
+journalctl -u dune-watch.service --since "today 08:40" --until "today 09:20" --no-pager
+```
+
+Eleven `Starting` lines with `ok` status means it held. Any `blocked` status, or
+a 🚫 BLOCKED email, means it did not. If it trips, do **not** just slow the
+cadence: switch the burst to scanning only the date carousel (3 page loads
+instead of 21, since every wave so far announced itself as new *dates*), which
+buys back roughly 7x the headroom at the same frequency.
+
+**Reverting** leaves the baseline completely untouched:
+
+```bash
+sudo systemctl disable --now dune-watch-burst.timer
+```
+
+**⚠️ DST deadline: 2026-11-01.** The VM clock is `Etc/UTC`, so the unit's
+`OnCalendar` lines are written in UTC (PDT+7). After DST ends they would
+silently slide an hour early. Either re-point them to 16:45 and 17:00, or set
+the box to `America/Los_Angeles` and rewrite them in local time. The latter is
+safe: `venue_today()` in `scripts/normalize.py` pins the venue timezone
+explicitly, so no date logic reads the host clock.
 
 ---
 
