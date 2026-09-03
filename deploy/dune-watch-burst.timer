@@ -1,0 +1,53 @@
+[Unit]
+Description=Morning burst: denser checks around the 9am PT on-sale window
+
+[Timer]
+# EXPERIMENT, started 2026-09-03. Full passes every 3 minutes across the
+# 08:45-09:15 PT window, layered on top of the 15-minute baseline in
+# dune-watch.timer. Eleven extra passes per day.
+#
+# The question it exists to answer: does a short dense push get us
+# rate-limited by Fandango? We were 403'd once already (2026-08-05), and a
+# full pass is roughly 21 page loads, so this window is about 230 page loads
+# against a ~2,000/day baseline. Read the journal after a few mornings:
+#
+#     journalctl -u dune-watch.service --since "today 08:40" --until "today 09:20"
+#
+# Look for "blocked" status or a BLOCKED email. If it stays clean, keep it
+# and consider widening. If it trips, fall back to scanning just the date
+# carousel (3 page loads instead of 21) rather than slowing the cadence.
+#
+# Why this window (see RUNBOOK, "Detection lag"):
+#   2026-09-03  The Odyssey  new block appeared between 09:01 and 09:16 PT
+#   2026-08-18  Dune 3       new block appeared between 08:22 and 08:35 PT
+# RESEARCH.md has both 2026 announced waves going on sale at 9:00am PT sharp,
+# with Dune 3's own announcement landing only ~30 minutes ahead.
+#
+# !!! THE TIMES BELOW ARE UTC, NOT PACIFIC !!!
+# The VM's clock is Etc/UTC, so these read as PDT+7. They are correct until
+# DST ends on 2026-11-01, after which they would silently slide an hour early
+# and miss the window. Before that date, either re-point them (PST is UTC+8,
+# so 16:45 and 17:00), or make the whole thing DST-proof:
+#     sudo timedatectl set-timezone America/Los_Angeles
+# then rewrite these two lines as 08:45..59/3 and 09:00..15/3.
+# Safe to do: venue_today() in normalize.py pins the venue timezone
+# explicitly, so the monitor's date logic does not read the host clock.
+OnCalendar=*-*-* 15:45..59/3
+OnCalendar=*-*-* 16:00..15/3
+
+# Fire on the clock, unsmeared. The baseline timer jitters so we never hit
+# the site on round numbers; here the whole point is a predictable grid that
+# can be read back out of the journal.
+RandomizedDelaySec=0
+
+# Never replay a missed burst. If the VM was down at 08:45 PT the window has
+# passed, and running it at noon is just extra load for no coverage.
+Persistent=false
+
+# Drives the same one-pass service as the baseline timer. systemd will not
+# start a second copy while one is still running, so a slow pass skips the
+# next tick rather than stacking up.
+Unit=dune-watch.service
+
+[Install]
+WantedBy=timers.target
