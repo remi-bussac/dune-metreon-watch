@@ -86,11 +86,22 @@ into the box in Step 3.5.
 
 ## Step 5 — Deploy (~10 min, mostly the Chromium download)
 
-One command on your laptop. Replace the IP with yours from Step 3.7:
+Store the address from Step 3.7 outside the repo, once. It goes next to the
+Gmail credentials, in the same laptop-local file:
 
 ```bash
-./deploy/deploy.sh 141.148.1.2
+echo "export DUNE_VM_IP=<the public IP from Step 3.7>" >> ~/.dune-metreon-watch.env
 ```
+
+Then, one command on your laptop:
+
+```bash
+./deploy/deploy.sh
+```
+
+Passing the address still works (`./deploy/deploy.sh <IP>`) and wins over the
+file. Keeping it in the file is what stops a public repo from advertising the
+host it deploys to.
 
 The first time, SSH asks `Are you sure you want to continue connecting?` —
 type **yes**.
@@ -105,7 +116,8 @@ the systemd timer.
 The bootstrap creates the credentials file but cannot fill in the secret.
 
 ```bash
-ssh ubuntu@141.148.1.2
+source ~/.dune-metreon-watch.env      # once per terminal, sets DUNE_VM_IP
+ssh ubuntu@"$DUNE_VM_IP"
 nano ~/.dune-metreon-watch.env
 ```
 
@@ -144,7 +156,7 @@ laptop is on. That is the entire point of this migration.
 | Watch live | `journalctl -u dune-watch.service -f` |
 | Last run | `journalctl -u dune-watch.service -n 40 --no-pager` |
 | Run one now | `sudo systemctl start dune-watch.service` |
-| Push code changes | `./deploy/deploy.sh <IP>` (from the laptop) |
+| Push code changes | `./deploy/deploy.sh` (from the laptop) |
 | Pause it | `sudo systemctl stop dune-watch.timer` |
 | Resume | `sudo systemctl start dune-watch.timer` |
 
@@ -154,7 +166,7 @@ Edit **one line** — `OnUnitActiveSec` in `deploy/dune-watch.timer` — then
 redeploy:
 
 ```bash
-./deploy/deploy.sh <IP>
+./deploy/deploy.sh
 ```
 
 Suggested: `15min` now, `10min` from October, `5min` in December. Cost is $0
@@ -163,7 +175,8 @@ at every one of these, so the only limit is being polite to Fandango.
 ## Teardown (December, or whenever you are done)
 
 ```bash
-ssh ubuntu@<IP> 'sudo systemctl disable --now dune-watch.timer'
+source ~/.dune-metreon-watch.env
+ssh ubuntu@"$DUNE_VM_IP" 'sudo systemctl disable --now dune-watch.timer'
 ```
 
 Then Console → **Compute → Instances → dune-watch → Terminate**. Tick
