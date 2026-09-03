@@ -2,7 +2,10 @@
 # Runs on YOUR LAPTOP. Copies the project to the Oracle VM and sets it up.
 # Safe to re-run -- use it for code updates too, not just the first install.
 #
-#   ./deploy/deploy.sh  <VM_PUBLIC_IP>
+#   ./deploy/deploy.sh  [VM_PUBLIC_IP]
+#
+# The address can be omitted once DUNE_VM_IP is set in
+# ~/.dune-metreon-watch.env, which is where it belongs: this repo is public.
 #
 # Code is pushed with rsync rather than cloned from GitHub on purpose: the
 # GitHub account is under review and the repo is not reliably reachable to
@@ -10,13 +13,32 @@
 
 set -euo pipefail
 
-IP="${1:-}"
 USER_NAME="${DUNE_VM_USER:-ubuntu}"      # Oracle's Ubuntu images default to 'ubuntu'
 REPO_DIR="$(cd "$(dirname "${BASH_SOURCE[0]}")/.." && pwd)"
+ENV_FILE="${DUNE_ENV_FILE:-$HOME/.dune-metreon-watch.env}"
+
+# The VM's address is laptop-local config and is deliberately not committed.
+# This repo is public: the address on its own is not a secret, but published
+# next to code that names the login user, the paths and the credentials file,
+# it turns a generic port scan into a targeted one. Resolution order is
+# argument, then DUNE_VM_IP from the environment, then DUNE_VM_IP out of
+# ~/.dune-metreon-watch.env (the same out-of-repo file that holds the Gmail
+# app password).
+IP="${1:-${DUNE_VM_IP:-}}"
+if [[ -z "$IP" && -f "$ENV_FILE" ]]; then
+  # shellcheck disable=SC1090
+  source "$ENV_FILE"
+  IP="${DUNE_VM_IP:-}"
+fi
 
 if [[ -z "$IP" ]]; then
-  echo "usage: ./deploy/deploy.sh <VM_PUBLIC_IP>"
-  echo "   e.g. ./deploy/deploy.sh 141.148.x.x"
+  echo "usage: ./deploy/deploy.sh [VM_PUBLIC_IP]"
+  echo
+  echo "No address given, and DUNE_VM_IP is not set in the environment or in"
+  echo "$ENV_FILE. Either pass it once:"
+  echo "    ./deploy/deploy.sh 203.0.113.10"
+  echo "or set it for good, outside the repo:"
+  echo "    echo 'export DUNE_VM_IP=203.0.113.10' >> $ENV_FILE"
   exit 1
 fi
 
