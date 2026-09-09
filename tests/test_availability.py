@@ -247,12 +247,14 @@ def test_rebuild_drops_phantoms_and_restores_the_january_alert():
     buyable_dec = [Showtime("2026-12-20", t, "IMAX 70mm", METREON, "https://tickets.fandango.com/x")
                    for t in ("08:30", "12:00")]
 
-    state = {"sources": {"dune-part-three::fandango": {
+    # Through migrate_state, because that is how a state file written before
+    # the reading-times change reaches the code in production.
+    state = monitor.migrate_state({"sources": {"dune-part-three::fandango": {
         **monitor.default_source_entry(),
         "known_showtimes": [s.to_dict() for s in locked_jan + buyable_dec],
         "known_calendar_dates": ["2026-12-20", "2027-01-08"],
         "known_evaluated_dates": ["2026-12-20", "2027-01-08"],
-    }}}
+    }}})
     target = TARGETS["dune-part-three"]
 
     known_dates = {s["date"] for s in state["sources"]["dune-part-three::fandango"]["known_showtimes"]}
@@ -262,13 +264,19 @@ def test_rebuild_drops_phantoms_and_restores_the_january_alert():
     monitor.rebuild_showtime_state(target, SourceResult(
         source="fandango", target_id="dune-part-three", status="ok", kind="showtime",
         showtimes=buyable_dec, locked_showtimes=locked_jan,
+        evaluated_dates=["2026-12-20", "2027-01-08"],
     ), state)
 
     entry = state["sources"]["dune-part-three::fandango"]
     remaining = {s["date"] for s in entry["known_showtimes"]}
     assert remaining == {"2026-12-20"}, "only what is genuinely on sale survives"
     assert entry["known_calendar_dates"] == ["2026-12-20", "2027-01-08"], "calendar must survive"
-    assert entry["known_evaluated_dates"] == ["2026-12-20", "2027-01-08"], "so must evaluated"
+    assert set(entry["known_evaluated_dates"]) == {"2026-12-20", "2027-01-08"}, "so must evaluated"
+    # A rebuild reads the whole calendar, so it must record having done so.
+    # If it left these unstamped every date would read as stale and the very
+    # next run would suppress the release this rebuild exists to restore.
+    assert all(entry["known_evaluated_dates"].values()), "rebuild must stamp reading times"
+    assert monitor.dates_gone_stale(entry["known_evaluated_dates"]) == frozenset()
 
     # And now the release fires, which is the whole point.
     released = Showtime("2027-01-08", "19:00", "IMAX 70mm", METREON, "https://tickets.fandango.com/y")
@@ -278,6 +286,7 @@ def test_rebuild_drops_phantoms_and_restores_the_january_alert():
         calendar_dates=set(entry["known_calendar_dates"]),
         evaluated_dates=set(entry["known_evaluated_dates"]),
         today=__import__("datetime").date(2026, 8, 19),
+        stale_dates=monitor.dates_gone_stale(entry["known_evaluated_dates"]),
     )
     assert alert_these == [released]
 

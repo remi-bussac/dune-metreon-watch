@@ -108,6 +108,18 @@ LABEL_CAP = 60
 # runs, so a date scanned once stays known even when later passes skip it.
 NEAR_TERM_RESCAN = 6
 
+# ...and everything else was read exactly once, back when it was still unseen,
+# then never again until it drifted into NEAR_TERM_RESCAN. That is how Sept 18,
+# 19 and 20 came to be emailed as new on three consecutive nights when their
+# times had been on sale for weeks: the state for those dates was simply old.
+#
+# So each pass also re-reads the few dates that have gone longest without a
+# look. With 4, the eleven dates that were orphaned when this was written are
+# all refreshed inside 3 passes, about 45 minutes, and no date can drift out
+# of date by more than that. Deliberately small: the empty dates already get
+# scanned every pass, so this only has to cover the ones that hold showtimes.
+STALE_ROTATION = 4
+
 # How long to wait for the page to confirm it switched to the requested date
 # before giving up and recording it as missed. Generous, because the failure
 # this guards against showed up on a laptop waking from sleep.
@@ -444,10 +456,44 @@ def _click_date(page, date_str: str, today: date) -> bool:
     return False
 
 
-def check(target: dict, known_dates: set[str] | None = None) -> SourceResult:
+def dates_to_scan(
+    all_dates: list[str],
+    known_dates: set[str],
+    read_times: dict[str, str | None],
+) -> list[str]:
+    """Which dates this pass spends a click on, in calendar order.
+
+    Three slices, and the third is the one that stops state going stale:
+
+      unseen     no showtimes recorded yet. A run being extended or a wave
+                 opening looks like this, so it is never skipped.
+      near_term  the NEAR_TERM_RESCAN nearest dates that do have showtimes,
+                 where same-day times get added.
+      stale      the STALE_ROTATION dates, out of everything left, that have
+                 gone longest without a reading.
+
+    Without that third slice a far-future date was read once, while it was
+    still unseen, and then not again until it drifted into near_term, by which
+    time weeks of changes had piled up and surfaced together looking like a
+    release. A date with no recorded reading sorts first: unknown means overdue.
+    """
+    unseen = [d for d in all_dates if d not in known_dates]
+    near_term = [d for d in all_dates if d in known_dates][:NEAR_TERM_RESCAN]
+    rest = [d for d in all_dates if d not in set(unseen) | set(near_term)]
+    stale = sorted(rest, key=lambda d: read_times.get(d) or "")[:STALE_ROTATION]
+    wanted = set(unseen) | set(near_term) | set(stale)
+    return [d for d in all_dates if d in wanted]
+
+
+def check(
+    target: dict,
+    known_dates: set[str] | None = None,
+    read_times: dict[str, str | None] | None = None,
+) -> SourceResult:
     url = target["fandango_film_url"]
     today = venue_today()
     known_dates = known_dates or set()
+    read_times = read_times or {}
     # The metro to ask from. Metreon is watched from San Francisco and Regal
     # Hacienda Crossings from Dublin, and because the theater list is capped
     # by distance, asking from the wrong one can drop a venue off the page
@@ -502,14 +548,10 @@ def check(target: dict, known_dates: set[str] | None = None) -> SourceResult:
 
         all_dates = [d for d in (_button_date(lbl, today) for lbl in labels) if d]
 
-        # Ration the clicks: every date we have never seen, plus the nearest
-        # few we have, in calendar order. A brand-new date -- a run being
-        # extended, or a new wave opening -- is always scanned the very run
-        # it appears. Known far-future dates are left alone; monitor.py's
-        # union means they stay known regardless.
-        unseen = [d for d in all_dates if d not in known_dates]
-        near_term = [d for d in all_dates if d in known_dates][:NEAR_TERM_RESCAN]
-        wanted_dates = [d for d in all_dates if d in set(unseen) | set(near_term)]
+        # Ration the clicks. A brand-new date -- a run being extended, or a
+        # new wave opening -- is always scanned the very run it appears; the
+        # rest is the rotation described on dates_to_scan.
+        wanted_dates = dates_to_scan(all_dates, known_dates, read_times)
 
         showtimes: list[Showtime] = []
         locked: list[Showtime] = []

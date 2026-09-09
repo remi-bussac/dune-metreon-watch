@@ -78,6 +78,33 @@ MENTION_ALERTS_ENABLED = False
 # on a week not yet observed -- if that shows up, raise this toward 14.
 MIN_LEAD_DAYS = 6
 
+# How recently we must have READ a date for a change on it to count as news.
+#
+# The lead-time floor above only works on dates we are actually watching. A
+# date we last read three weeks ago tells us nothing about when its showtimes
+# appeared: everything found on it accumulated while we were not looking. That
+# is not a release, it is a backlog, and emailing it is what produced the
+# Sept 7-9 Odyssey alerts. Each named a date whose times had been on sale for
+# weeks (verified against the live site on Sept 8: every time the Sept 20
+# alert would name was already buyable, and none was locked or sold out).
+#
+# This is a safety net, not the mechanism. STALE_ROTATION in fandango.py keeps
+# every date read within about 45 minutes, so in normal running nothing is
+# ever stale and this gate never fires. It exists for the gaps that rotation
+# cannot cover: the VM down overnight, or a source blocked for hours. A day is
+# the line because an hours-old release is still worth an email (late beats
+# never) while a weeks-old backlog is only noise.
+FRESH_WITHIN = timedelta(hours=24)
+
+# The baseline timer interval, from deploy/dune-watch.timer. Recorded here
+# only so test_rotation_outruns_the_freshness_gate can prove the rotation
+# still covers every date well inside FRESH_WITHIN. FRESH_WITHIN and
+# STALE_ROTATION are coupled: make the rotation slow enough and every date
+# reads as stale, and the monitor goes permanently silent. The bug this fixes
+# came from exactly such a coupling (MIN_LEAD_DAYS against NEAR_TERM_RESCAN)
+# holding by luck with nothing asserting it. This one is asserted.
+BASELINE_CADENCE = timedelta(minutes=15)
+
 SOURCE_MODULES = [fandango, reddit_rss]
 
 # Retained in the tree but NOT polled. amc_showtimes, amc_film_page and
@@ -114,8 +141,25 @@ def modules_for(target: dict) -> list:
 
 def load_state() -> dict:
     if STATE_PATH.exists():
-        return json.loads(STATE_PATH.read_text())
+        return migrate_state(json.loads(STATE_PATH.read_text()))
     return {"sources": {}, "last_heartbeat_sent": None}
+
+
+def migrate_state(state: dict) -> dict:
+    """known_evaluated_dates was a list of dates; it is now date -> when we
+    last read it.
+
+    An entry written before this change carries no timestamp, so it loads as
+    None, which reads as "read, but we cannot say when". That is the honest
+    answer and it has a useful consequence: the first run after this deploys
+    treats every pre-existing date as stale and absorbs the accumulated
+    backlog silently, instead of emailing eleven nights of Odyssey catch-up.
+    """
+    for entry in state.get("sources", {}).values():
+        seen = entry.get("known_evaluated_dates")
+        if isinstance(seen, list):
+            entry["known_evaluated_dates"] = {d: None for d in seen}
+    return state
 
 
 def save_state(state: dict) -> None:
@@ -126,7 +170,7 @@ def default_source_entry() -> dict:
     return {
         "known_showtimes": [],
         "known_calendar_dates": [],
-        "known_evaluated_dates": [],
+        "known_evaluated_dates": {},  # date -> ISO time we last read it
         "consecutive_parse_errors": 0,
         "consecutive_blocked": 0,
         "broken_alert_sent": False,
@@ -184,6 +228,7 @@ def alertable_showtimes(
     evaluated_dates: set[str],
     today: date,
     first_pass: bool = False,
+    stale_dates: frozenset[str] = frozenset(),
 ) -> tuple[list[Showtime], list[Showtime]]:
     """Split newly-detected showtimes into (worth emailing, not worth it).
 
@@ -195,6 +240,9 @@ def alertable_showtimes(
       backfill         the calendar already offered this date, we simply had
                        not managed to read it yet. Nothing was released; we
                        just got a clean scrape at last          -> silent
+      re-baseline      we HAVE read this date, but not within FRESH_WITHIN, so
+                       we cannot say when it changed. Catching up on a date we
+                       stopped watching is not a release        -> silent
       new time         a date we HAD already read gained a time -> ALERT if
                        far enough out (MIN_LEAD_DAYS), else churn
 
@@ -223,6 +271,13 @@ def alertable_showtimes(
             # so this is a backfill, not news. (The Aug 25 false alert.)
             quiet.append(showtime)
             continue
+        if showtime.date in stale_dates:
+            # Read before, but too long ago to date the change. Everything
+            # here accumulated while we were not looking, so re-baseline
+            # quietly. These were the Sept 7-9 false positives: dates last
+            # read weeks earlier whose times had been on sale throughout.
+            quiet.append(showtime)
+            continue
         if showtime.date not in scraped_dates:
             # We DID read this date before and it held nothing for our venue.
             # It now does. That is a release, and it is the single most
@@ -239,6 +294,27 @@ def alertable_showtimes(
             continue
         (alert_these if lead >= MIN_LEAD_DAYS else quiet).append(showtime)
     return alert_these, quiet
+
+
+def dates_gone_stale(read_times: dict, now: datetime | None = None) -> frozenset[str]:
+    """Dates we have read, but not within FRESH_WITHIN.
+
+    A missing or unparseable timestamp counts as stale: it means the entry
+    predates this bookkeeping, so we genuinely do not know when we last
+    looked, and the safe reading of "do not know" is "too long ago".
+    """
+    now = now or datetime.now(timezone.utc)
+    out = set()
+    for read_date, stamp in read_times.items():
+        if not stamp:
+            out.add(read_date)
+            continue
+        try:
+            if now - datetime.fromisoformat(stamp) > FRESH_WITHIN:
+                out.add(read_date)
+        except ValueError:
+            out.add(read_date)
+    return frozenset(out)
 
 
 def _blocked_cooldown_expired(entry: dict) -> bool:
@@ -279,7 +355,9 @@ def rebuild_showtime_state(target: dict, result: SourceResult, state: dict) -> N
     Deliberately keeps known_calendar_dates and known_evaluated_dates. They
     are what tells "the calendar grew" from "we finally read a date", and
     clearing them would make the next run look like a first pass and swallow
-    a real release as baseline. Mentions are left alone: they are pruned on
+    a real release as baseline. It does stamp the reading times, because a
+    rebuild scans the entire calendar: leaving them unset would mark every
+    date stale and make the very next run suppress whatever it found. Mentions are left alone: they are pruned on
     a 30-day window and re-alerting an old Reddit post is not a risk worth
     the extra moving part.
 
@@ -292,6 +370,10 @@ def rebuild_showtime_state(target: dict, result: SourceResult, state: dict) -> N
     before = len(entry["known_showtimes"])
     entry["known_showtimes"] = merge_known([], result.showtimes, result.kind)
     after = len(entry["known_showtimes"])
+    read_times = dict(entry.get("known_evaluated_dates", {}))
+    for read_date in result.evaluated_dates:
+        read_times[read_date] = result.checked_at
+    entry["known_evaluated_dates"] = dict(sorted(read_times.items()))
     print(
         f"  [REBUILD] {key}: {before} known -> {after} buyable "
         f"({before - after} phantom showtime(s) dropped, {len(result.locked_showtimes)} "
@@ -331,17 +413,19 @@ def process_result(target: dict, result: SourceResult, state: dict) -> bool:
             prior_calendar = set(entry.get("known_calendar_dates", []))
             # No calendar recorded yet => this is the target's first pass.
             first_pass = not entry.get("known_calendar_dates")
+            read_times = entry.get("known_evaluated_dates", {})
             new, quiet = alertable_showtimes(
                 new,
                 scraped_dates={s.date for s in known},
                 calendar_dates=prior_calendar,
-                evaluated_dates=set(entry.get("known_evaluated_dates", [])),
+                evaluated_dates=set(read_times),
                 today=venue_today(),
                 first_pass=first_pass,
+                stale_dates=dates_gone_stale(read_times),
             )
             if quiet:
-                reason = "first pass — recording baseline" if first_pass else (
-                    "backfill or under the lead-time floor"
+                reason = "first pass, recording baseline" if first_pass else (
+                    "backfill, stale re-baseline, or under the lead-time floor"
                 )
                 print(f"  ({len(quiet)} new showtime(s) not alerted for {key} — {reason})")
 
@@ -380,9 +464,12 @@ def process_result(target: dict, result: SourceResult, state: dict) -> bool:
                 set(entry.get("known_calendar_dates", [])) | set(result.calendar_dates)
             )
         if result.evaluated_dates:
-            entry["known_evaluated_dates"] = sorted(
-                set(entry.get("known_evaluated_dates", [])) | set(result.evaluated_dates)
-            )
+            # Union as before, but the value carries the reading: a date is
+            # only evidence about the site as of the moment we last read it.
+            read_times = dict(entry.get("known_evaluated_dates", {}))
+            for read_date in result.evaluated_dates:
+                read_times[read_date] = result.checked_at
+            entry["known_evaluated_dates"] = dict(sorted(read_times.items()))
         entry["consecutive_parse_errors"] = 0
         entry["consecutive_blocked"] = 0
         entry["broken_alert_sent"] = False
@@ -523,6 +610,9 @@ def main() -> None:
             # date always gets scanned, a known one only if it is near-term.
             prior = state["sources"].get(state_key(target["id"], module.SOURCE_NAME), {})
             known_dates = {s.get("date") for s in prior.get("known_showtimes", [])}
+            # When each date was last actually read, so the source can spend
+            # its rotation budget on whichever has gone longest unlooked-at.
+            read_times = prior.get("known_evaluated_dates", {}) or {}
             if rebuild:
                 # A rebuild REPLACES state, so it has to see the whole
                 # calendar: passing the usual known_dates would ration the
@@ -532,8 +622,11 @@ def main() -> None:
                 # binning Dec 23-26, which are genuinely on sale and would
                 # have come back as a fresh "new showtimes" alert.
                 known_dates = set()
+                read_times = {}
             try:
-                result = module.check(target, known_dates=known_dates)
+                result = module.check(
+                    target, known_dates=known_dates, read_times=read_times
+                )
             except Exception as e:
                 result = SourceResult(
                     source=module.SOURCE_NAME,

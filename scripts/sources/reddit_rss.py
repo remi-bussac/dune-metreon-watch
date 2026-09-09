@@ -143,7 +143,11 @@ def _matches(title: str, summary: str, target: dict) -> bool:
     return is_about_film and mentions_availability
 
 
-def check(target: dict, known_dates: set[str] | None = None) -> SourceResult:
+def check(
+    target: dict,
+    known_dates: set[str] | None = None,
+    read_times: dict[str, str | None] | None = None,
+) -> SourceResult:
     # known_dates is accepted for a uniform source signature; RSS entries are
     # deduplicated by monitor.py against the whole known set, not by date.
     successes = 0
