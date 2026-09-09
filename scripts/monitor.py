@@ -551,10 +551,18 @@ def meaningful_fingerprint(state: dict) -> str:
     December cadence, which buries the handful of commits that actually
     represent something happening. Persisting only on a meaningful change
     keeps the git history usable as the audit trail it was meant to be."""
-    trimmed = {
-        key: {k: v for k, v in entry.items() if k != "last_checked_at"}
-        for key, entry in state["sources"].items()
-    }
+    trimmed = {}
+    for key, entry in state["sources"].items():
+        slim = {k: v for k, v in entry.items() if k != "last_checked_at"}
+        seen = slim.get("known_evaluated_dates")
+        if isinstance(seen, dict):
+            # WHICH dates we have read is meaningful: a date read for the
+            # first time is a real change. WHEN we last read each one is not,
+            # it moves on every pass exactly like last_checked_at, and
+            # leaving it in here made every pass look like news and wrote
+            # state.json every time.
+            slim["known_evaluated_dates"] = sorted(seen)
+        trimmed[key] = slim
     return json.dumps(
         {"sources": trimmed, "last_heartbeat_sent": state.get("last_heartbeat_sent")},
         sort_keys=True,

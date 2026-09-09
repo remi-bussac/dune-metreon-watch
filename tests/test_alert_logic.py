@@ -24,7 +24,8 @@ import pytest  # noqa: E402
 from normalize import Showtime, diff_showtimes, venue_today  # noqa: E402
 from monitor import (  # noqa: E402
     BASELINE_CADENCE, FRESH_WITHIN, MIN_LEAD_DAYS,
-    alertable_showtimes, dates_gone_stale, merge_known, migrate_state,
+    alertable_showtimes, dates_gone_stale, meaningful_fingerprint,
+    merge_known, migrate_state,
 )
 from sources.fandango import (  # noqa: E402
     LABEL_CAP, NEAR_TERM_RESCAN, STALE_ROTATION, dates_to_scan,
@@ -365,3 +366,20 @@ def test_migration_repairs_a_non_dict_reading_map(junk):
     that raises never reaches save_state, losing everything it found."""
     state = {"sources": {"k::reddit_rss": {"known_evaluated_dates": junk}}}
     assert migrate_state(state)["sources"]["k::reddit_rss"]["known_evaluated_dates"] == {}
+
+
+def test_fingerprint_ignores_reading_times_but_not_the_dates():
+    """Reading times move every pass. Left in the fingerprint they made each
+    pass look like a meaningful change, which is what that function exists to
+    avoid: at the December cadence it would be ~288 commits a day."""
+    def state(times):
+        return {"sources": {"k::fandango": {"known_evaluated_dates": times}},
+                "last_heartbeat_sent": None}
+
+    a = meaningful_fingerprint(state({"2026-12-18": "2026-09-09T10:00:00+00:00"}))
+    b = meaningful_fingerprint(state({"2026-12-18": "2026-09-09T10:15:00+00:00"}))
+    assert a == b, "a re-read of the same date is not a meaningful change"
+
+    c = meaningful_fingerprint(state({"2026-12-18": "2026-09-09T10:15:00+00:00",
+                                      "2026-12-19": None}))
+    assert c != b, "reading a date for the first time IS a meaningful change"
