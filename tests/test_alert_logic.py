@@ -356,3 +356,12 @@ def test_rotation_outruns_the_freshness_gate():
         f"rotation needs {time_needed} to cover {worst_case_dates} dates, "
         f"which is not comfortably inside FRESH_WITHIN={FRESH_WITHIN}"
     )
+
+
+@pytest.mark.parametrize("junk", [None, "", 0])
+def test_migration_repairs_a_non_dict_reading_map(junk):
+    """The live state carried an explicit null for one reddit source. Left as
+    it was it would reach set() inside process_result and raise, and a run
+    that raises never reaches save_state, losing everything it found."""
+    state = {"sources": {"k::reddit_rss": {"known_evaluated_dates": junk}}}
+    assert migrate_state(state)["sources"]["k::reddit_rss"]["known_evaluated_dates"] == {}

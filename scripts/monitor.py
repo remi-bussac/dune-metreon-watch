@@ -159,6 +159,12 @@ def migrate_state(state: dict) -> dict:
         seen = entry.get("known_evaluated_dates")
         if isinstance(seen, list):
             entry["known_evaluated_dates"] = {d: None for d in seen}
+        elif not isinstance(seen, dict):
+            # Some older entries carry an explicit null here, which is not a
+            # shape any code below expects. Left alone it would reach set()
+            # and raise out of process_result, and a run that raises never
+            # reaches save_state and loses everything it found.
+            entry["known_evaluated_dates"] = {}
     return state
 
 
@@ -370,7 +376,7 @@ def rebuild_showtime_state(target: dict, result: SourceResult, state: dict) -> N
     before = len(entry["known_showtimes"])
     entry["known_showtimes"] = merge_known([], result.showtimes, result.kind)
     after = len(entry["known_showtimes"])
-    read_times = dict(entry.get("known_evaluated_dates", {}))
+    read_times = dict(entry.get("known_evaluated_dates") or {})
     for read_date in result.evaluated_dates:
         read_times[read_date] = result.checked_at
     entry["known_evaluated_dates"] = dict(sorted(read_times.items()))
@@ -413,7 +419,7 @@ def process_result(target: dict, result: SourceResult, state: dict) -> bool:
             prior_calendar = set(entry.get("known_calendar_dates", []))
             # No calendar recorded yet => this is the target's first pass.
             first_pass = not entry.get("known_calendar_dates")
-            read_times = entry.get("known_evaluated_dates", {})
+            read_times = entry.get("known_evaluated_dates") or {}
             new, quiet = alertable_showtimes(
                 new,
                 scraped_dates={s.date for s in known},
@@ -466,7 +472,7 @@ def process_result(target: dict, result: SourceResult, state: dict) -> bool:
         if result.evaluated_dates:
             # Union as before, but the value carries the reading: a date is
             # only evidence about the site as of the moment we last read it.
-            read_times = dict(entry.get("known_evaluated_dates", {}))
+            read_times = dict(entry.get("known_evaluated_dates") or {})
             for read_date in result.evaluated_dates:
                 read_times[read_date] = result.checked_at
             entry["known_evaluated_dates"] = dict(sorted(read_times.items()))
