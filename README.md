@@ -1,10 +1,12 @@
 # dune-metreon-watch
 
-A personal, single-user notifier that emails me when IMAX 70mm tickets for
-**Dune: Part Three** go on sale at **AMC Metreon 16** in San Francisco.
+A personal, single-user notifier that emails me when IMAX 70mm tickets go on
+sale for the films and venues listed in `config/targets.json` — currently
+**Dune: Part Three** at **AMC Metreon 16** (San Francisco) and **Regal
+Hacienda Crossings** (Dublin), and **The Odyssey** at AMC Metreon 16.
 
 That's the whole thing. It's one person trying not to miss a ticket on-sale
-for one film at one cinema.
+for a short list of IMAX 70mm releases at a couple of nearby cinemas.
 
 ## What it does
 
@@ -39,12 +41,17 @@ myself, in a normal browser, like anyone else.
 - **It is low volume.** A handful of requests per run, single-threaded, no
   parallel fetching, no retry storms.
 
-## Automation notice
+## Where it runs
 
-Commits authored by `dune-metreon-watch-bot` are this repo's own scheduled
-job writing `state/state.json` — the small file it diffs against to decide
-whether anything changed. They are the audit trail, not activity padding.
-State is only committed when something meaningful actually changes.
+This runs on a small Oracle Cloud Always Free VM, driven by a systemd timer
+(`dune-watch.timer` / `dune-watch.service`). It previously ran on GitHub
+Actions and, briefly, a laptop LaunchAgent; both were retired in favor of a
+host that isn't affected by the laptop sleeping or the Actions schedule
+being unreliable (see `RUNBOOK.md` and commit `4ba748b`). The VM keeps its
+own `state/state.json` and never commits or pushes it, so the copy of
+`state/state.json` in this repo and the git history are **not** a live
+record of what the monitor has done — see `RUNBOOK.md` for how to read the
+real logs (`journalctl -u dune-watch.service`).
 
 ## Layout
 
@@ -52,11 +59,14 @@ State is only committed when something meaningful actually changes.
 config/targets.json    what to watch (film, venue, format, URLs)
 scripts/monitor.py     orchestrator: check -> diff -> alert -> save state
 scripts/sources/       one module per source
-state/state.json       last-seen showtimes, committed as the audit trail
+scripts/alert.py       Gmail SMTP alerting
+scripts/browser.py     shared Playwright helper for sources that need a page render
+state/state.json       last-seen showtimes on disk; stale unless read from the VM
+deploy/                Oracle VM setup and deploy script (deploy/ORACLE_SETUP.md)
 RESEARCH.md            dataset of past 70mm on-sale timings
 FORECAST.md            when the next wave is likely, and confidence
 RUNBOOK.md             setup, testing, cost, teardown
 ```
 
-Secrets (the sending mailbox and its app password) live in GitHub Actions
-repository secrets, never in this repo.
+Secrets (the sending mailbox and its app password) live in an env file on
+the VM (`~/.dune-metreon-watch.env`), never in this repo.
