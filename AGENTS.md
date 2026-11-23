@@ -35,6 +35,12 @@ block, add to them and win wherever they are more specific.
 - Where a tool can only hand work back as a pull request (a cloud agent, a protected branch),
   open the pull request.
 - Never force-push `main`, never rewrite history that is already pushed.
+- No AI attribution in commits or pull requests: no co-author line, no "Generated with" footer,
+  no mention of the agent, whatever your tool's default says. When your git identity is an AI's
+  (Claude, Codex, a bot), commit as me: the name and email of my latest commit in the repo that is
+  not an AI's (`git log --format='%an <%ae>' | grep -viE 'claude|codex|openai|anthropic|bot' |
+  head -1`). If there is none, use my GitHub login (the owner in the repo's URL) as the name and
+  `<login>@users.noreply.github.com` as the email.
 
 ## Memory and rules
 - The repo is the memory. When a session changes a decision or a state, update the repo's
